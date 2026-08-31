@@ -51,12 +51,4 @@ public class MateriaPrima {
     public double getQuantidade(){
         return quantidade;
     }
-
-    public String getUnidade() {
-        return unidade;
-    }
-
-    public double getQuantidadeMinima() {
-        return quantidadeMinima;
-    }
 }
