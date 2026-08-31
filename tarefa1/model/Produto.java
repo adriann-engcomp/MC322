@@ -1,59 +1,41 @@
 package model;
 
 public class Produto {
+
+    // Atributos privados
     private int id;
     private String nome;
     private boolean status;
-    private int quantidadeMateriaPrimaNecessaria;
+    private double quantidadeMateriaPrimaNecessaria;
 
-    public Produto(int id, String nome, int quantidadeMateriaPrimaNecessaria) {
+    // Construtor
+    public Produto(int id, String nome, double quantidadeMateriaPrimaNecessaria) {
         this.id = id;
         this.nome = nome;
         this.quantidadeMateriaPrimaNecessaria = quantidadeMateriaPrimaNecessaria;
         this.status = false;
     }
 
+    // Métodos
     public void processar() {
-        // criar lógica
+        this.status = true;
+        System.out.println("Produto " + nome + " marcado como: PROCESSADO");
     }
-
-    public void definirDemandaMateriaPrima(int quantidade) {
+    public void definirDemandaMateriaPrima(double quantidade) {
         this.quantidadeMateriaPrimaNecessaria = quantidade;
     }
 
-    public int getDemandaMateriaPrima() {
+    // Getters
+    public double getDemandaMateriaPrimaNecessaria() {
         return this.quantidadeMateriaPrimaNecessaria;
     }
-
     public int getId() {
         return this.id;
     }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getNome() {
         return this.nome;
     }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public boolean getStatus() {
         return this.status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public int getQuantidadeMateriaPrimaNecessaria() {
-        return this.quantidadeMateriaPrimaNecessaria;
-    }
-
-    public void setQuantidadeMateriaPrimaNecessaria(int quantidadeMateriaPrimaNecessaria) {
-        this.quantidadeMateriaPrimaNecessaria = quantidadeMateriaPrimaNecessaria;
     }
 }

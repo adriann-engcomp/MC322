@@ -1,3 +1,5 @@
+package model;
+
 public class MateriaPrima {
     // Atributos privados (Tabela do Excel)
     private int id;
@@ -43,11 +45,9 @@ public class MateriaPrima {
     public int getId(){
         return id;
     }
-
     public String getNome(){
         return nome;
     }
-
     public double getQuantidade(){
         return quantidade;
     }

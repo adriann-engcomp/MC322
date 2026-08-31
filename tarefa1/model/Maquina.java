@@ -1,61 +1,50 @@
 package model;
 
 public class Maquina {
-    private int id;
-    private boolean ligada;
+
+    // Atributos privados
     private String nome;
+    private boolean ligada;
     private int capacidadeMaxima;
 
-    public Maquina() {
-    }
-
-    public Maquina(int id, String nome, int capacidadeMaxima) {
-        this.id = id;
+    // Construtor
+    public Maquina(String nome, boolean ligada, int capacidadeMaxima) {
         this.nome = nome;
         this.capacidadeMaxima = capacidadeMaxima;
         this.ligada = false;
     }
 
+    // Métodos
     public void ligar() {
         this.ligada = true;
     }
-
     public void desligar() {
         this.ligada = false;
     }
+    public void processar(MateriaPrima mp, double demanda) {
+        if (!this.ligada){
+            System.out.println("A máquina " + this.nome + " está desligada.");
+            return;
+        }
+        if (demanda > this.capacidadeMaxima) {
+            System.out.println("A demanda de " + demanda + " excede a capacidade máxima da máquina " + this.nome + " (" + this.capacidadeMaxima + ").");
+            return;
+        }
+        if (!mp.verificarDisponibilidade(demanda)) {
+            System.out.println("Materia prima insuficiente para seguir com a produção na máquina'" + produto.getNome() + "'.'");
+            return;
+        }
 
-    public void processar(MateriaPrima materiaPrima, int demanda) {
+        mp.consumir(demanda);
+        Produto.processar();
+        System.out.println("Produção de " + Produto.getNome() + " concluída");
     }
 
-    public int getId() {
-        return this.id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    // Getters
     public String getNome() {
         return this.nome;
     }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public boolean estaLigada() {
         return this.ligada;
-    }
-
-    public void setLigada(boolean ligada) {
-        this.ligada = ligada;
-    }
-
-    public int getCapacidadeMaxima() {
-        return this.capacidadeMaxima;
-    }
-
-    public void setCapacidadeMaxima(int capacidadeMaxima) {
-        this.capacidadeMaxima = capacidadeMaxima;
     }
 }

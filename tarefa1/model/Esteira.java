@@ -5,8 +5,6 @@ public class Esteira {
     private boolean emMovimento;
     private int capacidadeMaxima;
 
-    public Esteira() {
-    }
 
     public Esteira(int capacidadeMaxima) {
         this.capacidadeMaxima = capacidadeMaxima;
