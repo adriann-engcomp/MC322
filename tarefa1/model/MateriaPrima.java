@@ -1,13 +1,13 @@
-package model;
-
 public class MateriaPrima {
+    // Atributos privados (Tabela do Excel)
     private int id;
     private String nome;
-    private int quantidade;
+    private double quantidade;
     private String unidade;
-    private int quantidadeMinima;
+    private double quantidadeMinima;
 
-    public MateriaPrima(int id, String nome, int quantidade, String unidade, int quantidadeMinima) {
+    // Inicializo (caminhão chegou)
+    public MateriaPrima(int id, String nome, double quantidade, String unidade, double quantidadeMinima) {
         this.id = id;
         this.nome = nome;
         this.quantidade = quantidade;
@@ -15,53 +15,48 @@ public class MateriaPrima {
         this.quantidadeMinima = quantidadeMinima;
     }
 
-    public void consumir(int quantidadeDemandada) {
-    }
+    // Metodos
 
-    public void adicionarEstoque(int quantidadeAdicionada) {
-    }
-
-    public boolean verificarDisponibilidade(int demanda) {
+    // Pode produzir?
+    public boolean verificarDisponibilidade(double demanda) {
         return this.quantidade >= demanda;
     }
-
-    public int getId() {
-        return this.id;
+    // Se consigo produzir, então vou consumir
+    public void consumir(double demanda){
+        // Tem o suficiente para atender a demanda?
+        if (verificarDisponibilidade(demanda)) {
+            // desconto
+            this.quantidade -= demanda;
+            System.out.println("Consumidos " + demanda + " " + this.unidade + " de " + this.nome + ". Quantidade restante: " + this.quantidade + " " + this.unidade);
+        }
+        else {
+            System.out.println("Estoque insuficiente.");
+        }
+    }
+    // Novo caminhão chegou, então adiciono estoque
+    public void adicionarEstoque(double quantidadeExtra){
+        this.quantidade += quantidadeExtra;
+        System.out.println("Adicionados " + quantidadeExtra + " " + this.unidade + ". Total: " + this.quantidade);
     }
 
-    public void setId(int id) {
-        this.id = id;
+    // Relatório do João (getters)
+    public int getId(){
+        return id;
     }
 
-    public String getNome() {
-        return this.nome;
+    public String getNome(){
+        return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public int getQuantidade() {
-        return this.quantidade;
-    }
-
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
+    public double getQuantidade(){
+        return quantidade;
     }
 
     public String getUnidade() {
-        return this.unidade;
+        return unidade;
     }
 
-    public void setUnidade(String unidade) {
-        this.unidade = unidade;
-    }
-
-    public int getQuantidadeMinima() {
-        return this.quantidadeMinima;
-    }
-
-    public void setQuantidadeMinima(int quantidadeMinima) {
-        this.quantidadeMinima = quantidadeMinima;
+    public double getQuantidadeMinima() {
+        return quantidadeMinima;
     }
 }

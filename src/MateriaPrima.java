@@ -1,12 +1,12 @@
 public class MateriaPrima {
-    // 1. Atributos (o que tenho?)
+    // Atributos privados (Tabela do Excel)
     private int id;
     private String nome;
     private double quantidade;
     private String unidade;
     private double quantidadeMinima;
 
-    // 2. Construtor + parâmetros de entrada (inicializa os campos)
+    // Inicializo (caminhão chegou)
     public MateriaPrima(int id, String nome, double quantidade, String unidade, double quantidadeMinima) {
         this.id = id;
         this.nome = nome;
@@ -15,32 +15,48 @@ public class MateriaPrima {
         this.quantidadeMinima = quantidadeMinima;
     }
 
-    //3. Metodos (o que faz?)
-    public void consumir(int quantidadeDemandada){
+    // Metodos
+
+    // Pode produzir?
+    public boolean verificarDisponibilidade(double demanda) {
+        return this.quantidade >= demanda;
+    }
+    // Se consigo produzir, então vou consumir
+    public void consumir(double demanda){
+        // Tem o suficiente para atender a demanda?
+        if (verificarDisponibilidade(demanda)) {
+            // desconto
+            this.quantidade -= demanda;
+            System.out.println("Consumidos " + demanda + " " + this.unidade + " de " + this.nome + ". Quantidade restante: " + this.quantidade + " " + this.unidade);
+        }
+        else {
+            System.out.println("Estoque insuficiente.");
+        }
+    }
+    // Novo caminhão chegou, então adiciono estoque
+    public void adicionarEstoque(double quantidadeExtra){
+        this.quantidade += quantidadeExtra;
+        System.out.println("Adicionados " + quantidadeExtra + " " + this.unidade + ". Total: " + this.quantidade);
     }
 
-    public void adicionarEstoque(int quantidadeAdicionada){
-    }
-
-    public boolean verificarDisponibilidade(int demanda){
-        return false;
-    }
-
+    // Relatório do João (getters)
     public int getId(){
-        return 0;
+        return id;
     }
 
     public String getNome(){
-        return null;
+        return nome;
     }
 
-    public int getQuantidade(){
-        return 0;
+    public double getQuantidade(){
+        return quantidade;
     }
 
     public String getUnidade() {
-        return null;
+        return unidade;
     }
 
-
+    public double getQuantidadeMinima() {
+        return quantidadeMinima;
+    }
 }
