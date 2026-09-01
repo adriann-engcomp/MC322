@@ -30,14 +30,14 @@ public class Maquina {
             System.out.println("A demanda de " + demanda + " excede a capacidade máxima da máquina " + this.nome + " (" + this.capacidadeMaxima + ").");
             return;
         }
-        if (!mp.verificarDisponibilidade(demanda)) {
-            System.out.println("Materia prima insuficiente para seguir com a produção na máquina'" + produto.getNome() + "'.'");
-            return;
-        }
+        // if (!mp.verificarDisponibilidade(demanda)) {
+        //     System.out.println("Materia prima insuficiente para seguir com a produção na máquina'" + produto.getNome() + "'.'");
+        //     return;
+        // }
 
         mp.consumir(demanda);
-        Produto.processar();
-        System.out.println("Produção de " + Produto.getNome() + " concluída");
+        // Produto.processar();
+        // System.out.println("Produção de " + Produto.getNome() + " concluída");
     }
 
     // Getters

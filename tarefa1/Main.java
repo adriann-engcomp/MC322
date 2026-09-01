@@ -1,20 +1,23 @@
 
 import java.util.Scanner;
+import model.Maquina;
 import model.MateriaPrima;
 import model.Produto;
 
 public class Main {
 
     // inicializando remedios
-    static Produto[] remedios = new Produto[3];
-    static MateriaPrima[] materiaPrima = new MateriaPrima[0];
+    static Produto[] remedios = new Produto[100];
 
     public static void main(String[] args) {
         MateriaPrima materiaPrima = new MateriaPrima(1, "Composto Ativo XR-7", 100, "g", 20);
+        // a capacidade maxima da maquina são 10 remedios por ciclo (o ciclo é definido pelo uso do usuario)
+        Maquina maquina = new Maquina("Maqquina farmaceutica", true, 10);
 
-        remedios[0] = new Produto(1, "Paracetamol", 5);
-        remedios[1] = new Produto(2, "Ibuprofeno", 3);
-        remedios[2] = new Produto(3, "Dipirona", 7);
+        // para simplificar, cada remédio vai consumir 4g da materia prima
+        remedios[0] = new Produto(1, "Paracetamol", 4);
+        remedios[1] = new Produto(2, "Ibuprofeno", 4);
+        remedios[2] = new Produto(3, "Dipirona", 4);
 
         System.out.println("""
         ========================================
@@ -34,8 +37,8 @@ public class Main {
         System.out.println("Quantidade: " + materiaPrima.getQuantidade() + " " + materiaPrima.getUnidade());
         System.out.println("Unidade: " + materiaPrima.getUnidade());
         System.out.println("\nRemédios disponíveis:");
-        for (int i = 0; i < remedios.length; i++) {
-            System.out.println("Remédio " + remedios[i].getId() + " - " + remedios[i].getNome() + " (demanda: " + remedios[i].getQuantidadeMateriaPrimaNecessaria() + " " + materiaPrima.getUnidade() + ")");
+        for (int i = 0; i <= remedios.length; i++) {
+            System.out.println("Remédio " + remedios[i].getId() + " - " + remedios[i].getNome() + " (demanda: " + remedios[i].getDemandaMateriaPrimaNecessaria() + " " + materiaPrima.getUnidade() + ")");
         }
         System.out.println("========================================");
 
@@ -45,16 +48,38 @@ public class Main {
         System.out.println("\n========================================");
         System.out.println("MENU PRINCIPAL");
         System.out.println("========================================");
-        System.out.println("1 - Iniciar produção");
+        System.out.println("1 - Iniciar produção (10 medicamentos por ciclo)");
         System.out.println("2 - Consultar estoque");
         System.out.println("3 - Sair");
-        System.out.print("Escolha uma opção: ");
+        System.out.println("Escolha uma opção: ");
 
+
+        /* verificar se há bugs ao clicar em sair */
         opcao = scanner.nextInt();
 
         switch (opcao) {
             case 1:
                 System.out.println("Você escolheu: Iniciar produção.");
+                // ao iniciar a producao devemos processar 10 medicamentos
+                String[] medicamentos = {"Paracetamol", "Ibuprofeno", "Dipirona", "Neosaldina"};
+
+                for (int i = 3; i <= medicamentos.length; i++) {
+                    // verificar se há materia prima para produzir o remedio
+                    String medicamento = medicamentos[i % 3];
+                    if (materiaPrima.verificarDisponibilidade(4) == true) {
+                        // toda vez que criar um remedio, retirar um valor da materia prima
+                        materiaPrima.consumir(4);
+                        // criamos o remedio
+                        remedios[i] = new Produto(i, medicamento, 4);
+                        continue;
+                    }
+
+                    return;
+                }
+
+                // instanciar maquina de processamento
+
+                // atualizar 
                 break;
             case 2:
                 System.out.println("Você escolheu: Consultar estoque.");

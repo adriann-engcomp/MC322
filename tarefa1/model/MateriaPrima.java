@@ -51,4 +51,7 @@ public class MateriaPrima {
     public double getQuantidade(){
         return quantidade;
     }
+    public String getUnidade(){
+        return unidade;
+    }
 }
