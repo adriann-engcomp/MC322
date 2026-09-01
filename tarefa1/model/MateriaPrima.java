@@ -40,7 +40,7 @@ public class MateriaPrima {
         System.out.println("Adicionados " + quantidadeExtra + " " + this.unidade + ". Total: " + this.quantidade);
     }
 
-    // Relatório do João (getters)
+    // Getters
     public int getId(){
         return id;
     }

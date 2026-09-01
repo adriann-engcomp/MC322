@@ -35,19 +35,14 @@ public class Esteira {
         return false;
     }
 
+    // Getters
     public Object getItem() {
         return this.item;
     }
-
-    public boolean isEmMovimento() {
+    public boolean getemMovimento() {
         return this.emMovimento;
     }
-
     public int getCapacidadeMaxima() {
         return this.capacidadeMaxima;
-    }
-
-    public void setCapacidadeMaxima(int capacidadeMaxima) {
-        this.capacidadeMaxima = capacidadeMaxima;
     }
 }

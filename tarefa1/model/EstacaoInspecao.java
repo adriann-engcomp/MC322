@@ -1,14 +1,17 @@
 package model;
 
 public class EstacaoInspecao {
+    // Atributos privados
     private boolean ativa;
     private int produtosInspecionados;
 
+    // Construtor (incializo)
     public EstacaoInspecao() {
         this.ativa = false;
         this.produtosInspecionados = 0;
     }
 
+    // Métodos
     public void ativar() {
         this.ativa = true;
     }
@@ -27,19 +30,19 @@ public class EstacaoInspecao {
         return this.produtosInspecionados;
     }
 
-    public boolean isAtiva() {
+    // Getters
+    public boolean getAtivar() {
         return this.ativa;
     }
-
-    public void setAtiva(boolean ativa) {
-        this.ativa = ativa;
+    public boolean getDesativar() {
+        return !this.ativa;
     }
-
+    public void getInspecionar(Produto produto) {
+        if (this.ativa) {
+            this.produtosInspecionados++;
+        }
+    }
     public int getProdutosInspecionados() {
         return this.produtosInspecionados;
-    }
-
-    public void setProdutosInspecionados(int produtosInspecionados) {
-        this.produtosInspecionados = produtosInspecionados;
     }
 }
