@@ -1,7 +1,7 @@
 package model;
 
 public class MateriaPrima {
-    // Atributos privados (Tabela do Excel)
+    // Atributos privados
     private int id;
     private String nome;
     private double quantidade;
@@ -18,7 +18,6 @@ public class MateriaPrima {
     }
 
     // Metodos
-
     // Pode produzir?
     public boolean verificarDisponibilidade(double demanda) {
         return this.quantidade >= demanda;

@@ -1,16 +1,18 @@
 package model;
 
 public class Esteira {
+    // Atributos privados
     private Object item;
     private boolean emMovimento;
     private int capacidadeMaxima;
 
-
+    // Construtor
     public Esteira(int capacidadeMaxima) {
         this.capacidadeMaxima = capacidadeMaxima;
         this.emMovimento = false;
     }
 
+    // Métodos
     public void ligar() {
         this.emMovimento = true;
     }
