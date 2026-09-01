@@ -1,7 +1,6 @@
 package model;
 
 public class Maquina {
-
     // Atributos privados
     private String nome;
     private boolean ligada;
