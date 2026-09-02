@@ -53,10 +53,6 @@ public class Maquina {
         return nome;
     }
 
-    public boolean estaLigada() {
-        return ligada;
-    }
-
     public double getCapacidadeMaxima() {
         return capacidadeMaxima;
     }
