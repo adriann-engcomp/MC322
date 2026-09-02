@@ -1,6 +1,7 @@
-package model;
+package src;
 
 public class MateriaPrima {
+
     // Atributos privados
     private int id;
     private String nome;
@@ -22,35 +23,43 @@ public class MateriaPrima {
     public boolean verificarDisponibilidade(double demanda) {
         return this.quantidade >= demanda;
     }
+
     // Se consigo produzir, então vou consumir
-    public void consumir(double demanda){
+    public void consumir(double demanda) {
         // Tem o suficiente para atender a demanda?
         if (verificarDisponibilidade(demanda)) {
             // desconto
             this.quantidade -= demanda;
             System.out.println("Consumidos " + demanda + " " + this.unidade + " de " + this.nome + ". Quantidade restante: " + this.quantidade + " " + this.unidade);
-        }
-        else {
+        } else {
             System.out.println("Estoque insuficiente.");
         }
     }
+
     // Novo caminhão chegou, então adiciono estoque
-    public void adicionarEstoque(double quantidadeExtra){
+    public void adicionarEstoque(double quantidadeExtra) {
         this.quantidade += quantidadeExtra;
         System.out.println("Adicionados " + quantidadeExtra + " " + this.unidade + ". Total: " + this.quantidade);
     }
 
     // Getters
-    public int getId(){
+    public int getId() {
         return id;
     }
-    public String getNome(){
+
+    public String getNome() {
         return nome;
     }
-    public double getQuantidade(){
+
+    public double getQuantidade() {
         return quantidade;
     }
-    public String getUnidade(){
+
+    public String getUnidade() {
         return unidade;
+    }
+
+    public double getQuantidadeMinima() {
+        return quantidadeMinima;
     }
 }

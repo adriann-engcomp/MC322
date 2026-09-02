@@ -1,4 +1,4 @@
-package model;
+package src;
 
 public class Produto {
 
@@ -8,7 +8,6 @@ public class Produto {
     private boolean status;
     private double quantidadeMateriaPrimaNecessaria;
 
-    // Construtor
     public Produto(int id, String nome, double quantidadeMateriaPrimaNecessaria) {
         this.id = id;
         this.nome = nome;
@@ -19,23 +18,25 @@ public class Produto {
     // Métodos
     public void processar() {
         this.status = true;
-        System.out.println("Produto " + nome + " marcado como: PROCESSADO");
     }
+
     public void definirDemandaMateriaPrima(double quantidade) {
         this.quantidadeMateriaPrimaNecessaria = quantidade;
     }
 
-    // Getters
-    public double getDemandaMateriaPrimaNecessaria() {
-        return this.quantidadeMateriaPrimaNecessaria;
+    public double getDemandaMateriaPrima() {
+        return quantidadeMateriaPrimaNecessaria;
     }
+
     public int getId() {
-        return this.id;
+        return id;
     }
+
     public String getNome() {
-        return this.nome;
+        return nome;
     }
+
     public boolean getStatus() {
-        return this.status;
+        return status;
     }
 }
