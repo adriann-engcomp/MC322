@@ -1,0 +1,5 @@
+Justificativa da escolha do tema:
+Escolhemos criar uma fabrica de medicacoes devido ao fato de ser uma área muito ampla, onde podemos tanto construir um algoritmo para esse cenário de logistica,
+quanto 
+
+Visão de expansão futura:
