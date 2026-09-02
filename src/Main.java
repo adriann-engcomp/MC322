@@ -2,29 +2,20 @@ import java.util.Scanner;
 
 public class Main {
 
+    // Usamos o throws InterruptedException para termos acesso ao Thread.sleep() e assim simular tempo
     public static void main(String[] args) throws InterruptedException {
-        // Instanciar matéria-prima com estoque inicial
-        MateriaPrima materiaPrima = new MateriaPrima(1, "Composto X", 100, "g", 20);
 
-        // Instanciar produtos
+        MateriaPrima materiaPrima = new MateriaPrima(1, "Composto X", 100, "g", 20);
+        Maquina maquina = new Maquina("Compressora de Comprimidos", 50);
+        Esteira esteira = new Esteira(null, false, 50);
+        EstacaoInspecao estacaoInspecao = new EstacaoInspecao();
         Produto[] produtosDisponiveis = new Produto[]{
             new Produto(1, "Paracetamol 500mg", 4),
             new Produto(2, "Ibuprofeno 400mg", 6),
             new Produto(3, "Dipirona 500mg", 5)
         };
-
-        // optamos por não utilizar arraylist na tarefa 1
         Produto[] produtosProcessados = new Produto[1000];
         int totalProcessados = 0;
-
-        // Instanciar máquina de processamento
-        Maquina maquina = new Maquina("Compressora de Comprimidos", 50);
-
-        // Instanciar esteira
-        Esteira esteira = new Esteira(null, false, 50);
-
-        // Instanciar estação de inspeção
-        EstacaoInspecao estacaoInspecao = new EstacaoInspecao();
 
         System.out.println("========================================");
         System.out.println("FÁBRICA DE MEDICAMENTOS");
@@ -45,11 +36,12 @@ public class Main {
             System.out.println("1 - Iniciar produção");
             System.out.println("2 - Consultar estoque");
             System.out.println("3 - Consultar medicamentos processados");
-            System.out.println("4 - Sair");
-            System.out.print("Escolha uma opção (1-4): ");
+            System.out.println("4 - Gerenciar máquina");
+            System.out.println("5 - Sair");
+            System.out.print("Escolha uma opção (1-5): ");
 
             if (!scanner.hasNextInt()) {
-                System.out.println("Opção inválida. Tente novamente.\n");
+                System.out.println("Opção inválida, continue.\n");
                 scanner.next();
                 continue;
             }
@@ -129,9 +121,8 @@ public class Main {
                     System.out.println("[OK] Esteira ligada.");
                     Thread.sleep(400);
 
-                    maquina.ligar();
-                    System.out.println("[OK] Máquina " + maquina.getNome() + " ligada.");
-                    Thread.sleep(400);
+                    //System.out.println("[OK] Máquina " + maquina.getNome() + " ligada.");
+                    //Thread.sleep(400);
 
                     estacaoInspecao.ativar();
                     System.out.println("[OK] Estação de inspeção ativada.");
@@ -187,7 +178,6 @@ public class Main {
                     }
 
                     // Desligar equipamentos após ciclo concluído
-                    maquina.desligar();
                     esteira.desligar();
                     estacaoInspecao.desativar();
                     System.out.println("\n[OK] Equipamentos desligados.");
@@ -235,12 +225,29 @@ public class Main {
                     break;
 
                 case 4:
+                    System.out.println("\nGerenciar máquina, digite 1 para ligar e 0 para desligar:");
+
+                    int escolhaMaquina = scanner.nextInt();
+                    if (escolhaMaquina == 1) {
+                        maquina.ligar();
+                        Thread.sleep(400);
+                        System.out.println("\n[OK] Máquina ligada.");
+                    } else {
+                        maquina.desligar();
+                        Thread.sleep(400);
+                        System.out.println("\n[OK] Máquina desligada.");
+                    } 
+                    break;
+
+                case 5:
                     System.out.println("\nEncerrando o sistema da planta industrial Farmacêutica. Até logo!");
                     executando = false;
                     break;
+                
+                    
 
                 default:
-                    System.out.println("\nOpção inválida! Escolha entre 1 e 4.\n");
+                    System.out.println("\nOpção inválida! Escolha entre 1 e 5.\n");
             }
         }
 

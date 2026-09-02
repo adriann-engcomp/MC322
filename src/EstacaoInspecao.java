@@ -1,10 +1,8 @@
 public class EstacaoInspecao {
 
-    // Atributos privados
     private boolean ativa;
     private int produtosInspecionados;
 
-    // Construtor (incializo)
     public EstacaoInspecao() {
         this.ativa = false;
         this.produtosInspecionados = 0;
@@ -26,7 +24,6 @@ public class EstacaoInspecao {
         this.produtosInspecionados++;
         return true;
     }
-
     public int getTotalInspecionados() {
         return produtosInspecionados;
     }

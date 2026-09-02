@@ -1,6 +1,5 @@
 public class Produto {
 
-    // Atributos privados
     private int id;
     private String nome;
     private boolean status;
@@ -13,11 +12,9 @@ public class Produto {
         this.status = false;
     }
 
-    // Métodos
     public void processar() {
         this.status = true;
     }
-
     public void definirDemandaMateriaPrima(double quantidade) {
         this.quantidadeMateriaPrimaNecessaria = quantidade;
     }
@@ -25,15 +22,12 @@ public class Produto {
     public double getDemandaMateriaPrima() {
         return quantidadeMateriaPrimaNecessaria;
     }
-
     public int getId() {
         return id;
     }
-
     public String getNome() {
         return nome;
     }
-
     public boolean getStatus() {
         return status;
     }
