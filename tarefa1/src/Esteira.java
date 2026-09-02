@@ -5,15 +5,16 @@ public class Esteira {
     // Atributos privados
     private Object item;
     private boolean emMovimento;
-    // Capacidade maxima de peso ou volume que a esteira pode transportar.
     private double capacidadeMaxima;
 
-    public Esteira(double capacidadeMaxima) {
+    // Construtor
+    public Esteira(Object item, boolean emMovimento, int capacidadeMaxima) {
+        this.item = item;
+        this.emMovimento = emMovimento;
         this.capacidadeMaxima = capacidadeMaxima;
-        this.emMovimento = false;
-        this.item = null;
     }
 
+    // Métodos
     public void ligar() {
         this.emMovimento = true;
     }
@@ -42,10 +43,12 @@ public class Esteira {
         return itemRemovido;
     }
 
+    //???
     public boolean verificarCapacidade(double peso) {
         return peso <= this.capacidadeMaxima;
     }
 
+    // Getters
     public Object getItem() {
         return item;
     }
