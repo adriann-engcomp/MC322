@@ -1,23 +1,29 @@
 
 import java.util.Scanner;
-import model.Maquina;
 import model.MateriaPrima;
 import model.Produto;
+import model.Maquina;
+import model.Esteira;
+import model.EstacaoInspecao;
+
+private static Produto[] remedios = new Produto[100];
 
 public class Main {
 
-    // inicializando remedios
-    static Produto[] remedios = new Produto[100];
+    // Instancio os objetos
 
-    public static void main(String[] args) {
-        MateriaPrima materiaPrima = new MateriaPrima(1, "Composto Ativo XR-7", 100, "g", 20);
-        // a capacidade maxima da maquina são 10 remedios por ciclo (o ciclo é definido pelo uso do usuario)
-        Maquina maquina = new Maquina("Maqquina farmaceutica", true, 10);
-
-        // para simplificar, cada remédio vai consumir 4g da materia prima
+    // Vetor: cada remédio vai consumir 4g da materia prima
         remedios[0] = new Produto(1, "Paracetamol", 4);
         remedios[1] = new Produto(2, "Ibuprofeno", 4);
         remedios[2] = new Produto(3, "Dipirona", 4);
+
+    public static void main(String[] args) {
+        MateriaPrima materiaPrima = new MateriaPrima(1, "Composto X", 100, "g", 20);
+        // o ciclo é definido pelo uso do usuario
+        Maquina maquina = new Maquina("Maquina farmaceutica", true, 10);
+        Esteira esteira = new Esteira(materiaPrima, true, 100);
+        EstacaoInspecao estacao = new EstacaoInspecao(true, 100);
+
 
         System.out.println("""
         ========================================

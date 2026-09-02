@@ -6,9 +6,9 @@ public class EstacaoInspecao {
     private int produtosInspecionados;
 
     // Construtor (incializo)
-    public EstacaoInspecao() {
-        this.ativa = false;
-        this.produtosInspecionados = 0;
+    public EstacaoInspecao(boolean ativa, int produtosInspecionados) {
+        this.ativa = ativa;
+        this.produtosInspecionados = produtosInspecionados;
     }
 
     // Métodos

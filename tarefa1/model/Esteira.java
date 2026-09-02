@@ -7,9 +7,10 @@ public class Esteira {
     private int capacidadeMaxima;
 
     // Construtor
-    public Esteira(int capacidadeMaxima) {
+    public Esteira(Object item, boolean emMovimento, int capacidadeMaxima) {
+        this.item = item;
+        this.emMovimento = emMovimento;
         this.capacidadeMaxima = capacidadeMaxima;
-        this.emMovimento = false;
     }
 
     // Métodos
