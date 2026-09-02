@@ -1,5 +1,100 @@
-Justificativa da escolha do tema:
-Escolhemos criar uma fabrica de medicacoes devido ao fato de ser uma área muito ampla, onde podemos tanto construir um algoritmo para esse cenário de logistica,
-quanto 
+Escolhemos desenvolver uma fábrica de medicamentos porque 
+[explique aqui o motivo pessoal da dupla: interesse pela área 
+da saúde, contato com profissionais da área, curiosidade sobre 
+processos farmacêuticos ou outro motivo verdadeiro].
 
-Visão de expansão futura:
+Além de sua importância para a sociedade, a produção de medicamentos oferece um cenário 
+interessante para aplicar os conceitos de Programação Orientada 
+a Objetos. Nesse tipo de fábrica, diferentes componentes possuem 
+responsabilidades específicas: a matéria-prima representa os 
+compostos utilizados, a esteira realiza o transporte, a máquina 
+transforma os materiais em comprimidos e a estação de inspeção 
+verifica os produtos fabricados.
+
+Decidimos trabalhar inicialmente com medicamentos mais 
+conhecidos e usados, como paracetamol, ibuprofeno e dipirona, 
+porque isso facilita a compreensão do funcionamento da fábrica. 
+Apesar de o programa representar uma versão simplificada do 
+processo real, procuramos manter uma sequência de produção coerente, 
+desde o consumo da matéria-prima até a inspeção do produto final.
+
+A escolha desse tema também permite discutir aspectos 
+importantes, como controle de estoque, rastreabilidade, 
+qualidade e segurança. Esses elementos são especialmente 
+relevantes em uma fábrica farmacêutica, pois erros no processo 
+de fabricação podem afetar diretamente a saúde das pessoas.
+Disso, veja um exemplo:
+
+A fábrica de Medicamentos
+
+Dia a dia:
+
+A minha fabrica produz 100 comprimidos de Dipirona 500mg (comprimido) e ibuprofeno 400 mg (comprimido) por dia.
+Diante disso, todos os dias o meu funcionário João responsável pelo controle da operação repassa uma tabela no Excel para o 
+funcionário Francisco conferir o id, o nome, a quantidade, a unidade, a quantidadeMinima que chegou no caminhão para que nada 
+venha errado.
+
+Depois de conferir tudo, Francisco deixa o caminhão entrar na fábrica para assim descarregar a matéria prima para assim iniciar o 
+fluxo de produção.
+
+Antes de colocar a Materia Prima na esteira defino o quanto vou consumir, tal que consumir = quantidade de materia prima que 
+recebi - demanda por dia. Disso, se a demanda for maior, então nao incio o processo, se for igual continuo o fluxo e se for 
+maior continuo o fluo e guardo o resto no estoque = 'verificarDisponibilidade'. Nesse caso, guardo o estoque em 'adicionarEstoque'.
+
+Diante disso, para prestar contas no final do dia João sobe no Excel o identificador de matéria-prima (getId), o nome (getNome) 
+e quantidade (getQuantidade).
+
+
+
+VISÃO DE EXPANSÃO FUTURA
+
+Nos próximos laboratórios, imaginamos expandir a fábrica com 
+novas etapas, equipamentos e regras de produção. 
+Uma possível evolução seria permitir o uso de diferentes 
+matérias-primas para fabricar um mesmo medicamento. 
+Dessa forma, cada produto poderia possuir uma fórmula composta 
+por determinadas quantidades de princípios ativos e 
+outros componentes.
+
+Também poderíamos adicionar novos equipamentos, como:
+
+Misturador de compostos, responsável por combinar as 
+matérias-primas;
+
+Máquina de revestimento, responsável por criar capsulas;
+
+Máquina de embalagem, responsável por organizar os comprimidos 
+em cartelas;
+
+Estação de controle de qualidade, responsável por aprovar ou 
+reprovar produtos;
+
+Equipamento de descarte, responsável por encaminhar produtos 
+defeituosos.
+
+Outra expansão possível seria implementar o controle de lotes. 
+Cada conjunto de medicamentos fabricados teria um número de lote, 
+uma data de fabricação e um prazo de validade. 
+Isso melhoraria a rastreabilidade e permitiria descobrir 
+quais matérias-primas e equipamentos foram utilizados em cada 
+produção.
+
+A estação de inspeção também poderia realizar verificações mais 
+detalhadas. Em vez de aprovar automaticamente todos os produtos, 
+ela poderia analisar critérios como peso, composição, validade e 
+presença de defeitos. Produtos reprovados seriam separados e 
+encaminhados para descarte ou reprocessamento.
+
+Por fim, pretendemos utilizar os conceitos apresentados nas 
+próximas tarefas para melhorar a organização do sistema. 
+Com herança e classes abstratas, por exemplo, diferentes 
+equipamentos poderão compartilhar características comuns. 
+Também seria possível adicionar manutenção de máquinas, 
+registro de falhas, funcionários responsáveis, relatórios de 
+produção e níveis de automação mais avançados.
+
+Integrantes da dupla:
+
+[Nome completo do primeiro integrante]
+
+[Nome completo do segundo integrante]
