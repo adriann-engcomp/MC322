@@ -11,8 +11,10 @@ public class Main {
         EstacaoInspecao estacaoInspecao = new EstacaoInspecao();
         Produto[] produtosDisponiveis = new Produto[]{
             new Produto(1, "Paracetamol 500mg", 4),
-            new Produto(2, "Ibuprofeno 400mg", 6),
-            new Produto(3, "Dipirona 500mg", 5)
+            new Produto(2, "Losartana 50mg", 6),
+            new Produto(3, "Dipirona 500mg", 5),
+            new Produto(4, "Metformina 500mg", 8),
+            new Produto(5, "Ritalina 40mg", 7),
         };
         Produto[] produtosProcessados = new Produto[1000];
         int totalProcessados = 0;

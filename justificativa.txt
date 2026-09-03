@@ -1,100 +1,30 @@
-Escolhemos desenvolver uma fábrica de medicamentos porque 
-[explique aqui o motivo pessoal da dupla: interesse pela área 
-da saúde, contato com profissionais da área, curiosidade sobre 
-processos farmacêuticos ou outro motivo verdadeiro].
+Tarefa 1: Início da Operação - Justificativa do tema escolhido para a fábrica
 
-Além de sua importância para a sociedade, a produção de medicamentos oferece um cenário 
-interessante para aplicar os conceitos de Programação Orientada 
-a Objetos. Nesse tipo de fábrica, diferentes componentes possuem 
-responsabilidades específicas: a matéria-prima representa os 
-compostos utilizados, a esteira realiza o transporte, a máquina 
-transforma os materiais em comprimidos e a estação de inspeção 
-verifica os produtos fabricados.
+Dupla: Adriann e Alex
+Data de entrega: 02/09
 
-Decidimos trabalhar inicialmente com medicamentos mais 
-conhecidos e usados, como paracetamol, ibuprofeno e dipirona, 
-porque isso facilita a compreensão do funcionamento da fábrica. 
-Apesar de o programa representar uma versão simplificada do 
-processo real, procuramos manter uma sequência de produção coerente, 
-desde o consumo da matéria-prima até a inspeção do produto final.
+1. Por que escolhemos uma fábrica de medicamentos?
 
-A escolha desse tema também permite discutir aspectos 
-importantes, como controle de estoque, rastreabilidade, 
-qualidade e segurança. Esses elementos são especialmente 
-relevantes em uma fábrica farmacêutica, pois erros no processo 
-de fabricação podem afetar diretamente a saúde das pessoas.
-Disso, veja um exemplo:
+Escolhemos esse tema pois um dos integrantes do grupo faz uma iniciação científica na qual utiliza a computação como ferramenta para a área de saúde. Ele estruturou os dados em SQL e usou PHP para definir funções que representaram o controle de medicamentos para pessoas que são acometidas com epilepsia no Hospital das Clínicas da Unicamp. Para tal ele usou o seguinte livro: "Metodologia de Pesquisa para Ciência da Computação" [1], que o guiou na pesquisa e fez com que notasse que o uso de POO, que não foi muito, seria bom para dividir estruturas e promover clareza. Além disso, temos familiares acometidos, como muitas pessoas são geralmente, por dores de cabeça, resfriados, gripes, hipertensão, diabetes ou, atualmente, neurodivergências. Logo, diante de tais fatores tronou-se intrínseco para nos o quanto uma fabrica de medicamentos é importante para o bem-estar da sociedade.
 
-A fábrica de Medicamentos
+O setor farmacêutico é um setor que está passando por muitas mudanças na atualidade, com perspectivas bastante promissoras no que diz respeito à automatização de fábricas e ao uso de IA para desenvolver medicamentos mais rapidamente, especialmente após a pandemia de COVID-19. Algumas das diversas vantagens de se utilizar robôs nas fábricas farmacêuticas são: 1. A maior precisão e controle no que diz respeito à medição das matérias-primas e princípios ativos, aspecto essencial no que diz respeito a área, na qual mesmo os menores erros podem ter efeitos extremamente adversos ou até mesmo fatais nos usuários dos medicamentos, 2. Menor risco de contaminação microbiológica na linha de produção introduzida por humanos, 3. Maior rastreabilidade dos problemas ao longo de toda a cadeia e a possibilidade de corrigir os erros rapidamente, sem ter que parar todo o processo ou aguardar até a finalização da produção. Isso se deve ao uso de sensores para medição de massa, da temperatura, do pH, da pressão, da umidade, dentre outras propriedades das soluções e do ambiente ao longo de toda a linha de produção. Por fim, 4. Uma última vantagem trazida por esses sistemas diz respeito ao fato de poderem ser rapidamente montados e escalonados em um contexto de emergência sanitária (tal qual o da COVID-19), possibilitando a produção mais rápida de medicamentos e, ao mesmo tempo, mantendo totalmente a segurança sanitária do empreendimento, inclusive no que diz respeito à inibição da contaminação humana [2]. 
 
-Dia a dia:
+Nesse sentido, entendemos que a produção é definida assim: A matéria-prima chega em caminhões em sua maioria, devido à grande malha brasileira; é verificada por um funcionário da empresa que é responsável pela parte operacional; se aprovada, segue para esteira que a transporta para a máquina onde, por fim, vira produto. Esse produto tem a sua forma alterada conforme a demanda do mercado, sendo um funcionário de Inteligência de Negócios (BI) responsável por catalogar e um profissional de Pricing por definir o seu preço. Por fim, o produto passa por uma etapa rigorosa de inspeção do medicamento conforme os moldes da Anvisa e, em sendo aprovado, tal produto é encaminhado para esteira onde logo mais será transportado para diversas regiões conforme o time de logística definir. Disso, tais diretrizes se encaixam no que foi denotado pelo projeto da Tarefa 1.
 
-A minha fabrica produz 100 comprimidos de Dipirona 500mg (comprimido) e ibuprofeno 400 mg (comprimido) por dia.
-Diante disso, todos os dias o meu funcionário João responsável pelo controle da operação repassa uma tabela no Excel para o 
-funcionário Francisco conferir o id, o nome, a quantidade, a unidade, a quantidadeMinima que chegou no caminhão para que nada 
-venha errado.
+2. Mediante tal escolha, como seria o dia a dia de nossa fábrica?
 
-Depois de conferir tudo, Francisco deixa o caminhão entrar na fábrica para assim descarregar a matéria prima para assim iniciar o 
-fluxo de produção.
+O nosso dia a dia seria pautado em produzir 1000 comprimidos dos seguintes medicamentos: Paracetamol 500mg, Losartana 50mg, Dipirona 500mg, Metformina 500mg e Ritalina 40mg. Todo dia, o funcionário João - responsável pelo controle da operação repassa uma tabela para o funcionário Francisco. Essa tabela contém o id, o nome, a quantidade, a unidade e a quantidade mínima da matéria-prima que chegou no caminhão. Francisco confere os dados antes de liberar a entrada do caminhão na fábrica. Essa conferência virou o construtor da classe MateriaPrima no código. Quando o objeto é criado, ele recebe exatamente esses cinco valores, assim como Francisco recebe a tabela antes de deixar o caminhão entrar. Depois que a matéria-prima é descarregada, o operador define quanto vai consumir. A lógica é: consumo = quantidade recebida - demanda do dia. Se a demanda for maior do que o que tem em estoque, a produção não começa. Se for igual ou menor, a produção segue e o que sobra fica registrado no estoque. Isso virou o método verificarDisponibilidade() e o método consumir() na classe MateriaPrima. No final do dia, João precisa registrar na planilha o identificador da matéria-prima, o nome e a quantidade restante. Para isso, o código usa getId(), getNome() e getQuantidade().
 
-Antes de colocar a Materia Prima na esteira defino o quanto vou consumir, tal que consumir = quantidade de materia prima que 
-recebi - demanda por dia. Disso, se a demanda for maior, então nao incio o processo, se for igual continuo o fluxo e se for 
-maior continuo o fluo e guardo o resto no estoque = 'verificarDisponibilidade'. Nesse caso, guardo o estoque em 'adicionarEstoque'.
+3. Agora, como poderíamos expandir a fábrica em um futuro não tão distante?
 
-Diante disso, para prestar contas no final do dia João sobe no Excel o identificador de matéria-prima (getId), o nome (getNome) 
-e quantidade (getQuantidade).
+De ínicio, notamos que os medicamentos usam diversas matérias-primas diferentes. Então, certamente poderíamos criar um ArrayList para cada medicamento com quantidades diferentes, com Máquinas, produção e inspeção modernas (repletas de sensores para que aumentemos a produção em paralelo com a qualidade rigorosa baseada nas diretrizes da Anvisa) e com novos parâmetros que possibilitariam confiabilidade em nossos produtos.
 
+4. Conclusão
 
+Por fim, com os conceitos das próximas tarefas, como herança e classes abstratas, poderíamos organizar melhor os equipamentos. Hoje, a Maquina, a Esteira e a EstacaoInspecao têm comportamentos parecidos, como ligar e desligar. Com herança, isso poderia ser centralizado em uma classe.
 
-VISÃO DE EXPANSÃO FUTURA
+Referências bibliográficas:
 
-Nos próximos laboratórios, imaginamos expandir a fábrica com 
-novas etapas, equipamentos e regras de produção. 
-Uma possível evolução seria permitir o uso de diferentes 
-matérias-primas para fabricar um mesmo medicamento. 
-Dessa forma, cada produto poderia possuir uma fórmula composta 
-por determinadas quantidades de princípios ativos e 
-outros componentes.
+[1] WAZLAWICK, Raul Sidnei. Metodologia de pesquisa para ciência da computação. 2. ed. Rio de Janeiro: Elsevier, 2014.
 
-Também poderíamos adicionar novos equipamentos, como:
-
-Misturador de compostos, responsável por combinar as 
-matérias-primas;
-
-Máquina de revestimento, responsável por criar capsulas;
-
-Máquina de embalagem, responsável por organizar os comprimidos 
-em cartelas;
-
-Estação de controle de qualidade, responsável por aprovar ou 
-reprovar produtos;
-
-Equipamento de descarte, responsável por encaminhar produtos 
-defeituosos.
-
-Outra expansão possível seria implementar o controle de lotes. 
-Cada conjunto de medicamentos fabricados teria um número de lote, 
-uma data de fabricação e um prazo de validade. 
-Isso melhoraria a rastreabilidade e permitiria descobrir 
-quais matérias-primas e equipamentos foram utilizados em cada 
-produção.
-
-A estação de inspeção também poderia realizar verificações mais 
-detalhadas. Em vez de aprovar automaticamente todos os produtos, 
-ela poderia analisar critérios como peso, composição, validade e 
-presença de defeitos. Produtos reprovados seriam separados e 
-encaminhados para descarte ou reprocessamento.
-
-Por fim, pretendemos utilizar os conceitos apresentados nas 
-próximas tarefas para melhorar a organização do sistema. 
-Com herança e classes abstratas, por exemplo, diferentes 
-equipamentos poderão compartilhar características comuns. 
-Também seria possível adicionar manutenção de máquinas, 
-registro de falhas, funcionários responsáveis, relatórios de 
-produção e níveis de automação mais avançados.
-
-Integrantes da dupla:
-
-[Nome completo do primeiro integrante]
-
-[Nome completo do segundo integrante]
+[2] Autom8. Inside Pharmas High-Tech Factory. Youtube, 22 jun. 2025. 1 vídeo (11 min.). Disponível em: <.https://www.youtube.com/watch?v=hEI2VqbOsr0&t=211s>.  Acesso em: 2 set. 2026.
