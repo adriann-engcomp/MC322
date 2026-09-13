@@ -11,6 +11,14 @@ public abstract class Produto {
     // Construtor
     public Produto(int id, String nome, String status, double quantidadeMateriaPrimaPorUnidade, double qualidade) {
         // todo: conteudo que preciso fazer (inicializar atributos e incrementar totalProdutosFabricados)
+        this.id = id;
+        this.nome = nome;
+        this.status = "Aguardando";
+        this.quantidadeMateriaPrimaPorUnidade = quantidadeMateriaPrimaPorUnidade;
+        this.qualidade = qualidade;
+        this.probabilidadeFalhaAcumulada = 0;
+        totalProdutosFabricados++;
+
     }
 
     // Métodos Abstratos
@@ -20,76 +28,63 @@ public abstract class Produto {
 
     // Métodos Concretos
     public int getId() {
-        // todo: conteudo que preciso fazer
         return id;
     }
 
     public void setId(int id) {
-        // todo: conteudo que preciso fazer
         this.id = id;
     }
 
     public String getNome() {
-        // todo: conteudo que preciso fazer
         return nome;
     }
 
     public void setNome(String nome) {
-        // todo: conteudo que preciso fazer
         this.nome = nome;
     }
 
     public String getStatus() {
-        // todo: conteudo que preciso fazer
         return status;
     }
 
     public void setStatus(String status) {
-        // todo: conteudo que preciso fazer
         this.status = status;
     }
 
     public double getQuantidadeMateriaPrimaPorUnidade() {
-        // todo: conteudo que preciso fazer
         return quantidadeMateriaPrimaPorUnidade;
     }
 
     public void setQuantidadeMateriaPrimaPorUnidade(double quantidadeMateriaPrimaPorUnidade) {
-        // todo: conteudo que preciso fazer
         this.quantidadeMateriaPrimaPorUnidade = quantidadeMateriaPrimaPorUnidade;
     }
 
     public double getQualidade() {
-        // todo: conteudo que preciso fazer
         return qualidade;
     }
 
     public void setQualidade(double qualidade) {
-        // todo: conteudo que preciso fazer
         this.qualidade = qualidade;
     }
 
     public double getProbabilidadeFalhaAcumulada() {
-        // todo: conteudo que preciso fazer
         return probabilidadeFalhaAcumulada;
     }
 
     public void setProbabilidadeFalhaAcumulada(double probabilidadeFalhaAcumulada) {
-        // todo: conteudo que preciso fazer
         this.probabilidadeFalhaAcumulada = probabilidadeFalhaAcumulada;
     }
 
     public void aumentarProbabilidadeFalha(double incremento) {
         // todo: conteudo que preciso fazer (somar o incremento à probabilidadeFalhaAcumulada)
+        probabilidadeFalhaAcumulada += incremento;
     }
 
     public static int getTotalProdutosFabricados() {
-        // todo: conteudo que preciso fazer
         return totalProdutosFabricados;
     }
 
     public static void setTotalProdutosFabricados(int total) {
-        // todo: conteudo que preciso fazer
         totalProdutosFabricados = total;
     }
 }
