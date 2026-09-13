@@ -7,51 +7,47 @@ public class Demanda {
     // Construtor
     public Demanda(String tipoProduto, int quantidadeProdutos) {
         // todo: conteudo que preciso fazer (inicializar tipoProduto, quantidadeProdutos e atendida = false)
+        this.tipoProduto = tipoProduto;
+        this.quantidadeProdutos = quantidadeProdutos;
+        this.atendida = false;
     }
 
     // Métodos
     public void atualizarQuantidade(int novaQuantidade) {
         // todo: conteudo que preciso fazer (atualizar quantidadeProdutos)
+        novaQuantidade += quantidadeProdutos;
     }
-
     public double calcularMateriaPrimaNecessaria(double materiaPrimaPorUnidade) {
         // todo: conteudo que preciso fazer (calcular materiaPrimaPorUnidade * quantidadeProdutos)
-        return 0.0;
+        return materiaPrimaPorUnidade *= quantidadeProdutos;
     }
 
     public void atender() {
-        // todo: conteudo que preciso fazer (marcar atendida = true)
         this.atendida = true;
     }
 
     // Getters e Setters
+    // TipoProduto
     public String getTipoProduto() {
-        // todo: conteudo que preciso fazer
         return tipoProduto;
     }
-
     public void setTipoProduto(String tipoProduto) {
-        // todo: conteudo que preciso fazer
         this.tipoProduto = tipoProduto;
     }
 
+    // QuantidadeProdutos
     public int getQuantidadeProdutos() {
-        // todo: conteudo que preciso fazer
         return quantidadeProdutos;
     }
-
     public void setQuantidadeProdutos(int quantidadeProdutos) {
-        // todo: conteudo que preciso fazer
         this.quantidadeProdutos = quantidadeProdutos;
     }
 
+    // Atendida
     public boolean isAtendida() {
-        // todo: conteudo que preciso fazer
         return atendida;
     }
-
     public void setAtendida(boolean atendida) {
-        // todo: conteudo que preciso fazer
         this.atendida = atendida;
     }
 }
