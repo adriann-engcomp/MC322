@@ -4,17 +4,19 @@ public class MedicamentoAltaQualidade extends Produto {
     public MedicamentoAltaQualidade(int id, String nome, String status, double quantidadeMateriaPrimaPorUnidade) {
         super(id, nome, status, quantidadeMateriaPrimaPorUnidade, 0.9);
         // todo: conteudo que preciso fazer (qualidade fixa em 0.9 e maior demanda de matéria-prima)
+        
     }
 
     @Override
     public void processar() {
         // todo: conteudo que preciso fazer (define o processamento específico de produto de alta qualidade)
+        setStatus("Processando");
     }
 
     @Override
     public double calcularTempoProducao() {
         // todo: conteudo que preciso fazer (tempo de produção para medicamento de alta qualidade)
-        return 0.0;
+        return 10.0; // unidades/tempo
     }
 
     @Override

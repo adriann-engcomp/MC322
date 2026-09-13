@@ -14,7 +14,7 @@ public class MedicamentoMediaQualidade extends Produto {
     @Override
     public double calcularTempoProducao() {
         // todo: conteudo que preciso fazer (tempo de produção para medicamento de média qualidade)
-        return 0.0;
+        return 6.0; // unidades/tempo
     }
 
     @Override

@@ -8,13 +8,12 @@ public class MedicamentoBaixaQualidade extends Produto {
 
     @Override
     public void processar() {
-        // todo: conteudo que preciso fazer (define o processamento específico de produto de baixa qualidade)
+        setStatus("Processando");
     }
 
     @Override
     public double calcularTempoProducao() {
-        // todo: conteudo que preciso fazer (tempo de produção para medicamento de baixa qualidade)
-        return 0.0;
+        return 5.0; // unidades/tempo
     }
 
     @Override
