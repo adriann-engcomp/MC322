@@ -1,0 +1,30 @@
+Tarefa 1: Início da Operação - Justificativa do tema escolhido para a fábrica
+
+Dupla: Adriann e Alex
+Data de entrega: 02/09
+
+1. Por que escolhemos uma fábrica de medicamentos?
+
+Escolhemos esse tema pois um dos integrantes do grupo faz uma iniciação científica na qual utiliza a computação como ferramenta para a área de saúde. Ele estruturou os dados emSQL e usou PHP para definir funções que representaram o controle de medicamentos para pessoas que são acometidas com epilepsia no Hospital das Clínicas da Unicamp. Para tal eleusou o seguinte livro: "Metodologia de Pesquisa para Ciência da Computação" [1], que o guiou na pesquisa e fez com que notasse que o uso de POO, que não foi muito, seria bom para dividir estruturas e promover clareza. Além disso, temos familiares acometidos, como muitas pessoas são geralmente, por dores de cabeça, resfriados, gripes, hipertensão, diabetes ou, atualmente, neurodivergências. Logo, diante de tais fatores tronou-se intrínseco para nos o quanto uma fabrica de medicamentos é importante para o bem-estar da sociedade.
+
+O setor farmacêutico é um setor que está passando por muitas mudanças na atualidade, com perspectivas bastante promissoras no que diz respeito à automatização de fábricas e ao uso de IA para desenvolver medicamentos mais rapidamente, especialmente após a pandemia de COVID-19. Algumas das diversas vantagens de se utilizar robôs nas fábricas farmacêuticas são: 1. A maior precisão e controle no que diz respeito à medição das matérias-primas e princípios ativos, aspecto essencial no que diz respeito a área, na qual mesmo os menores erros podem ter efeitos extremamente adversos ou até mesmo fatais nos usuários dos medicamentos, 2. Menor risco de contaminação microbiológica na linha de produção introduzida por humanos, 3. Maior rastreabilidade dos problemas ao longo de toda a cadeia e a possibilidade de corrigir os erros rapidamente, sem ter que parar todo o processo ou aguardar até a finalização da produção. Isso se deve ao uso de sensores para medição de massa, da temperatura, do pH, da pressão, da umidade, dentre outras propriedades das soluções e do ambiente ao longo de toda a linha de produção. Por fim, 4. Uma última vantagem trazida por esses sistemas diz respeito ao fato de poderem ser rapidamente montados e escalonados em um contexto de emergência sanitária (tal qual o da COVID-19), possibilitando a produção mais rápida de medicamentos e, ao mesmo tempo, mantendo totalmente a segurança sanitária do empreendimento, inclusive no que diz respeito à inibição da contaminação humana [2]. 
+
+Nesse sentido, entendemos que a produção é definida assim: A matéria-prima chega em caminhões em sua maioria, devido à grande malha brasileira; é verificada por um funcionário da empresa que é responsável pela parte operacional; se aprovada, segue para esteira que a transporta para a máquina onde, por fim, vira produto. Esse produto tem a sua forma alterada conforme a demanda do mercado, sendo um funcionário de Inteligência de Negócios (BI) responsável por catalogar e um profissional de Pricing por definir o seu preço. Por fim, o produto passa por uma etapa rigorosa de inspeção do medicamento conforme os moldes da Anvisa e, em sendo aprovado, tal produto é encaminhado para esteira onde logo mais será transportado para diversas regiões conforme o time de logística definir. Disso, tais diretrizes se encaixam no que foi denotado pelo projeto da Tarefa 1.
+
+2. Mediante tal escolha, como seria o dia a dia de nossa fábrica?
+
+O nosso dia a dia seria pautado em produzir 1000 comprimidos dos seguintes medicamentos: Paracetamol 500mg, Losartana 50mg, Dipirona 500mg, Metformina 500mg e Ritalina 40mg. Todo dia, o funcionário João - responsável pelo controle da operação repassa uma tabela para o funcionário Francisco. Essa tabela contém o id, o nome, a quantidade, a unidade e a quantidade mínima da matéria-prima que chegou no caminhão. Francisco confere os dados antes de liberar a entrada do caminhão na fábrica. Essa conferência virou o construtor da classe MateriaPrima no código. Quando o objeto é criado, ele recebe exatamente esses cinco valores, assim como Francisco recebe a tabela antes de deixar o caminhão entrar. Depoisque a matéria-prima é descarregada, o operador define quanto vai consumir. A lógica é: consumo = quantidade recebida - demanda do dia. Se a demanda for maior do que o que tem em estoque, a produção não começa. Se for igual ou menor, a produção segue e o que sobra fica registrado no estoque. Isso virou o método verificarDisponibilidade() e o método consumir() na classe MateriaPrima. No final do dia, João precisa registrar na planilha o identificador da matéria-prima, o nome e a quantidade restante. Para isso, o código usa getId(), getNome() e getQuantidade().
+
+3. Agora, como poderíamos expandir a fábrica em um futuro não tão distante?
+
+De ínicio, notamos que os medicamentos usam diversas matérias-primas diferentes. Então, certamente poderíamos criar um ArrayList para cada medicamento com quantidades diferentes, com Máquinas, produção e inspeção modernas (repletas de sensores para que aumentemos a produção em paralelo com a qualidade rigorosa baseada nas diretrizes da Anvisa) e com novos parâmetros que possibilitariam confiabilidade em nossos produtos.
+
+4. Conclusão
+
+Por fim, com os conceitos das próximas tarefas, como herança e classes abstratas, poderíamos organizar melhor os equipamentos. Hoje, a Maquina, a Esteira e a EstacaoInspecao têm comportamentos parecidos, como ligar e desligar. Com herança, isso poderia ser centralizado em uma classe.
+
+Referências bibliográficas:
+
+[1] WAZLAWICK, Raul Sidnei. Metodologia de pesquisa para ciência da computação. 2. ed. Rio de Janeiro: Elsevier, 2014.
+
+[2] Autom8. Inside Pharmas High-Tech Factory. Youtube, 22 jun. 2025. 1 vídeo (11 min.). Disponível em: <.https://www.youtube.com/watch?v=hEI2VqbOsr0&t=211s>.  Acesso em: 2 set.2026.
