@@ -7,10 +7,16 @@ public abstract class Maquina {
     private int capacidadeMaxima;
     private double probabilidadeFalha;
     private double custoOperacao;
+    private Random random;
 
-    // Construtor
+    // Construtor (inicializo)
     public Maquina(String nome, int capacidadeMaxima, double probabilidadeFalha, double custoOperacao) {
-        // todo: conteudo que preciso fazer (inicializar atributos, ligada inicia como false ou conforme desejado)
+        this.nome = nome;
+        this.ligada = false;
+        this.capacidadeMaxima = capacidadeMaxima;
+        this.probabilidadeFalha = probabilidadeFalha;
+        this.custoOperacao = custoOperacao;
+        this.random = new Random();
     }
 
     // Métodos Abstratos
@@ -19,63 +25,52 @@ public abstract class Maquina {
 
     // Métodos Concretos
     public void ligar() {
-        // todo: conteudo que preciso fazer
         this.ligada = true;
     }
 
     public void desligar() {
-        // todo: conteudo que preciso fazer
         this.ligada = false;
     }
 
     public boolean estaLigada() {
-        // todo: conteudo que preciso fazer
         return ligada;
     }
 
     public String getNome() {
-        // todo: conteudo que preciso fazer
         return nome;
     }
 
     public void setNome(String nome) {
-        // todo: conteudo que preciso fazer
         this.nome = nome;
     }
 
     public int getCapacidadeMaxima() {
-        // todo: conteudo que preciso fazer
         return capacidadeMaxima;
     }
 
     public void setCapacidadeMaxima(int capacidadeMaxima) {
-        // todo: conteudo que preciso fazer
         this.capacidadeMaxima = capacidadeMaxima;
     }
 
     public double getProbabilidadeFalha() {
-        // todo: conteudo que preciso fazer
         return probabilidadeFalha;
     }
 
     public void setProbabilidadeFalha(double probabilidadeFalha) {
-        // todo: conteudo que preciso fazer
         this.probabilidadeFalha = probabilidadeFalha;
     }
 
     public double getCustoOperacao() {
-        // todo: conteudo que preciso fazer
         return custoOperacao;
     }
 
     public void setCustoOperacao(double custoOperacao) {
-        // todo: conteudo que preciso fazer
         this.custoOperacao = custoOperacao;
     }
 
     // Método protegido com aleatoriedade
     protected boolean verificarFalha() {
         // todo: conteudo que preciso fazer (usar Random ou probabilidadeFalha para verificar se houve falha)
-        return false;
+        return random.nextDouble() < probabilidadeFalha;
     }
 }
