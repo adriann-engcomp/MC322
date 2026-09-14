@@ -23,7 +23,7 @@ public abstract class Produto {
 
     // Métodos Abstratos
     public abstract void processar();
-    public abstract double calcularTempoProducao();
+    public abstract double calcularTempoProducao(int quantidade);
     public abstract String getTipo();
 
     // Métodos Concretos

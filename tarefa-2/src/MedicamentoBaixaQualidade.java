@@ -12,8 +12,8 @@ public class MedicamentoBaixaQualidade extends Produto {
     }
 
     @Override
-    public double calcularTempoProducao() {
-        return 5.0; // unidades/tempo
+    public double calcularTempoProducao(int quantidade) {
+        return 5.0 * quantidade; // tempo(min)*quantidade(unidades)
     }
 
     @Override
