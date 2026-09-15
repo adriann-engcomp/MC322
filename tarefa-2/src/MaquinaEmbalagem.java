@@ -4,7 +4,6 @@ public class MaquinaEmbalagem extends Maquina {
     // Construtor
     public MaquinaEmbalagem(String nome, int capacidadeMaxima, double probabilidadeFalha, double custoOperacao, double chanceAumentarFalha) {
         super(nome, capacidadeMaxima, probabilidadeFalha, custoOperacao);
-        // todo: conteudo que preciso fazer (inicializar chanceAumentarFalha)
     }
 
     @Override

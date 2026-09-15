@@ -3,7 +3,6 @@ public class MaquinaInspecao extends Maquina {
     // Construtor
     public MaquinaInspecao(String nome, int capacidadeMaxima, double probabilidadeFalha, double custoOperacao) {
         super(nome, capacidadeMaxima, probabilidadeFalha, custoOperacao);
-        // todo: conteudo que preciso fazer (inicializar atributos)
     }
 
     @Override

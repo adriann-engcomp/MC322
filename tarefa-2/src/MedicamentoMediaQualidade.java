@@ -3,7 +3,6 @@ public class MedicamentoMediaQualidade extends Produto {
     // Construtor
     public MedicamentoMediaQualidade(int id, String nome, String status, double quantidadeMateriaPrimaPorUnidade) {
         super(id, nome, status, quantidadeMateriaPrimaPorUnidade, 0.7);
-        // todo: conteudo que preciso fazer (qualidade fixa em 0.7 e demanda média de matéria-prima)
     }
 
     @Override
@@ -13,7 +12,6 @@ public class MedicamentoMediaQualidade extends Produto {
 
     @Override
     public double calcularTempoProducao(int quantidade) {
-        // todo: conteudo que preciso fazer (tempo de produção para medicamento de média qualidade)
         return 6.0 * quantidade; // tempo(min)*quantidade(unidades)
     }
 
