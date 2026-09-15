@@ -43,26 +43,37 @@ public class GerenciadorProducao {
     }
 
     public void comprarMateriaPrima(double quantidade) {
-        // todo: conteudo que preciso fazer
         // 1. Calcular custo total (quantidade * custoPorUnidade)
+        double custoTotal = quantidade * materiaPrima.getCustoPorUnidade();
         // 2. Verificar se há budget suficiente
+        if (budget < custoTotal) {
+            System.out.println("Budget insuficiente para comprar matéria-prima.");
+            return;
+        }
         // 3. Debitar valor do budget e adicionar quantidade ao estoque de materiaPrima
+        budget -= custoTotal;
+        materiaPrima.adicionarEstoque(quantidade);
+        System.out.println("Compra de matéria-prima realizada com sucesso. Novo budget: R$ " + budget);
     }
 
     public void exibirBudget() {
-        // todo: conteudo que preciso fazer (exibir o valor atual do budget)
+        System.out.println("Budget: " + budget);
     }
 
     public void exibirArmazem() {
-        // todo: conteudo que preciso fazer (listar todos os produtos fabricados no armazém e seus status)
+        System.out.println("Produtos Fabricados:");
+        for (Produto produto : produtosFabricados) {
+            System.out.println("ID: " + produto.getId() + ", Nome: " +  produto.getNome() + ", Qualidade: " + produto.getQualidade() + ", Status: " + produto.getStatus());
+        }
     }
 
     public void exibirEstoqueMateriaPrima() {
-        // todo: conteudo que preciso fazer (exibir quantidade e dados da matéria-prima)
+        System.out.println("Estoque de Matéria-Prima:");
+        System.out.println("ID: " + materiaPrima.getId() + ", Nome: " + materiaPrima.getNome() + ", Quantidade: " + materiaPrima.getQuantidade() + ", Unidade: " + materiaPrima.getUnidade());
     }
 
     public void adicionarMaquina(Maquina maquina) {
-        // todo: conteudo que preciso fazer (adicionar máquina à linha de produção)
+        maquinas.add(maquina);
     }
 
     // Método privado

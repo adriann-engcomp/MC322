@@ -19,6 +19,10 @@ public class MateriaPrima {
 
     // Métodos
     public boolean consumir(double qtd) {
+        if (this.quantidade >= qtd) {
+            this.quantidade -= qtd;
+            return true;
+        }
         return false;
     }
 
