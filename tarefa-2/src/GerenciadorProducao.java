@@ -25,19 +25,21 @@ public class GerenciadorProducao {
     }
 
     public void atualizarDemanda(int indice, int novaQuantidade) {
-        // todo: conteudo que preciso fazer (atualizar quantidade da demanda especificada)
         demandas.get(indice).atualizarQuantidade(novaQuantidade);
     }
 
     public void fabricarDemanda(int indiceDemanda) {
-        // todo: conteudo que preciso fazer
         // 1. Verificar se a demanda existe e não foi atendida
+        if (demandas.get(indiceDemanda) == null || demandas.get(indiceDemanda).isAtendida()) {
+            System.out.println("Demanda inválida ou já atendida.");
+            return;
+        }
         // 2. Verificar e consumir matéria-prima necessária
+
         // 3. Debitar custo de operação das máquinas do budget (calcularCustoProducao)
         // 4. Passar os produtos pelo fluxo de máquinas (Processamento -> Embalagem -> Inspeção)
         // 5. Adicionar produtos fabricados ao armazém (produtosFabricados)
         // 6. Marcar demanda como atendida
-        if (demandas)
     }
 
     public void comprarMateriaPrima(double quantidade) {

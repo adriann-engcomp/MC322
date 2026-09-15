@@ -47,37 +47,55 @@ public class Main {
             }
 
             int opcao = scanner.nextInt();
-            scanner.nextLine(); // Consumir quebra de linha
-
+            
             switch (opcao) {
                 case 1:
-                    // todo: conteudo que preciso fazer (atualizar demanda de Medicamento de Alta Qualidade)
+                    if (gerenciador.getDemandas().size() < 1) {
+                        System.out.println("Demanda de Alta Qualidade não encontrada. Registrando nova demanda.");
+                        gerenciador.registrarDemanda(new Demanda("Medicamento de Alta Qualidade", 100));
+                    } else {
+                        System.out.println("Atualizando demanda de Medicamento de Alta Qualidade para 100 unidades.");
+                        gerenciador.atualizarDemanda(0, 100);
+                    }
+
+                    gerenciador.atualizarDemanda(0, 50);
                     break;
                 case 2:
-                    // todo: conteudo que preciso fazer (atualizar demanda de Medicamento de Média Qualidade)
+                    System.out.println("Atualizando demanda de Medicamento de Média Qualidade para 50 unidades.");
+                    gerenciador.atualizarDemanda(1, 50);
                     break;
                 case 3:
-                    // todo: conteudo que preciso fazer (atualizar demanda de Medicamento de Baixa Qualidade)
+                    System.out.println("Atualizando demanda de Medicamento de Baixa Qualidade para 50 unidades.");
+                    gerenciador.atualizarDemanda(2, 50);
                     break;
                 case 4:
-                    // todo: conteudo que preciso fazer (fabricar demanda de Medicamento de Alta Qualidade)
+                    System.out.println("Fabricando demanda de Medicamento de Alta Qualidade.");
+                    gerenciador.fabricarDemanda(0);
                     break;
                 case 5:
-                    // todo: conteudo que preciso fazer (fabricar demanda de Medicamento de Média Qualidade)
+                    System.out.println("Fabricando demanda de Medicamento de Média Qualidade.");
+                    gerenciador.fabricarDemanda(1);
                     break;
                 case 6:
-                    // todo: conteudo que preciso fazer (fabricar demanda de Medicamento de Baixa Qualidade)
+                    System.out.println("Fabricando demanda de Medicamento de Baixa Qualidade.");
+                    gerenciador.fabricarDemanda(2);
                     break;
                 case 7:
-                    // todo: conteudo que preciso fazer (consultar armazém de produtos fabricados)
                     gerenciador.exibirArmazem();
                     break;
                 case 8:
-                    // todo: conteudo que preciso fazer (consultar estoque de matéria-prima)
                     gerenciador.exibirEstoqueMateriaPrima();
                     break;
                 case 9:
-                    // todo: conteudo que preciso fazer (comprar matéria-prima)
+                    System.out.print("Digite a quantidade de matéria-prima a ser comprada: ");
+                    if (!scanner.hasNextDouble()) {
+                        System.out.println("Entrada inválida! Digite apenas números.");
+                        scanner.nextLine();
+                    }
+                    else {
+                        double quantidade = scanner.nextDouble();
+                        gerenciador.comprarMateriaPrima(quantidade);
+                    }
                     break;
                 case 0:
                     System.out.println("\nEncerrando o sistema da fábrica farmacêutica. Até logo!");
