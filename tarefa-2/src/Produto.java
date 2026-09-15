@@ -10,7 +10,6 @@ public abstract class Produto {
 
     // Construtor
     public Produto(int id, String nome, String status, double quantidadeMateriaPrimaPorUnidade, double qualidade) {
-        // todo: conteudo que preciso fazer (inicializar atributos e incrementar totalProdutosFabricados)
         this.id = id;
         this.nome = nome;
         this.status = "Aguardando";
@@ -76,7 +75,6 @@ public abstract class Produto {
     }
 
     public void aumentarProbabilidadeFalha(double incremento) {
-        // todo: conteudo que preciso fazer (somar o incremento à probabilidadeFalhaAcumulada)
         probabilidadeFalhaAcumulada += incremento;
     }
 
