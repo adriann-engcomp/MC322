@@ -20,21 +20,34 @@ public class GerenciadorProducao {
     }
 
     // Métodos
+    // Demanda
     public void registrarDemanda(Demanda demanda) {
         demandas.add(demanda);
     }
-
     public void atualizarDemanda(int indice, int novaQuantidade) {
+        if (indice < 0){
+            System.out.println("Demanda negativa");
+        }
         demandas.get(indice).atualizarQuantidade(novaQuantidade);
     }
 
+    // Maquina
+    public void adicionarMaquina(Maquina maquina) {
+        maquinas.add(maquina);
+    }
+
+    // Produção
     public void fabricarDemanda(int indiceDemanda) {
         // 1. Verificar se a demanda existe e não foi atendida
         if (demandas.get(indiceDemanda) == null || demandas.get(indiceDemanda).isAtendida()) {
             System.out.println("Demanda inválida ou já atendida.");
             return;
         }
+        Demanda demanda = demandas.get(indiceDemanda);
         // 2. Verificar e consumir matéria-prima necessária
+        if (demanda = medicamentoAltaQualidade){
+            
+        }
 
         // 3. Debitar custo de operação das máquinas do budget (calcularCustoProducao)
         // 4. Passar os produtos pelo fluxo de máquinas (Processamento -> Embalagem -> Inspeção)
@@ -42,7 +55,8 @@ public class GerenciadorProducao {
         // 6. Marcar demanda como atendida
     }
 
-    public void comprarMateriaPrima(int quantidade) {
+    // Materia Prima
+    public void comprarMateriaPrima(double quantidade) {
         // 1. Calcular custo total (quantidade * custoPorUnidade)
         double custoTotal = calcularCustoProducao(quantidade);
         // 3. Debitar value do budget e adicionar quantidade ao estoque de materiaPrima
@@ -51,6 +65,7 @@ public class GerenciadorProducao {
         System.out.println("Compra de matéria-prima realizada com sucesso. Novo budget: R$ " + budget);
     }
 
+    // Prints
     public void exibirBudget() {
         System.out.println("Budget: " + budget);
     }
@@ -58,24 +73,32 @@ public class GerenciadorProducao {
     public void exibirArmazem() {
         System.out.println("Produtos Fabricados:");
         for (Produto produto : produtosFabricados) {
-            System.out.println("ID: " + produto.getId() + ", Nome: " +  produto.getNome() + ", Qualidade: " + produto.getQualidade() + ", Status: " + produto.getStatus());
+            System.out.println("ID: " + produto.getId() 
+            + ", Nome: " +  produto.getNome() 
+            + ", Qualidade: " 
+            + produto.getQualidade() 
+            + ", Status: " + produto.getStatus());
         }
     }
 
     public void exibirEstoqueMateriaPrima() {
         System.out.println("Estoque de Matéria-Prima:");
-        System.out.println("ID: " + materiaPrima.getId() + ", Nome: " + materiaPrima.getNome() + ", Quantidade: " + materiaPrima.getQuantidade() + ", Unidade: " + materiaPrima.getUnidade());
-    }
-
-    public void adicionarMaquina(Maquina maquina) {
-        maquinas.add(maquina);
+        System.out.println("ID: " + materiaPrima.getId() 
+        + ", Nome: " + materiaPrima.getNome() 
+        + ", Quantidade: " + materiaPrima.getQuantidade() 
+        + ", Unidade: " + materiaPrima.getUnidade());
     }
 
     // Método privado
     private double calcularCustoProducao(int quantidadeProdutos) {
-        double custoTotal = quantidadeProdutos * materiaPrima.getCustoPorUnidade();
-        // 2. Verificar se há budget suficiente
-        return custoTotal;
+        // todo: conteudo que preciso fazer (somar custos de operação das máquinas na linha de produção)
+        double custoPorProduto = 0;
+
+        for (int i = 0; i < maquinas.size(); i++){
+            Maquina maquina = maquinas.get(i);
+            custoPorProduto += maquina.getCustoOperacao();
+        }
+        return custoPorProduto * quantidadeProdutos;
     }
 
     // Getters e Setters

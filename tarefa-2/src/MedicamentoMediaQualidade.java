@@ -7,7 +7,7 @@ public class MedicamentoMediaQualidade extends Produto {
 
     @Override
     public void processar() {
-        // todo: conteudo que preciso fazer (define o processamento específico de produto de média qualidade)
+        setStatus("Processando");
     }
 
     @Override
