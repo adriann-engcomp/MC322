@@ -1,7 +1,6 @@
-Tarefa 1: Início da Operação - Justificativa do tema escolhido para a fábrica
-
+Tarefa 2: Atualização da Justificativa
 Dupla: Adriann e Alex
-Data de entrega: 02/09
+Data de entrega: 15/09
 
 1. Por que escolhemos uma fábrica de medicamentos?
 
@@ -19,12 +18,32 @@ O nosso dia a dia seria pautado em produzir 1000 comprimidos dos seguintes medic
 
 De ínicio, notamos que os medicamentos usam diversas matérias-primas diferentes. Então, certamente poderíamos criar um ArrayList para cada medicamento com quantidades diferentes, com Máquinas, produção e inspeção modernas (repletas de sensores para que aumentemos a produção em paralelo com a qualidade rigorosa baseada nas diretrizes da Anvisa) e com novos parâmetros que possibilitariam confiabilidade em nossos produtos.
 
-4. Conclusão
+4. Evolução para a Tarefa 2: Expansão e Complexidade
 
-Por fim, com os conceitos das próximas tarefas, como herança e classes abstratas, poderíamos organizar melhor os equipamentos. Hoje, a Maquina, a Esteira e a EstacaoInspecao têm comportamentos parecidos, como ligar e desligar. Com herança, isso poderia ser centralizado em uma classe.
+Na Tarefa 2, a planta industrial farmacêutica evoluiu para incorporar conceitos avançados de Orientação a Objetos, controle financeiro, gestão de armazém e aleatoriedade estocástica baseada nas normas sanitárias e industriais:
+
+4.1. Herança e Polimorfismo em Produtos
+A classe abstrata Produto centraliza propriedades essenciais (id, nome, status, quantidadeMateriaPrimaPorUnidade, qualidade, probabilidadeFalhaAcumulada e o contador estático totalProdutosFabricados). A partir dela, especializamos três categorias de fármacos:
+- MedicamentoAltaQualidade (Qualidade 0.9): Representa medicamentos de alto valor agregado e rigor extremo (ex: medicamentos controlados e soluções injetáveis estéreis). Demandam maior quantidade de princípio ativo puro (3.0 kg/unidade) e passam por critérios de tolerância rígidos.
+- MedicamentoMediaQualidade (Qualidade 0.7): Representa medicamentos de uso contínuo (ex: anti-hipertensivos como Losartana), com consumo intermediário (2.0 kg/unidade).
+- MedicamentoBaixaQualidade (Qualidade 0.5): Representa medicamentos analgésicos e genéricos de grande volume (ex: Paracetamol 500mg), com menor exigência de insumo (1.0 kg/unidade).
+
+4.2. Relação Qualidade × Inspeção Sanitária (Anvisa)
+Implementamos uma relação diretamente proporcional entre a qualidade e a taxa de rejeição na inspeção: medicamentos de alta qualidade exigem padrões de pureza e uniformidade físico-química severos, de modo que qualquer imperfeição acumulada durante o processamento resulta em maior probabilidade de descarte pela máquina de inspeção. Medicamentos de menor qualidade possuem faixas de tolerância mais amplas.
+
+4.3. Herança, Polimorfismo e Aleatoriedade em Máquinas
+A classe abstrata Maquina padroniza os estados operacionais (ligar/desligar, capacidade, custo de operação e verificação probabilística de falhas). A linha automatizada é composta por:
+1. MaquinaProcessamento (Reator de Mistura/Sintetização): Processa o princípio ativo e possui X% de chance de introduzir pequenas oscilações de mistura, aumentando a probabilidade de falha acumulada do produto.
+2. MaquinaEmbalagem (Embaladora Blister/Selagem): Realiza o envase e selagem hermética, com Y% de chance de aumentar a falha do lote em caso de microvariações de pressão.
+3. MaquinaInspecao (Espectrômetro e Sensor Óptico de Controle de Qualidade): É a única máquina com chance de falha direta de calibração (Z%), avaliando a integridade de cada unidade e definindo seu status final ("Aprovado" ou "Rejeitado").
+
+4.4. Controle Orçamentário (Budget), Armazém e Gestão de Coleções
+O GerenciadorProducao coordena o ciclo completo por meio de coleções dinâmicas (ArrayList<Demanda>, ArrayList<Produto> para o armazém e ArrayList<Maquina> para a linha fabril). O budget é rigidamente debitado na compra de lotes de matéria-prima e no pagamento do custo operacional de cada máquina durante a fabricação.
+
+5. Com a implementação da Tarefa 2, o sistema atinge um novo patamar de fidelidade e maturidade arquitetural, combinando encapsulamento rigoroso, métodos polimórficos, contadores estáticos e tratamento dinâmico de recursos.
 
 Referências bibliográficas:
 
 [1] WAZLAWICK, Raul Sidnei. Metodologia de pesquisa para ciência da computação. 2. ed. Rio de Janeiro: Elsevier, 2014.
 
-[2] Autom8. Inside Pharmas High-Tech Factory. Youtube, 22 jun. 2025. 1 vídeo (11 min.). Disponível em: <.https://www.youtube.com/watch?v=hEI2VqbOsr0&t=211s>.  Acesso em: 2 set.2026.
+[2] Autom8. Inside Pharmas High-Tech Factory. Youtube, 22 jun. 2025. 1 vídeo (11 min.). Disponível em: <.https://www.youtube.com/watch?v=hEI2VqbOsr0&t=211s>. Acesso em: 2 set. 2026.

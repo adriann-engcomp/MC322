@@ -17,7 +17,6 @@ public class MedicamentoMediaQualidade extends Produto {
 
     @Override
     public String getTipo() {
-        // todo: conteudo que preciso fazer (retornar o tipo do produto, ex: "Medicamento de Média Qualidade")
         return "Medicamento de Média Qualidade";
     }
 }

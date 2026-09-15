@@ -7,17 +7,29 @@ public class MaquinaInspecao extends Maquina {
 
     @Override
     public void processar(Produto produto) {
-        // todo: conteudo que preciso fazer
-        // 1. Pode falhar com probabilidade Z% (verificarFalha()), gerando uma inspeção incorreta.
-        // 2. Avaliar se o produto é aprovado ou rejeitado com base em:
-        //    - Probabilidade acumulada de falha do produto
-        //    - Qualidade do produto (diretamente proporcional à chance de falha na inspeção: alta qualidade = critérios mais rigorosos = maior chance de rejeição)
-        // 3. Atualizar o status do produto (ex: "Aprovado", "Rejeitado")
+        if (produto == null) return;
+
+        // 1. Chance de rejeição baseada na probabilidade de falha acumulada e no rigor de qualidade:
+        // Alta qualidade (0.9) -> critérios mais rigorosos -> maior chance de rejeição
+        // Baixa qualidade (0.5) -> critérios mais flexíveis -> menor chance de rejeição
+        double chanceRejeicao = produto.getProbabilidadeFalhaAcumulada() * (produto.getQualidade() / 0.5);
+
+        boolean defeituoso = random.nextDouble() < chanceRejeicao;
+
+        // 2. A máquina de inspeção pode falhar diretamente com probabilidade Z% (verificarFalha()),
+        // resultando em uma inspeção incorreta (inverte a decisão de aprovação/rejeição)
+        boolean maquinaFalhou = verificarFalha();
+        boolean aprovado = maquinaFalhou ? defeituoso : !defeituoso;
+
+        if (aprovado) {
+            produto.setStatus("Aprovado");
+        } else {
+            produto.setStatus("Rejeitado");
+        }
     }
 
     @Override
     public String getTipo() {
-        // todo: conteudo que preciso fazer
         return "Máquina de Inspeção / Controle de Qualidade";
     }
 }

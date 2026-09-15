@@ -9,23 +9,25 @@ public class MaquinaProcessamento extends Maquina {
 
     @Override
     public void processar(Produto produto) {
-        // todo: conteudo que preciso fazer
-        // Não falha diretamente, mas tem X% de chance de aumentar a probabilidade de falha acumulada do produto processado
+        if (produto == null) return;
+        produto.setStatus("Em Processamento");
+        // Não falha diretamente, mas tem chanceAumentarFalha (X%) de aumentar a probabilidade de falha acumulada do produto
+        if (random.nextDouble() < chanceAumentarFalha) {
+            produto.aumentarProbabilidadeFalha(0.10);
+        }
+        produto.setStatus("Processado");
     }
 
     @Override
     public String getTipo() {
-        // todo: conteudo que preciso fazer
         return "Máquina de Processamento / Mistura Farmacêutica";
     }
 
     public double getChanceAumentarFalha() {
-        // todo: conteudo que preciso fazer
         return chanceAumentarFalha;
     }
 
     public void setChanceAumentarFalha(double chanceAumentarFalha) {
-        // todo: conteudo que preciso fazer
         this.chanceAumentarFalha = chanceAumentarFalha;
     }
 }

@@ -6,9 +6,23 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // todo: conteudo que preciso fazer (instanciar matéria-prima, máquinas, demandas e o gerenciador de produção)
+        // 1. Instanciar Matéria-Prima e Gerenciador de Produção
         MateriaPrima materiaPrima = new MateriaPrima(1, "Princípio Ativo Farmacêutico (Insumo)", 500.0, "kg", 10.0);
         GerenciadorProducao gerenciador = new GerenciadorProducao(materiaPrima, 1000.0);
+
+        // 2. Instanciar e registrar as Máquinas da linha de produção
+        MaquinaProcessamento maquinaProcessamento = new MaquinaProcessamento("Reator Farmacêutico / Mistura", 500, 0.0, 1.50, 0.15);
+        MaquinaEmbalagem maquinaEmbalagem = new MaquinaEmbalagem("Embaladora Blister / Selagem", 500, 0.0, 1.00, 0.10);
+        MaquinaInspecao maquinaInspecao = new MaquinaInspecao("Espectrômetro de Inspeção / Controle Anvisa", 500, 0.05, 2.00);
+
+        gerenciador.adicionarMaquina(maquinaProcessamento);
+        gerenciador.adicionarMaquina(maquinaEmbalagem);
+        gerenciador.adicionarMaquina(maquinaInspecao);
+
+        // 3. Registrar Demandas Iniciais de Medicamentos
+        gerenciador.registrarDemanda(new Demanda("Medicamento de Alta Qualidade", 50));
+        gerenciador.registrarDemanda(new Demanda("Medicamento de Média Qualidade", 50));
+        gerenciador.registrarDemanda(new Demanda("Medicamento de Baixa Qualidade", 50));
 
         boolean executando = true;
 
@@ -47,37 +61,48 @@ public class Main {
             }
 
             int opcao = scanner.nextInt();
-            
+
             switch (opcao) {
                 case 1:
-                    if (gerenciador.getDemandas().size() < 1) {
-                        System.out.println("Demanda de Alta Qualidade não encontrada. Registrando nova demanda.");
-                        gerenciador.registrarDemanda(new Demanda("Medicamento de Alta Qualidade", 100));
+                    System.out.print("Digite a nova quantidade para a demanda de Alta Qualidade: ");
+                    if (scanner.hasNextInt()) {
+                        int qtd = scanner.nextInt();
+                        gerenciador.atualizarDemanda(0, qtd);
                     } else {
-                        System.out.println("Atualizando demanda de Medicamento de Alta Qualidade para 100 unidades.");
-                        gerenciador.atualizarDemanda(0, 100);
+                        System.out.println("Entrada inválida! Digite apenas números inteiros.");
+                        scanner.nextLine();
                     }
-
-                    gerenciador.atualizarDemanda(0, 50);
                     break;
                 case 2:
-                    System.out.println("Atualizando demanda de Medicamento de Média Qualidade para 50 unidades.");
-                    gerenciador.atualizarDemanda(1, 50);
+                    System.out.print("Digite a nova quantidade para a demanda de Média Qualidade: ");
+                    if (scanner.hasNextInt()) {
+                        int qtd = scanner.nextInt();
+                        gerenciador.atualizarDemanda(1, qtd);
+                    } else {
+                        System.out.println("Entrada inválida! Digite apenas números inteiros.");
+                        scanner.nextLine();
+                    }
                     break;
                 case 3:
-                    System.out.println("Atualizando demanda de Medicamento de Baixa Qualidade para 50 unidades.");
-                    gerenciador.atualizarDemanda(2, 50);
+                    System.out.print("Digite a nova quantidade para a demanda de Baixa Qualidade: ");
+                    if (scanner.hasNextInt()) {
+                        int qtd = scanner.nextInt();
+                        gerenciador.atualizarDemanda(2, qtd);
+                    } else {
+                        System.out.println("Entrada inválida! Digite apenas números inteiros.");
+                        scanner.nextLine();
+                    }
                     break;
                 case 4:
-                    System.out.println("Fabricando demanda de Medicamento de Alta Qualidade.");
+                    System.out.println("\nIniciando fabricação de Medicamento de Alta Qualidade...");
                     gerenciador.fabricarDemanda(0);
                     break;
                 case 5:
-                    System.out.println("Fabricando demanda de Medicamento de Média Qualidade.");
+                    System.out.println("\nIniciando fabricação de Medicamento de Média Qualidade...");
                     gerenciador.fabricarDemanda(1);
                     break;
                 case 6:
-                    System.out.println("Fabricando demanda de Medicamento de Baixa Qualidade.");
+                    System.out.println("\nIniciando fabricação de Medicamento de Baixa Qualidade...");
                     gerenciador.fabricarDemanda(2);
                     break;
                 case 7:
@@ -87,13 +112,12 @@ public class Main {
                     gerenciador.exibirEstoqueMateriaPrima();
                     break;
                 case 9:
-                    System.out.print("Digite a quantidade de matéria-prima a ser comprada: ");
-                    if (!scanner.hasNextInt()) {
+                    System.out.print("Digite a quantidade de matéria-prima a ser comprada (kg): ");
+                    if (!scanner.hasNextDouble()) {
                         System.out.println("Entrada inválida! Digite apenas números.");
                         scanner.nextLine();
-                    }
-                    else {
-                        int quantidade = scanner.nextInt();
+                    } else {
+                        double quantidade = scanner.nextDouble();
                         gerenciador.comprarMateriaPrima(quantidade);
                     }
                     break;

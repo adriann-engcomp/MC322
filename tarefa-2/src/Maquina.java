@@ -7,7 +7,7 @@ public abstract class Maquina {
     private int capacidadeMaxima;
     private double probabilidadeFalha;
     private double custoOperacao;
-    private Random random;
+    protected Random random;
 
     // Construtor (inicializo)
     public Maquina(String nome, int capacidadeMaxima, double probabilidadeFalha, double custoOperacao) {
@@ -70,7 +70,6 @@ public abstract class Maquina {
 
     // Método protegido com aleatoriedade
     protected boolean verificarFalha() {
-        // todo: conteudo que preciso fazer (usar Random ou probabilidadeFalha para verificar se houve falha)
         return random.nextDouble() < probabilidadeFalha;
     }
 }
