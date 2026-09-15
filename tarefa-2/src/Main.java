@@ -88,12 +88,12 @@ public class Main {
                     break;
                 case 9:
                     System.out.print("Digite a quantidade de matéria-prima a ser comprada: ");
-                    if (!scanner.hasNextDouble()) {
+                    if (!scanner.hasNextInt()) {
                         System.out.println("Entrada inválida! Digite apenas números.");
                         scanner.nextLine();
                     }
                     else {
-                        double quantidade = scanner.nextDouble();
+                        int quantidade = scanner.nextInt();
                         gerenciador.comprarMateriaPrima(quantidade);
                     }
                     break;

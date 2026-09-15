@@ -42,15 +42,10 @@ public class GerenciadorProducao {
         // 6. Marcar demanda como atendida
     }
 
-    public void comprarMateriaPrima(double quantidade) {
+    public void comprarMateriaPrima(int quantidade) {
         // 1. Calcular custo total (quantidade * custoPorUnidade)
-        double custoTotal = quantidade * materiaPrima.getCustoPorUnidade();
-        // 2. Verificar se há budget suficiente
-        if (budget < custoTotal) {
-            System.out.println("Budget insuficiente para comprar matéria-prima.");
-            return;
-        }
-        // 3. Debitar valor do budget e adicionar quantidade ao estoque de materiaPrima
+        double custoTotal = calcularCustoProducao(quantidade);
+        // 3. Debitar value do budget e adicionar quantidade ao estoque de materiaPrima
         budget -= custoTotal;
         materiaPrima.adicionarEstoque(quantidade);
         System.out.println("Compra de matéria-prima realizada com sucesso. Novo budget: R$ " + budget);
@@ -78,58 +73,49 @@ public class GerenciadorProducao {
 
     // Método privado
     private double calcularCustoProducao(int quantidadeProdutos) {
-        // todo: conteudo que preciso fazer (somar custos de operação das máquinas na linha de produção)
-        return 0.0;
+        double custoTotal = quantidadeProdutos * materiaPrima.getCustoPorUnidade();
+        // 2. Verificar se há budget suficiente
+        return custoTotal;
     }
 
     // Getters e Setters
     public ArrayList<Demanda> getDemandas() {
-        // todo: conteudo que preciso fazer
         return demandas;
     }
 
     public void setDemandas(ArrayList<Demanda> demandas) {
-        // todo: conteudo que preciso fazer
         this.demandas = demandas;
     }
 
     public ArrayList<Produto> getProdutosFabricados() {
-        // todo: conteudo que preciso fazer
         return produtosFabricados;
     }
 
     public void setProdutosFabricados(ArrayList<Produto> produtosFabricados) {
-        // todo: conteudo que preciso fazer
         this.produtosFabricados = produtosFabricados;
     }
 
     public ArrayList<Maquina> getMaquinas() {
-        // todo: conteudo que preciso fazer
         return maquinas;
     }
 
     public void setMaquinas(ArrayList<Maquina> maquinas) {
-        // todo: conteudo que preciso fazer
         this.maquinas = maquinas;
     }
 
     public MateriaPrima getMateriaPrima() {
-        // todo: conteudo que preciso fazer
         return materiaPrima;
     }
 
     public void setMateriaPrima(MateriaPrima materiaPrima) {
-        // todo: conteudo que preciso fazer
         this.materiaPrima = materiaPrima;
     }
 
     public double getBudget() {
-        // todo: conteudo que preciso fazer
         return budget;
     }
 
     public void setBudget(double budget) {
-        // todo: conteudo que preciso fazer
         this.budget = budget;
     }
 }
