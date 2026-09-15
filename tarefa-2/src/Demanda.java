@@ -21,7 +21,7 @@ public class Demanda {
     }
     public double calcularMateriaPrimaNecessaria(double materiaPrimaPorUnidade) {
         // todo: conteudo que preciso fazer (calcular materiaPrimaPorUnidade * quantidadeProdutos)
-        return materiaPrimaPorUnidade *= quantidadeProdutos;
+        return materiaPrimaPorUnidade * quantidadeProdutos;
     }
 
     public void atender() {
