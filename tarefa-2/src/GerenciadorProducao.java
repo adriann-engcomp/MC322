@@ -1,6 +1,8 @@
 import java.util.ArrayList;
+// Eu sei se consigo fabricar essa demanda.
 
 public class GerenciadorProducao {
+
     // Atributos
     private ArrayList<Demanda> demandas;
     private ArrayList<Produto> produtosFabricados;
@@ -10,7 +12,6 @@ public class GerenciadorProducao {
 
     // Construtor
     public GerenciadorProducao(MateriaPrima materiaPrima, double budgetInicial) {
-        // todo: conteudo que preciso fazer (inicializar listas, materiaPrima e budget)
         this.demandas = new ArrayList<>();
         this.produtosFabricados = new ArrayList<>();
         this.maquinas = new ArrayList<>();
@@ -20,14 +21,15 @@ public class GerenciadorProducao {
 
     // Métodos
     public void registrarDemanda(Demanda demanda) {
-        // todo: conteudo que preciso fazer (adicionar demanda à lista de demandas)
+        demandas.add(demanda);
     }
 
-    public void atualizarDemanda(int index, int novaQuantidade) {
+    public void atualizarDemanda(int indice, int novaQuantidade) {
         // todo: conteudo que preciso fazer (atualizar quantidade da demanda especificada)
+        demandas.get(indice).atualizarQuantidade(novaQuantidade);
     }
 
-    public void fabricarDemanda(int indexDemanda) {
+    public void fabricarDemanda(int indiceDemanda) {
         // todo: conteudo que preciso fazer
         // 1. Verificar se a demanda existe e não foi atendida
         // 2. Verificar e consumir matéria-prima necessária
@@ -35,6 +37,7 @@ public class GerenciadorProducao {
         // 4. Passar os produtos pelo fluxo de máquinas (Processamento -> Embalagem -> Inspeção)
         // 5. Adicionar produtos fabricados ao armazém (produtosFabricados)
         // 6. Marcar demanda como atendida
+        if (demandas)
     }
 
     public void comprarMateriaPrima(double quantidade) {

@@ -1,3 +1,5 @@
+// o que o cliente quer e qnt?
+
 public class Demanda {
     // Atributos
     private String tipoProduto;
@@ -15,7 +17,7 @@ public class Demanda {
     // Métodos
     public void atualizarQuantidade(int novaQuantidade) {
         // todo: conteudo que preciso fazer (atualizar quantidadeProdutos)
-        novaQuantidade += quantidadeProdutos;
+        this.quantidadeProdutos = novaQuantidade;
     }
     public double calcularMateriaPrimaNecessaria(double materiaPrimaPorUnidade) {
         // todo: conteudo que preciso fazer (calcular materiaPrimaPorUnidade * quantidadeProdutos)
