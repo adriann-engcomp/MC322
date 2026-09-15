@@ -23,10 +23,11 @@ public class MateriaPrima {
     }
 
     public void adicionarEstoque(double qtd) {
+        this.quantidade += qtd;
     }
 
     public boolean verificarDisponibilidade(double qtdNecessaria) {
-        return false;
+        return this.quantidade >= qtdNecessaria;
     }
 
     // Getters e Setters
