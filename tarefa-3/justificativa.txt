@@ -1,0 +1,58 @@
+Tarefa 2: Atualização da Justificativa
+Dupla: Adriann e Alex
+Data de entrega: __/09/2026
+
+1. Por que escolhemos uma fábrica de medicamentos?
+
+Escolhemos esse tema porque um dos integrantes do grupo faz uma iniciação científica na qual utiliza a computação como ferramenta para a área da saúde. Ele estruturou os dados em SQL e usou PHP para definir funções que representam o controle de medicamentos de pessoas acometidas por epilepsia no Hospital das Clínicas da Unicamp. Para isso, ele usou o livro "Metodologia de Pesquisa para Ciência da Computação" [1], que o guiou na pesquisa e o fez perceber que a POO, pouco usada naquele projeto, ajudaria a dividir as estruturas e a dar mais clareza ao código. Além disso, temos familiares acometidos, como acontece com muitas pessoas, por dores de cabeça, resfriados, gripes, hipertensão, diabetes ou, atualmente, neurodivergências. Diante desses fatores, ficou evidente para nós o quanto uma fábrica de medicamentos é importante para o bem-estar da sociedade.
+
+O setor farmacêutico está passando por muitas mudanças, com perspectivas bastante promissoras no que diz respeito à automatização de fábricas e ao uso de IA para desenvolver medicamentos mais rapidamente, especialmente após a pandemia de COVID-19. Algumas das vantagens de usar robôs nas fábricas farmacêuticas são: 1. Maior precisão e controle na medição das matérias-primas e dos princípios ativos, aspecto essencial nessa área, em que mesmo os menores erros podem ter efeitos extremamente adversos ou até fatais para quem usa o medicamento; 2. Menor risco de contaminação microbiológica introduzida por humanos na linha de produção. Esse risco é real: um estudo mediu que uma pessoa com roupa comum libera, em média, cerca de 2.400 partículas com microrganismos por minuto, contra cerca de 177 com roupa de sala limpa [4]; 3. Maior rastreabilidade dos problemas ao longo de toda a cadeia e a possibilidade de corrigir os erros rapidamente, sem parar todo o processo nem esperar o fim da produção, graças a sensores que medem massa, temperatura, pH, pressão, umidade e outras propriedades das soluções e do ambiente; 4. Esses sistemas podem ser montados e escalonados rapidamente em uma emergência sanitária (como a da COVID-19), produzindo medicamentos mais depressa e mantendo a segurança sanitária do empreendimento, inclusive contra a contaminação humana [2].
+
+Nesse sentido, entendemos que a produção acontece assim: a matéria-prima chega, em sua maioria, em caminhões, por causa da grande malha rodoviária brasileira; é verificada por um funcionário responsável pela parte operacional; se aprovada, segue pela esteira até a máquina onde vira produto. A forma do produto muda conforme a demanda do mercado: um funcionário de Inteligência de Negócios (BI) é responsável por catalogá-lo e um profissional de Pricing define seu preço. Por fim, o produto passa por uma inspeção rigorosa, nos moldes das Boas Práticas de Fabricação exigidas pela Anvisa [3], e, se aprovado, segue pela esteira até ser transportado para diversas regiões, conforme o time de logística definir. Essas diretrizes guiaram o projeto da Tarefa 1 e continuam guiando o da Tarefa 2.
+
+2. Mediante tal escolha, como seria o dia a dia de nossa fábrica?
+
+O nosso dia a dia seria produzir comprimidos dos seguintes medicamentos: Paracetamol 500mg, Losartana 50mg, Dipirona 500mg, Metformina 500mg e Ritalina 40mg. Todo dia, o funcionário João, responsável pelo controle da operação, repassa uma tabela para o funcionário Francisco. Essa tabela contém o id, o nome, a quantidade e a unidade da matéria-prima que chegou no caminhão e, desde a Tarefa 2, também o custo por quilo, já que agora a fábrica tem um orçamento para respeitar. Francisco confere os dados antes de liberar a entrada do caminhão na fábrica. Essa conferência virou o construtor da classe MateriaPrima: quando o objeto é criado, ele recebe exatamente esses cinco valores, assim como Francisco recebe a tabela antes de deixar o caminhão entrar. Depois que a matéria-prima é descarregada, o operador define quanto vai consumir. A lógica é: estoque restante = quantidade recebida - demanda do dia. Se a demanda for maior do que o estoque, a produção não começa. Se for igual ou menor, a produção segue e o que sobra fica registrado no estoque. Isso virou os métodos verificarDisponibilidade() e consumir() da classe MateriaPrima. No fim do dia, João registra na planilha o identificador da matéria-prima, o nome e a quantidade restante. Para isso, o código usa getId(), getNome() e getQuantidade().
+
+3. Agora, como poderíamos expandir a fábrica em um futuro não tão distante?
+
+Na Tarefa 2 já passamos a usar ArrayList para as demandas, as máquinas e o armazém. O próximo passo seria reconhecer que cada medicamento usa várias matérias-primas diferentes: cada um teria a sua própria lista (ArrayList<MateriaPrima>) com quantidades diferentes, como uma receita. Também gostaríamos de ter máquinas de produção e de inspeção mais modernas, repletas de sensores, para aumentar a produção sem perder a qualidade exigida pela Anvisa [3], e de agrupar os medicamentos em lotes rastreáveis, para saber exatamente de onde veio cada unidade caso algum problema apareça.
+
+4. Evolução para a Tarefa 2: Expansão e Complexidade
+
+Na Tarefa 1, nossa fábrica produzia um medicamento por vez, e toda unidade era aprovada. Na Tarefa 2, aproximamos o código do que vimos no vídeo [2]: medicamentos com exigências diferentes, máquinas que podem errar e um orçamento que precisa ser respeitado.
+
+4.1. Os três tipos de medicamento (herança em Produto)
+Seguindo o enunciado da Tarefa 2, criamos a classe abstrata Produto, com o que todo medicamento tem (id, nome, status, matéria-prima por unidade, qualidade e falha acumulada) e um contador estático de quantas unidades já foram fabricadas. Dela saem três subclasses:
+- MedicamentoAltaQualidade (qualidade 0,9): pensamos na Ritalina 40mg, que é um medicamento controlado. Gasta 3 kg de princípio ativo por unidade e leva 10 minutos para ser produzida.
+- MedicamentoMediaQualidade (qualidade 0,7): pensamos na Losartana 50mg e na Metformina 500mg, de uso contínuo. Gasta 2 kg por unidade e leva 6 minutos.
+- MedicamentoBaixaQualidade (qualidade 0,5): pensamos no Paracetamol 500mg e na Dipirona 500mg, feitos em grande volume. Gasta 1 kg por unidade e leva 5 minutos.
+
+4.2. Por que o medicamento mais exigente é mais rejeitado?
+Porque, quanto mais exigente o medicamento, menor é a tolerância a qualquer imperfeição na inspeção, como no controle de qualidade exigido pela Anvisa [3]. No código, a chance de rejeição é: falha acumulada x (qualidade / 0,5). Por exemplo, um comprimido que acumulou 0,10 de falha na linha tem 18% de chance de ser rejeitado se for de alta qualidade (0,10 x 0,9 / 0,5) e 10% se for de baixa qualidade (0,10 x 0,5 / 0,5).
+
+4.3. A linha de produção (herança em Maquina)
+Na Tarefa 1, a esteira levava a matéria-prima até uma única máquina. Agora a linha virou uma lista de máquinas (ArrayList<Maquina>) percorrida em ordem. Todas herdam da classe abstrata Maquina, que guarda o nome, se está ligada, a capacidade, a chance de falha e o custo de operação por unidade:
+1. MaquinaProcessamento (reator de mistura): não quebra, mas em 15% das vezes a mistura sai irregular e a falha acumulada do produto aumenta 0,10. Custa R$ 1,50 por unidade.
+2. MaquinaEmbalagem (embaladora de blister): em 10% das vezes a selagem sai imperfeita e a falha acumulada aumenta 0,05. Custa R$ 1,00 por unidade.
+3. MaquinaInspecao (espectrômetro): é a única máquina que pode falhar sozinha, em 5% das inspeções. Quando isso acontece, a decisão sai invertida: um produto bom pode ser rejeitado e um defeituoso pode passar. Custa R$ 2,00 por unidade.
+Somando as três, cada unidade custa R$ 4,50 para passar pela linha. Como na nossa rotina, as máquinas são ligadas no início da produção e desligadas no fim, e uma máquina desligada não processa nada.
+
+4.4. O gerente da fábrica (GerenciadorProducao)
+O GerenciadorProducao faz no código o papel que João faz no dia a dia. A fábrica começa com R$ 1.000,00 de orçamento e 500 kg de princípio ativo, que custa R$ 10,00 o quilo. Quando chega uma demanda, por exemplo 50 unidades de Paracetamol, ele:
+1. confere se há matéria-prima suficiente (50 x 1 kg = 50 kg), como Francisco confere o caminhão;
+2. confere se o orçamento cobre o custo das máquinas (50 x R$ 4,50 = R$ 225,00), usando o método privado calcularCustoProducao();
+3. só então consome a matéria-prima, desconta o orçamento, liga as máquinas e fabrica unidade por unidade;
+4. guarda cada unidade no armazém (ArrayList<Produto>), aprovada ou rejeitada, e marca a demanda como atendida.
+Ao final desse exemplo, restam 450 kg de princípio ativo e R$ 775,00 de orçamento. Se depois comprarmos 10 kg de matéria-prima, pagamos 10 x R$ 10,00 = R$ 100,00, e o orçamento cai para R$ 675,00. O orçamento só diminui nesses dois momentos: na compra de matéria-prima e no uso das máquinas. Se a quantidade de uma demanda mudar, ela pode ser fabricada de novo.
+
+5. Conclusão
+Com a Tarefa 2, nossa fábrica ficou mais parecida com uma fábrica de verdade: cada medicamento tem suas exigências, as máquinas podem errar, o orçamento limita o que conseguimos produzir e tudo o que foi fabricado fica registrado no armazém. Herança, polimorfismo, ArrayList e Random deixaram de ser só conceitos e passaram a representar partes da rotina de João e Francisco.
+
+Referências bibliográficas:
+
+[1] WAZLAWICK, Raul Sidnei. Metodologia de pesquisa para ciência da computação. 2. ed. Rio de Janeiro: Elsevier, 2014.
+
+[2] AUTOM8. Inside Pharma's High Tech Factory. YouTube, 22 jun. 2025. 1 vídeo (11 min). Disponível em: <https://www.youtube.com/watch?v=hEI2VqbOsr0&t=211s>. Acesso em: 2 set. 2026.
+
+[3] AGÊNCIA NACIONAL DE VIGILÂNCIA SANITÁRIA (Brasil). Resolução da Diretoria Colegiada - RDC nº 658, de 30 de março de 2022. Dispõe sobre as Diretrizes Gerais de Boas Práticas de Fabricação de Medicamentos. Brasília: Anvisa, 2022. Disponível em: <https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000658&seqAto=000&valorAno=2022&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=1696&cod_modulo=134&pesquisa=true>. Acesso em: 14 set. 2026.
