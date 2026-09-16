@@ -56,7 +56,7 @@ public class Main {
             // Validação de entrada numérica
             if (!scanner.hasNextInt()) {
                 System.out.println("Entrada inválida! Digite apenas números.");
-                scanner.nextLine();
+                scanner.next();
                 continue;
             }
 
@@ -70,7 +70,7 @@ public class Main {
                         gerenciador.atualizarDemanda(0, qtd);
                     } else {
                         System.out.println("Entrada inválida! Digite apenas números inteiros.");
-                        scanner.nextLine();
+                        scanner.next();
                     }
                     break;
                 case 2:
@@ -80,7 +80,7 @@ public class Main {
                         gerenciador.atualizarDemanda(1, qtd);
                     } else {
                         System.out.println("Entrada inválida! Digite apenas números inteiros.");
-                        scanner.nextLine();
+                        scanner.next();
                     }
                     break;
                 case 3:
@@ -90,7 +90,7 @@ public class Main {
                         gerenciador.atualizarDemanda(2, qtd);
                     } else {
                         System.out.println("Entrada inválida! Digite apenas números inteiros.");
-                        scanner.nextLine();
+                        scanner.next();
                     }
                     break;
                 case 4:
@@ -115,7 +115,7 @@ public class Main {
                     System.out.print("Digite a quantidade de matéria-prima a ser comprada (kg): ");
                     if (!scanner.hasNextDouble()) {
                         System.out.println("Entrada inválida! Digite apenas números.");
-                        scanner.nextLine();
+                        scanner.next();
                     } else {
                         double quantidade = scanner.nextDouble();
                         gerenciador.comprarMateriaPrima(quantidade);
