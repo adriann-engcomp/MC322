@@ -1,7 +1,7 @@
-public class MedicamentoAltaQualidade extends Produto {
+public class MedicamentoControlado extends Produto {
 
     // Construtor
-    public MedicamentoAltaQualidade(int id, String nome, String status, double quantidadeMateriaPrimaPorUnidade) {
+    public MedicamentoControlado(int id, String nome, String status, double quantidadeMateriaPrimaPorUnidade) {
         super(id, nome, status, quantidadeMateriaPrimaPorUnidade, 0.9);
     }
 
