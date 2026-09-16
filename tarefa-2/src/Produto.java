@@ -8,15 +8,21 @@ public abstract class Produto {
     private double probabilidadeFalhaAcumulada;
     private static int totalProdutosFabricados = 0;
 
+    // Fazemos assim?
+    public static String AGUARDANDO = "Aguardando";
+    public static String APROVADO = "Aprovado";
+    public static String REJEITADO = "Rejeitado";
+
     // Construtor
     public Produto(int id, String nome, String status, double quantidadeMateriaPrimaPorUnidade, double qualidade) {
         this.id = id;
         this.nome = nome;
-        this.status = "Aguardando";
+        this.status = status;
         this.quantidadeMateriaPrimaPorUnidade = quantidadeMateriaPrimaPorUnidade;
         this.qualidade = qualidade;
         this.probabilidadeFalhaAcumulada = 0;
         totalProdutosFabricados++;
+        this.qualidade = limitar(qualidade);
 
     }
 
@@ -74,10 +80,6 @@ public abstract class Produto {
         this.probabilidadeFalhaAcumulada = probabilidadeFalhaAcumulada;
     }
 
-    public void aumentarProbabilidadeFalha(double incremento) {
-        probabilidadeFalhaAcumulada += incremento;
-    }
-
     public static int getTotalProdutosFabricados() {
         return totalProdutosFabricados;
     }
@@ -85,4 +87,21 @@ public abstract class Produto {
     public static void setTotalProdutosFabricados(int total) {
         totalProdutosFabricados = total;
     }
+
+    // ??
+    private static double limitar(double valor){
+        return Math.max(0.0, Math.min(1.0, valor));
+    }
+    public void aumentarProbabilidadeFalha(double incremento) {
+        if (incremento <= 0){
+            return;
+        }
+        probabilidadeFalhaAcumulada = limitar(probabilidadeFalhaAcumulada + incremento);
+    }
+
+    public boolean foiAprovado(){
+        return APROVADO.equals(status);
+    }
+
+
 }
