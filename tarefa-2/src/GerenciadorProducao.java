@@ -56,15 +56,15 @@ public class GerenciadorProducao {
 
         // Definir consumo de matéria-prima por unidade e tipo de produto
         double consumoPorUnidade;
-        if (indiceDemanda == 0 || demanda.getTipoProduto().toLowerCase().contains("alta")) {
+        if (indiceDemanda == 0) {
             consumoPorUnidade = 3.0;
-        } else if (indiceDemanda == 1 || demanda.getTipoProduto().toLowerCase().contains("méd") || demanda.getTipoProduto().toLowerCase().contains("med")) {
+        } else if (indiceDemanda == 1) {
             consumoPorUnidade = 2.0;
         } else {
             consumoPorUnidade = 1.0;
         }
 
-        // 2. Verificar disponibilidade de matéria-prima necessária
+        // Verificar disponibilidade de matéria-prima necessária
         double materiaPrimaNecessaria = demanda.calcularMateriaPrimaNecessaria(consumoPorUnidade);
         if (!materiaPrima.verificarDisponibilidade(materiaPrimaNecessaria)) {
             System.out.printf("Erro: Matéria-prima insuficiente! Necessário: %.2f %s | Disponível: %.2f %s\n",
@@ -73,7 +73,7 @@ public class GerenciadorProducao {
             return;
         }
 
-        // 3. Verificar budget para debitar custo de operação das máquinas
+        // Verificar budget para debitar custo de operação das máquinas
         double custoOperacional = calcularCustoProducao(quantidade);
         if (budget < custoOperacional) {
             System.out.printf("Erro: Budget insuficiente para pagar a operação das máquinas! Necessário: R$ %.2f | Disponível: R$ %.2f\n",
@@ -98,9 +98,9 @@ public class GerenciadorProducao {
             Produto produto;
             int idProduto = Produto.getTotalProdutosFabricados() + 1;
 
-            if (indiceDemanda == 0 || demanda.getTipoProduto().toLowerCase().contains("alta")) {
+            if (indiceDemanda == 0) {
                 produto = new MedicamentoAltaQualidade(idProduto, "Medicamento Alta Qualidade #" + idProduto, "Aguardando", consumoPorUnidade);
-            } else if (indiceDemanda == 1 || demanda.getTipoProduto().toLowerCase().contains("méd") || demanda.getTipoProduto().toLowerCase().contains("med")) {
+            } else if (indiceDemanda == 1) {
                 produto = new MedicamentoMediaQualidade(idProduto, "Medicamento Média Qualidade #" + idProduto, "Aguardando", consumoPorUnidade);
             } else {
                 produto = new MedicamentoBaixaQualidade(idProduto, "Medicamento Baixa Qualidade #" + idProduto, "Aguardando", consumoPorUnidade);
@@ -113,7 +113,7 @@ public class GerenciadorProducao {
                 maquina.processar(produto);
             }
 
-            // 5. Adicionar ao armazém
+            // Adicionar ao armazém
             produtosFabricados.add(produto);
 
             if ("Aprovado".equalsIgnoreCase(produto.getStatus())) {
@@ -128,7 +128,7 @@ public class GerenciadorProducao {
             m.desligar();
         }
 
-        // 6. Marcar demanda como atendida
+        // Marcar demanda como atendida
         demanda.atender();
 
         // Exibir relatório da fabricação
@@ -148,22 +148,22 @@ public class GerenciadorProducao {
 
     // Matéria-Prima
     public void comprarMateriaPrima(double quantidade) {
-        if (quantidade <= 0) {
+        if (!(quantidade > 0)) {
             System.out.println("Erro: A quantidade a ser comprada deve ser maior que zero.");
             return;
         }
 
-        // 1. Calcular custo total da matéria-prima (quantidade * custoPorUnidade)
+        // Calcular custo total da matéria-prima (quantidade * custoPorUnidade)
         double custoTotal = quantidade * materiaPrima.getCustoPorUnidade();
 
-        // 2. Validar budget disponível
+        // Validar budget disponível
         if (custoTotal > budget) {
             System.out.printf("Erro: Budget insuficiente! Custo da compra: R$ %.2f | Budget disponível: R$ %.2f\n",
                     custoTotal, budget);
             return;
         }
 
-        // 3. Debitar do budget e adicionar ao estoque
+        // Debitar do budget e adicionar ao estoque
         budget -= custoTotal;
         materiaPrima.adicionarEstoque(quantidade);
         System.out.printf("Compra de %.2f %s realizada com sucesso! Custo: R$ %.2f | Novo Budget: R$ %.2f\n",
