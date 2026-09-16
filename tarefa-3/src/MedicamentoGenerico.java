@@ -17,6 +17,6 @@ public class MedicamentoGenerico extends Produto {
 
     @Override
     public String getTipo() {
-        return "Medicamento de Baixa Qualidade";
+        return "Medicamento Genérico";
     }
 }

@@ -116,11 +116,11 @@ public class GerenciadorProducao {
             int idProduto = Produto.getTotalProdutosFabricados() + 1;
 
             if (indiceDemanda == 0) {
-                produto = new MedicamentoControlado(idProduto, "Medicamento Alta Qualidade #" + idProduto, "Aguardando", consumoPorUnidade);
+                produto = new MedicamentoControlado(idProduto, "Medicamento Controlado #" + idProduto, "Aguardando", consumoPorUnidade);
             } else if (indiceDemanda == 1) {
-                produto = new MedicamentoContinuo(idProduto, "Medicamento Média Qualidade #" + idProduto, "Aguardando", consumoPorUnidade);
+                produto = new MedicamentoContinuo(idProduto, "Medicamento Contínuo #" + idProduto, "Aguardando", consumoPorUnidade);
             } else {
-                produto = new MedicamentoGenerico(idProduto, "Medicamento Baixa Qualidade #" + idProduto, "Aguardando", consumoPorUnidade);
+                produto = new MedicamentoGenerico(idProduto, "Medicamento Genérico #" + idProduto, "Aguardando", consumoPorUnidade);
             }
 
             produto.processar();

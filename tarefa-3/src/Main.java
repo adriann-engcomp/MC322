@@ -20,9 +20,9 @@ public class Main {
         gerenciador.adicionarMaquina(maquinaInspecao);
 
         // 3. Registrar Demandas Iniciais de Medicamentos
-        gerenciador.registrarDemanda(new Demanda("Medicamento de Alta Qualidade", 50));
-        gerenciador.registrarDemanda(new Demanda("Medicamento de Média Qualidade", 50));
-        gerenciador.registrarDemanda(new Demanda("Medicamento de Baixa Qualidade", 50));
+        gerenciador.registrarDemanda(new Demanda("Medicamento Controlado", 50));
+        gerenciador.registrarDemanda(new Demanda("Medicamento Contínuo", 50));
+        gerenciador.registrarDemanda(new Demanda("Medicamento Genérico", 50));
 
         boolean executando = true;
 
@@ -36,14 +36,14 @@ public class Main {
             System.out.printf("BUDGET ATUAL: R$ %.2f\n\n", gerenciador.getBudget());
 
             System.out.println("ATUALIZAR DEMANDAS");
-            System.out.println("1 - Atualizar demanda de Medicamento de Alta Qualidade");
-            System.out.println("2 - Atualizar demanda de Medicamento de Média Qualidade");
-            System.out.println("3 - Atualizar demanda de Medicamento de Baixa Qualidade");
+            System.out.println("1 - Atualizar demanda de Medicamento Controlado");
+            System.out.println("2 - Atualizar demanda de Medicamento Contínuo");
+            System.out.println("3 - Atualizar demanda de Medicamento Genérico");
 
             System.out.println("\nFABRICAR");
-            System.out.println("4 - Fabricar Medicamento de Alta Qualidade");
-            System.out.println("5 - Fabricar Medicamento de Média Qualidade");
-            System.out.println("6 - Fabricar Medicamento de Baixa Qualidade");
+            System.out.println("4 - Fabricar Medicamento Controlado");
+            System.out.println("5 - Fabricar Medicamento Contínuo");
+            System.out.println("6 - Fabricar Medicamento Genérico");
 
             System.out.println("\nCONSULTAR");
             System.out.println("7 - Ver demandas");
@@ -67,7 +67,7 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                    System.out.print("Digite a nova quantidade para a demanda de Alta Qualidade: ");
+                    System.out.print("Digite a nova quantidade para a demanda de Medicamento Controlado: ");
                     if (scanner.hasNextInt()) {
                         int qtd = scanner.nextInt();
                         gerenciador.atualizarDemanda(0, qtd);
@@ -77,7 +77,7 @@ public class Main {
                     }
                     break;
                 case 2:
-                    System.out.print("Digite a nova quantidade para a demanda de Média Qualidade: ");
+                    System.out.print("Digite a nova quantidade para a demanda de Medicamento Contínuo: ");
                     if (scanner.hasNextInt()) {
                         int qtd = scanner.nextInt();
                         gerenciador.atualizarDemanda(1, qtd);
@@ -87,7 +87,7 @@ public class Main {
                     }
                     break;
                 case 3:
-                    System.out.print("Digite a nova quantidade para a demanda de Baixa Qualidade: ");
+                    System.out.print("Digite a nova quantidade para a demanda de Medicamento Genérico: ");
                     if (scanner.hasNextInt()) {
                         int qtd = scanner.nextInt();
                         gerenciador.atualizarDemanda(2, qtd);
@@ -97,22 +97,22 @@ public class Main {
                     }
                     break;
                 case 4:
-                    System.out.println("\nIniciando fabricação de Medicamento de Alta Qualidade...");
+                    System.out.println("\nIniciando fabricação de Medicamento Controlado...");
                     gerenciador.fabricarDemanda(0);
                     break;
                 case 5:
-                    System.out.println("\nIniciando fabricação de Medicamento de Média Qualidade...");
+                    System.out.println("\nIniciando fabricação de Medicamento Contínuo...");
                     gerenciador.fabricarDemanda(1);
                     break;
                 case 6:
-                    System.out.println("\nIniciando fabricação de Medicamento de Baixa Qualidade...");
+                    System.out.println("\nIniciando fabricação de Medicamento Genérico...");
                     gerenciador.fabricarDemanda(2);
                     break;
                 case 7:
-                    gerenciador.exibirArmazem();
+                    gerenciador.exibirDemandas();
                     break;
                 case 8:
-                    gerenciador.exibirDemandas();
+                    gerenciador.exibirArmazem();
                     break;
                 case 9:
                     gerenciador.exibirEstoqueMateriaPrima();

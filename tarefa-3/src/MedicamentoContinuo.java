@@ -17,6 +17,6 @@ public class MedicamentoContinuo extends Produto {
 
     @Override
     public String getTipo() {
-        return "Medicamento de Média Qualidade";
+        return "Medicamento Contínuo";
     }
 }

@@ -17,6 +17,6 @@ public class MedicamentoControlado extends Produto {
 
     @Override
     public String getTipo() {
-        return "Medicamento de Alta Qualidade";
+        return "Medicamento Controlado";
     }
 }
