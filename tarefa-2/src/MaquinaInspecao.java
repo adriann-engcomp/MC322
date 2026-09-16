@@ -7,7 +7,9 @@ public class MaquinaInspecao extends Maquina {
 
     @Override
     public void processar(Produto produto) {
-        if (produto == null) return;
+        if (produto == null || !estaLigada()){
+            return;
+        }
 
         // 1. Chance de rejeição baseada na probabilidade de falha acumulada e no rigor de qualidade:
         // Alta qualidade (0.9) -> critérios mais rigorosos -> maior chance de rejeição

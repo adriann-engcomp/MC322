@@ -9,8 +9,9 @@ public class MaquinaProcessamento extends Maquina {
 
     @Override
     public void processar(Produto produto) {
-        if (produto == null) return;
-        produto.setStatus("Em Processamento");
+        if (produto == null || !estaLigada()){
+            return;
+        }
         // Não falha diretamente, mas tem chanceAumentarFalha (X%) de aumentar a probabilidade de falha acumulada do produto
         if (random.nextDouble() < chanceAumentarFalha) {
             produto.aumentarProbabilidadeFalha(0.10);
