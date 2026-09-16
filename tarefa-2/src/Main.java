@@ -29,7 +29,9 @@ public class Main {
         while (executando) {
             // Exibição do Menu
             System.out.println("\n==========================================");
-            System.out.println("       FÁBRICA DE MEDICAMENTOS");
+            System.out.println("       FÁBRICA DE MEDICAMENTOS - Crescendo para te ajuadar!!!");
+            System.out.println("        A vida é uma caixinha de surpresas, a nossa tem remédio barato hehe. ");
+            System.out.println("            Desenvolvido por: Adriann e Alex");
             System.out.println("==========================================");
             System.out.printf("BUDGET ATUAL: R$ %.2f\n\n", gerenciador.getBudget());
 
