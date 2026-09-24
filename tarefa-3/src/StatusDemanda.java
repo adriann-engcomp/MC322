@@ -4,8 +4,8 @@ public enum StatusDemanda {
     CONCLUIDA("Concluída", "Todas as unidades foram fabricadas"),
     CANCELADA("Cancelada", "Não tem matéria prima ou orçamento disponível");
 
-    private String Rotulo;
-    private String Detalhe;
+    private final String Rotulo;
+    private final String Detalhe;
 
     StatusDemanda(String Rotulo, String Detalhe){
         this.Rotulo = Rotulo;
