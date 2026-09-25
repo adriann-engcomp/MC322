@@ -1,8 +1,9 @@
-public class MedicamentoControlado extends Produto {
+// Ex: Ritalina
 
+public class MedicamentoControlado extends Produto {
     // Construtor
-    public MedicamentoControlado(int id, String nome, String status, double quantidadeMateriaPrimaPorUnidade) {
-        super(id, nome, status, quantidadeMateriaPrimaPorUnidade, 0.9);
+    public MedicamentoControlado(String nome, String lote) {
+        super(nome, lote, TipoMedicamento.CONTROLADO);
     }
 
     @Override
