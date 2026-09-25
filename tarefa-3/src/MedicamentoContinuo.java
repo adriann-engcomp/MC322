@@ -1,4 +1,4 @@
-// Ex: 
+// Ex: Insulina
 
 public class MedicamentoContinuo extends Produto {
     // Construtor
