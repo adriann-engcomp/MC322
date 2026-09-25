@@ -1,13 +1,9 @@
+// Ex: Dipirona
+
 public class MedicamentoGenerico extends Produto {
-
     // Construtor
-    public MedicamentoGenerico(int id, String nome, String status, double quantidadeMateriaPrimaPorUnidade) {
-        super(id, nome, status, quantidadeMateriaPrimaPorUnidade, 0.5);
-    }
-
-    @Override
-    public void processar() {
-        setStatus("Processando");
+    public MedicamentoGenerico(String nome, String lote) {
+        super(nome, lote, TipoMedicamento.GENERICO);
     }
 
     @Override
@@ -15,8 +11,14 @@ public class MedicamentoGenerico extends Produto {
         return 5.0 * quantidade; // tempo(min)*quantidade(unidades)
     }
 
+    @Override 
+    protected double getRiscoDeFalha(){
+        return 0.30;
+    }
+
+    // Relatorio com base no texto da super classe
     @Override
-    public String getTipo() {
-        return "Medicamento Genérico";
+    public String gerarRelatorioDiagnostico(){
+        return super.gerarRelatorioDiagnostico() + " | Ás vezes usa-se a receita (contínuo) ou não";
     }
 }
