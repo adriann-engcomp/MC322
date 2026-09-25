@@ -1,0 +1,1 @@
+Comentar um bloco = Ctrl + Shift + a 
