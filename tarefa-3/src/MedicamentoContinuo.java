@@ -1,13 +1,9 @@
+// Ex: 
+
 public class MedicamentoContinuo extends Produto {
-
     // Construtor
-    public MedicamentoContinuo(int id, String nome, String status, double quantidadeMateriaPrimaPorUnidade) {
-        super(id, nome, status, quantidadeMateriaPrimaPorUnidade, 0.7);
-    }
-
-    @Override
-    public void processar() {
-        setStatus("Processando");
+    public MedicamentoContinuo(String nome, String lote) {
+        super(nome, lote, TipoMedicamento.CONTINUO);
     }
 
     @Override
@@ -15,8 +11,14 @@ public class MedicamentoContinuo extends Produto {
         return 6.0 * quantidade; // tempo(min)*quantidade(unidades)
     }
 
+    @Override 
+    protected double getRiscoDeFalha(){
+        return 0.20;
+    }
+
+    // Relatorio com base no texto da super classe
     @Override
-    public String getTipo() {
-        return "Medicamento Contínuo";
+    public String gerarRelatorioDiagnostico(){
+        return super.gerarRelatorioDiagnostico() + " | Precisa de receita constante";
     }
 }
