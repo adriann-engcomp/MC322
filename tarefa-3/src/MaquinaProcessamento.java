@@ -1,11 +1,11 @@
-public class MaquinaProcessamento extends Maquina {
-    
-    private double chanceAumentarFalha; // Chance de X% de aumentar a probabilidade de falha do produto
+import java.util.Random;
 
+public class MaquinaProcessamento extends Maquina {
     // Construtor
-    public MaquinaProcessamento(String nome, int capacidadeMaxima, double probabilidadeFalha, double custoOperacao, double chanceAumentarFalha) {
-        super(nome, capacidadeMaxima, probabilidadeFalha, custoOperacao);
-        this.chanceAumentarFalha = chanceAumentarFalha;
+    public MaquinaProcessamento(String nome, int capacidadeMaxima,
+        double probabilidadeFalha, double custoOperacao, 
+        Cenario cenario, Random random) {
+        super(nome, capacidadeMaxima, probabilidadeFalha, custoOperacao, cenario, random);
     }
 
     @Override
@@ -14,22 +14,14 @@ public class MaquinaProcessamento extends Maquina {
             return;
         }
         // Não falha diretamente, mas tem chanceAumentarFalha (X%) de aumentar a probabilidade de falha acumulada do produto
-        if (random.nextDouble() < chanceAumentarFalha) {
+        if (verificarFalha()) {
             produto.aumentarProbabilidadeFalha(0.10);
         }
-        produto.setStatus("Processado");
+        produto.setStatus(StatusProduto.PROCESSADO);
     }
 
     @Override
     public String getTipo() {
         return "Máquina de Processamento / Mistura Farmacêutica";
-    }
-
-    public double getChanceAumentarFalha() {
-        return chanceAumentarFalha;
-    }
-
-    public void setChanceAumentarFalha(double chanceAumentarFalha) {
-        this.chanceAumentarFalha = chanceAumentarFalha;
     }
 }

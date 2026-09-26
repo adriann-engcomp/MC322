@@ -1,8 +1,12 @@
+import java.util.Random;
+
 public class MaquinaInspecao extends Maquina {
 
     // Construtor
-    public MaquinaInspecao(String nome, int capacidadeMaxima, double probabilidadeFalha, double custoOperacao) {
-        super(nome, capacidadeMaxima, probabilidadeFalha, custoOperacao);
+    public MaquinaInspecao(String nome, int capacidadeMaxima, 
+        double probabilidadeFalha, double custoOperacao,
+        Cenario cenario, Random random) {
+        super(nome, capacidadeMaxima, probabilidadeFalha, custoOperacao, cenario, random);
     }
 
     @Override
@@ -15,7 +19,6 @@ public class MaquinaInspecao extends Maquina {
         // Alta qualidade (0.9) -> critérios mais rigorosos -> maior chance de rejeição
         // Baixa qualidade (0.5) -> critérios mais flexíveis -> menor chance de rejeição
         double chanceRejeicao = produto.getProbabilidadeFalhaAcumulada() * (produto.getQualidade() / 0.5);
-
         boolean defeituoso = random.nextDouble() < chanceRejeicao;
 
         // 2. A máquina de inspeção pode falhar diretamente com probabilidade Z% (verificarFalha()),
@@ -24,14 +27,14 @@ public class MaquinaInspecao extends Maquina {
         boolean aprovado = maquinaFalhou ? defeituoso : !defeituoso;
 
         if (aprovado) {
-            produto.setStatus("Aprovado");
+            produto.setStatus(StatusProduto.APROVADO);
         } else {
-            produto.setStatus("Rejeitado");
+            produto.setStatus(StatusProduto.REJEITADO);
         }
     }
 
-    @Override
-    public String getTipo() {
-        return "Máquina de Inspeção / Controle de Qualidade";
-    }
+        @Override
+        public String getTipo() {
+            return "Máquina de Inspeção / Controle de Qualidade";
+        }
 }
