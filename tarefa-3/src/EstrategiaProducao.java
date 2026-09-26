@@ -10,7 +10,7 @@ public interface EstrategiaProducao {
     String getNomeEstrategia();
 
     // Trato os pedidos PENDENTES e com qtd > 0 (o default ajuda a generalizar para as outras estratégias)
-    default List<Demanda> tratoPedidosElegiveis(List<Demanda> demandas){
+    default List<Demanda> separoElegiveis(List<Demanda> demandas){
         List<Demanda> elegiveis = new ArrayList<>();
         for (Demanda demanda : demandas){
             if (demanda.estaElegivel()){
