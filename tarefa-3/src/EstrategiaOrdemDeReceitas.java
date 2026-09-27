@@ -14,7 +14,7 @@ Em seguida, get retrona a estratégia no menu.
 
 import java.util.List;
 
-public class EstrategiaOrdemDeReceitas implements EstrategiaProducao{
+public class EstrategiaOrdemDeReceitas implements EstrategiaProducao {
     @Override 
     public Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel){
         Demanda receitaEscolhida = null;
