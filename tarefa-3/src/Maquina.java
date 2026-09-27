@@ -137,7 +137,7 @@ public abstract class Maquina implements Auditavel {
     @Override 
     public String gerarRelatorioDiagnostico(){
         return "Máquina " + nome + " | " + status.getDescricao()
-        + String.format(" | saúde %.1f | chance de falha %.of%%", saude, getProbabilidadeFalhaAtual() * 100)
+        + String.format(" | saúde %.1f | chance de falha %.0f%%", saude, getProbabilidadeFalhaAtual() * 100)
         + "| falhas " + historicoDeFalhas;
     }
 

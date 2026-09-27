@@ -16,7 +16,7 @@ import java.util.List;
 
 public class EstrategiaOrdemDeReceitas implements EstrategiaProducao{
     @Override 
-    public Demanda selecionarDemanda(Lista<Demanda> demandas, double orcamentoDisponivel){
+    public Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel){
         Demanda receitaEscolhida = null;
         for (Demanda demanda : separoElegiveis(demandas)){
             // Busco quem chegou logo (menor numero)
@@ -27,6 +27,9 @@ public class EstrategiaOrdemDeReceitas implements EstrategiaProducao{
         return receitaEscolhida;
     }
 
-    
+    @Override
+    public String getNomeEstrategia() {
+        return "Ordem de Chegada";
+    }
 }
 

@@ -1,4 +1,5 @@
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -6,23 +7,26 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        Cenario cenario = Cenario.FABRICA_NORMAL;
+        Random random = new Random(cenario.getSementeAleatoria());
+
         // 1. Instanciar Matéria-Prima e Gerenciador de Produção
-        MateriaPrima materiaPrima = new MateriaPrima(1, "Princípio Ativo Farmacêutico (Insumo)", 500.0, "kg", 10.0);
-        GerenciadorProducao gerenciador = new GerenciadorProducao(materiaPrima, 1000.0);
+        MateriaPrima materiaPrima = new MateriaPrima(1, "Princípio Ativo Farmacêutico (Insumo)", cenario.getEstoqueInicialMateriaPrima(), "kg", 10.0);
+        GerenciadorProducao gerenciador = new GerenciadorProducao(materiaPrima, cenario.getBudgetInicial());
 
         // 2. Instanciar e registrar as Máquinas da linha de produção
-        MaquinaProcessamento maquinaProcessamento = new MaquinaProcessamento("Reator Farmacêutico / Mistura", 500, 0.0, 1.50, 0.15);
-        MaquinaEmbalagem maquinaEmbalagem = new MaquinaEmbalagem("Embaladora Blister / Selagem", 500, 0.0, 1.00, 0.10);
-        MaquinaInspecao maquinaInspecao = new MaquinaInspecao("Espectrômetro de Inspeção / Controle Anvisa", 500, 0.05, 2.00);
+        MaquinaProcessamento maquinaProcessamento = new MaquinaProcessamento("Reator Farmacêutico / Mistura", 500, 0.15, 1.50, cenario, random);
+        MaquinaEmbalagem maquinaEmbalagem = new MaquinaEmbalagem("Embaladora Blister / Selagem", 500, 0.10, 1.00, cenario, random);
+        MaquinaInspecao maquinaInspecao = new MaquinaInspecao("Espectrômetro de Inspeção / Controle Anvisa", 500, 0.05, 2.00, cenario, random);
 
         gerenciador.adicionarMaquina(maquinaProcessamento);
         gerenciador.adicionarMaquina(maquinaEmbalagem);
         gerenciador.adicionarMaquina(maquinaInspecao);
 
         // 3. Registrar Demandas Iniciais de Medicamentos
-        gerenciador.registrarDemanda(new Demanda("Medicamento Controlado", 50));
-        gerenciador.registrarDemanda(new Demanda("Medicamento Contínuo", 50));
-        gerenciador.registrarDemanda(new Demanda("Medicamento Genérico", 50));
+        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.CONTROLADO, "Medicamento Controlado", 50, 4.50));
+        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.CONTINUO, "Medicamento Contínuo", 50, 4.50));
+        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.GENERICO, "Medicamento Genérico", 50, 4.50));
 
         boolean executando = true;
 

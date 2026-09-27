@@ -9,6 +9,7 @@ public class GerenciadorProducao {
     private ArrayList<Maquina> maquinas;
     private MateriaPrima materiaPrima;
     private double budget;
+    private EstrategiaProducao estrategiaAtual;
 
     // Construtor
     public GerenciadorProducao(MateriaPrima materiaPrima, double budgetInicial) {
@@ -17,6 +18,30 @@ public class GerenciadorProducao {
         this.maquinas = new ArrayList<>();
         this.materiaPrima = materiaPrima;
         this.budget = budgetInicial;
+        this.estrategiaAtual = new EstrategiaOrdemDeReceitas();
+    }
+
+    // Métodos do Strategy
+    public void setEstrategia(EstrategiaProducao novaEstrategia) {
+        this.estrategiaAtual = novaEstrategia;
+    }
+
+    public EstrategiaProducao getEstrategiaAtual() {
+        return estrategiaAtual;
+    }
+
+    public void executarProximaProducao() {
+        if (estrategiaAtual == null) {
+            System.out.println("Nenhuma estratégia definida.");
+            return;
+        }
+        Demanda selecionada = estrategiaAtual.selecionarDemanda(demandas, budget);
+        if (selecionada != null) {
+            int indice = demandas.indexOf(selecionada);
+            fabricarDemanda(indice);
+        } else {
+            System.out.println("Nenhuma demanda elegível encontrada pela estratégia " + estrategiaAtual.getNomeEstrategia());
+        }
     }
 
     // Métodos de Demanda
@@ -30,7 +55,7 @@ public class GerenciadorProducao {
             return;
         }
         demandas.get(indice).atualizarQuantidade(novaQuantidade);
-        System.out.println("Demanda de \"" + demandas.get(indice).getTipoProduto() + "\" atualizada para " + novaQuantidade + " unidades.");
+        System.out.println("Demanda de \"" + demandas.get(indice).getMedicamento() + "\" atualizada para " + novaQuantidade + " unidades.");
     }
 
     // Métodos de Máquinas
@@ -51,8 +76,8 @@ public class GerenciadorProducao {
 
         for (int i = 0; i < demandas.size(); i++) {
             Demanda demanda = demandas.get(i);
-            System.out.printf("Demanda %d: Tipo: %s | Quantidade: %d | Atendida: %s\n",
-                    i + 1, demanda.getTipoProduto(), demanda.getQuantidadeProdutos(), demanda.isAtendida() ? "Sim" : "Não");
+            System.out.printf("Demanda %d: Tipo: %s | Quantidade: %d | Status: %s\n",
+                    i + 1, demanda.getMedicamento(), demanda.getQuantidade(), demanda.getStatus().getDescricao());
         }
     }
     
@@ -60,29 +85,19 @@ public class GerenciadorProducao {
         Demanda demanda = demandas.get(indiceDemanda);
 
         // Verificar se a demanda já foi atendida
-        if (demanda.isAtendida()) {
+        if (demanda.getStatus() == StatusDemanda.CONCLUIDA) {
             System.out.println("Aviso: Esta demanda já foi atendida anteriormente.");
             return;
         }
 
-        int quantidade = demanda.getQuantidadeProdutos();
+        int quantidade = demanda.getQuantidade();
         if (quantidade <= 0) {
             System.out.println("Aviso: A quantidade da demanda é zero. Atualize a demanda antes de fabricar.");
             return;
         }
 
-        // Definir consumo de matéria-prima por unidade e tipo de produto
-        double consumoPorUnidade;
-        if (indiceDemanda == 0) {
-            consumoPorUnidade = 3.0;
-        } else if (indiceDemanda == 1) {
-            consumoPorUnidade = 2.0;
-        } else {
-            consumoPorUnidade = 1.0;
-        }
-
         // Verificar disponibilidade de matéria-prima necessária
-        double materiaPrimaNecessaria = demanda.calcularMateriaPrimaNecessaria(consumoPorUnidade);
+        double materiaPrimaNecessaria = demanda.calcularConsumoPorDemanda();
         if (!materiaPrima.verificarDisponibilidade(materiaPrimaNecessaria)) {
             System.out.printf("Erro: Matéria-prima insuficiente! Necessário: %.2f %s | Disponível: %.2f %s\n",
                     materiaPrimaNecessaria, materiaPrima.getUnidade(), materiaPrima.getQuantidade(), materiaPrima.getUnidade());
@@ -98,6 +113,8 @@ public class GerenciadorProducao {
             return;
         }
 
+        demanda.iniciarProducao();
+
         // Consumir matéria-prima e debitar budget
         materiaPrima.consumir(materiaPrimaNecessaria);
         budget -= custoOperacional;
@@ -109,21 +126,12 @@ public class GerenciadorProducao {
 
         int aprovados = 0;
         int rejeitados = 0;
+        String lote = "LOTE-" + demanda.getNumero();
 
         // (Processamento -> Embalagem -> Inspeção)
         for (int i = 0; i < quantidade; i++) {
-            Produto produto;
-            int idProduto = Produto.getTotalProdutosFabricados() + 1;
-
-            if (indiceDemanda == 0) {
-                produto = new MedicamentoControlado(idProduto, "Medicamento Controlado #" + idProduto, "Aguardando", consumoPorUnidade);
-            } else if (indiceDemanda == 1) {
-                produto = new MedicamentoContinuo(idProduto, "Medicamento Contínuo #" + idProduto, "Aguardando", consumoPorUnidade);
-            } else {
-                produto = new MedicamentoGenerico(idProduto, "Medicamento Genérico #" + idProduto, "Aguardando", consumoPorUnidade);
-            }
-
-            produto.processar();
+            Produto produto = demanda.getTipo().criarProduto(demanda.getMedicamento() + " #" + (i + 1), lote);
+            produto.iniciarProcessamento();
 
             // Passagem pelas máquinas da linha de produção
             for (Maquina maquina : maquinas) {
@@ -133,26 +141,27 @@ public class GerenciadorProducao {
             // Adicionar ao armazém
             produtosFabricados.add(produto);
 
-            if ("Aprovado".equalsIgnoreCase(produto.getStatus())) {
+            if (produto.foiAprovado()) {
                 aprovados++;
             } else {
                 rejeitados++;
             }
         }
 
-        // Desligar máquinas após a produção
+        // Registrar ciclo de uso e desligar máquinas após a produção
         for (Maquina m : maquinas) {
+            m.registrarCicloDeUso();
             m.desligar();
         }
 
-        // Marcar demanda como atendida
-        demanda.atender();
+        // Marcar demanda como concluída
+        demanda.concluir();
 
         // Exibir relatório da fabricação
         System.out.println("\n==========================================");
         System.out.println("       RELATÓRIO DE FABRICAÇÃO");
         System.out.println("==========================================");
-        System.out.println("Demanda atendida: " + demanda.getTipoProduto());
+        System.out.println("Demanda atendida: " + demanda.getMedicamento());
         System.out.println("Total produzido: " + quantidade + " unidades");
         System.out.println(" - Aprovados na Inspeção (Anvisa): " + aprovados + " unidades");
         System.out.println(" - Rejeitados no Controle: " + rejeitados + " unidades");
@@ -200,15 +209,35 @@ public class GerenciadorProducao {
             System.out.println("O armazém está vazio no momento.");
         } else {
             for (Produto produto : produtosFabricados) {
-                System.out.printf("ID: %-3d | Nome: %-32s | Tipo: %-32s | Qualidade: %.1f | Falha Acumulada: %.2f | Status: %s\n",
+                System.out.printf("ID: %-3d | Nome: %-25s | Tipo: %-10s | Lote: %-8s | Qualidade: %.1f | Status: %-10s | Precisa Manutenção: %s\n",
                         produto.getId(),
                         produto.getNome(),
-                        produto.getTipo(),
+                        produto.getTipo().getNome(),
+                        produto.getLote(),
                         produto.getQualidade(),
-                        produto.getProbabilidadeFalhaAcumulada(),
-                        produto.getStatus());
+                        produto.getStatus().getDescricao(),
+                        produto.precisaManutencao() ? "Sim" : "Não");
             }
             System.out.println("Total no armazém: " + produtosFabricados.size() + " itens (Total geral fabricado: " + Produto.getTotalProdutosFabricados() + ")");
+        }
+        System.out.println("==========================================\n");
+    }
+
+    public void gerarAuditoriaGeral() {
+        System.out.println("\n==========================================");
+        System.out.println("       RELATÓRIO DE AUDITORIA GERAL");
+        System.out.println("==========================================");
+        System.out.println("[MÁQUINAS]");
+        for (Maquina maquina : maquinas) {
+            System.out.println(maquina.gerarRelatorioDiagnostico());
+        }
+        System.out.println("\n[PRODUTOS]");
+        if (produtosFabricados.isEmpty()) {
+            System.out.println("Nenhum produto fabricado no momento.");
+        } else {
+            for (Produto produto : produtosFabricados) {
+                System.out.println(produto.gerarRelatorioDiagnostico());
+            }
         }
         System.out.println("==========================================\n");
     }
