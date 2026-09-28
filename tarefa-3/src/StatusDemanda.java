@@ -22,7 +22,7 @@ public enum StatusDemanda {
         return Detalhe;
     }
 
-    // Agora, vou montar a lógica de transições para cada Status
+    // Lógica de transições para cada Status
     public boolean mudaPara(StatusDemanda Novo){
         switch (this) {
             case PENDENTE:
@@ -31,7 +31,7 @@ public enum StatusDemanda {
                 return Novo == CONCLUIDA;
             case CONCLUIDA:
                 // Mesmo se produzir a quantidade de uma demanda pedida, posso precisar produzir a mesma quantidade n vezes 
-                // ou tive defeito na produção e assim devo produzir mais e por isso saio de concluida para pendente.
+                // ou tive defeito na produção e assim devo produzir mais e por isso saio de concluida para pendente
                 return Novo == PENDENTE;
             default:
                 return false;
