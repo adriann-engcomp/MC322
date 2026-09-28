@@ -104,6 +104,7 @@ public class Main {
             System.out.println("1. Demandas");
             System.out.println("1. Atualizar demanda");
             System.out.println("2. Listar demandas (status via enum)");
+            System.out.println("3. Registrar demanda");
             System.out.println("0. Voltar");
             System.out.print("ESCOLHA: ");
 
@@ -144,6 +145,56 @@ public class Main {
                     break;
                 case 2:
                     gerenciador.exibirDemandas();
+                    break;
+                case 3:
+                    System.out.print("Digite o nome do medicamento: ");
+                    scanner.nextLine();
+
+                    String nomeMedicamento = scanner.nextLine();
+                    System.out.print("Digite a quantidade da demanda: ");
+
+                    while (!scanner.hasNextInt()) {
+                        System.out.println("Entrada inválida! Digite apenas números inteiros.");
+                        scanner.next();
+                    }
+
+                    int quantidade = scanner.nextInt();
+                    System.out.print("Digite o preço do medicamento: ");
+                    while (!scanner.hasNextDouble()) {
+                        System.out.println("Entrada inválida! Digite apenas números.");
+                        scanner.next();
+                    }
+                    
+                    double preco = scanner.nextDouble();
+                    System.out.println("Selecione o tipo de medicamento:");
+                    System.out.println("1 - CONTROLADO");
+                    System.out.println("2 - CONTINUO");
+                    System.out.println("3 - GENERICO");
+                    System.out.print("Escolha: ");
+                    
+                    while (!scanner.hasNextInt()) {
+                        System.out.println("Entrada inválida! Digite apenas números inteiros.");
+                        scanner.next();
+                    }
+
+                    int tipoEscolha = scanner.nextInt();
+                    TipoMedicamento tipo;
+                    switch (tipoEscolha) {
+                        case 1:
+                            tipo = TipoMedicamento.CONTROLADO;
+                            break;
+                        case 2:
+                            tipo = TipoMedicamento.CONTINUO;
+                            break;
+                        case 3:
+                            tipo = TipoMedicamento.GENERICO;
+                            break; 
+                        default:
+                            System.out.println("Opção inválida! Tipo de medicamento não registrado."); 
+                            continue;
+                    }
+                    gerenciador.registrarDemanda(new Demanda(tipo, nomeMedicamento, quantidade, preco));
+                    System.out.println("Demanda registrada com sucesso!");
                     break;
                 case 0:
                     voltar = true;
