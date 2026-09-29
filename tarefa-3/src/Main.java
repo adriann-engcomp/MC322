@@ -24,9 +24,9 @@ public class Main {
         gerenciador.adicionarMaquina(maquinaInspecao);
 
         // 3. Registrar Demandas Iniciais de Medicamentos
-        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.CONTROLADO, "Medicamento Controlado", 50, 4.50));
-        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.CONTINUO, "Medicamento Contínuo", 50, 4.50));
-        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.GENERICO, "Medicamento Genérico", 50, 4.50));
+        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.CONTROLADO, "Ritalina 40mg", 50, 4.50));
+        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.CONTINUO, "Losartana 50mg", 50, 4.50));
+        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.GENERICO, "Dipirona 500mg", 50, 4.50));
 
         boolean executando = true;
 
