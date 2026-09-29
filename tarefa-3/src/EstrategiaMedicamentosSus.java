@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class EstrategiaMaximoProdutos implements EstrategiaProducao {
+public class EstrategiaMedicamentosSus implements EstrategiaProducao {
 
     @Override
     public Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel) {
@@ -17,6 +17,6 @@ public class EstrategiaMaximoProdutos implements EstrategiaProducao {
 
     @Override
     public String getNomeEstrategia() {
-        return "Maximizar Produção no Orçamento";
+        return "Muitos remédios para fabricar para o SUS";
     }
 }

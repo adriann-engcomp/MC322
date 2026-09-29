@@ -7,12 +7,12 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        Cenario cenario = Cenario.FABRICA_NORMAL;
+        Cenario cenario = menuCenario(scanner);
         Random random = new Random(cenario.getSementeAleatoria());
 
         // 1. Instanciar Matéria-Prima e Gerenciador de Produção
         MateriaPrima materiaPrima = new MateriaPrima(1, "Princípio Ativo Farmacêutico (Insumo)", cenario.getEstoqueInicialMateriaPrima(), "kg", 10.0);
-        GerenciadorProducao gerenciador = new GerenciadorProducao(materiaPrima, cenario.getBudgetInicial());
+        GerenciadorProducao gerenciador = new GerenciadorProducao(materiaPrima, cenario.getBudgetInicial(), new EstrategiaFilaDePedidos());
 
         // 2. Instanciar e registrar as Máquinas da linha de produção
         MaquinaProcessamento maquinaProcessamento = new MaquinaProcessamento("Reator Farmacêutico / Mistura", 500, 0.15, 1.50, cenario, random);
@@ -24,9 +24,9 @@ public class Main {
         gerenciador.adicionarMaquina(maquinaInspecao);
 
         // 3. Registrar Demandas Iniciais de Medicamentos
-        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.CONTROLADO, "Ritalina 40mg", 50, 4.50));
-        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.CONTINUO, "Losartana 50mg", 50, 4.50));
-        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.GENERICO, "Dipirona 500mg", 50, 4.50));
+        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.CONTROLADO, "Ritalina 40mg", 10, 4.50));
+        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.CONTINUO, "Losartana 50mg", 20, 4.50));
+        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.GENERICO, "Dipirona 500mg", 30, 4.50));
 
         boolean executando = true;
 
@@ -95,6 +95,30 @@ public class Main {
         }
 
         scanner.close();
+    }
+
+    private static Cenario menuCenario(Scanner scanner){
+        while (true){
+            System.out.println("\nEscolha o cenário da fábrica:");
+            System.out.println("1 - " + Cenario.FABRICA_NORMAL.getNome());
+            System.out.println("2 - " + Cenario.FABRICA_PANDEMIA.getNome());
+            System.out.print("Escolha: ");
+
+            if (!scanner.hasNextInt()){
+                System.out.println("Entrada inválida! Digite um número");
+                scanner.next();
+                continue;
+            }
+
+            int opcao = scanner.nextInt();
+            if (opcao == 1){
+                return Cenario.FABRICA_NORMAL;
+            }
+            if (opcao == 2){
+                return Cenario.FABRICA_PANDEMIA;
+            }
+            System.out.println("Opção inválida! Digite 1 ou 2.");
+        }
     }
 
     private static void menuDemandas(Scanner scanner, GerenciadorProducao gerenciador) {
@@ -300,7 +324,7 @@ public class Main {
             System.out.println("\n--------------------------------------------------------------");
             System.out.println("5. Gerenciar estrategia");
             System.out.printf("Estratégia atual: [%s]\n", gerenciador.getEstrategiaAtual().getNomeEstrategia());
-            System.out.println("1. Ordem de Chegada");
+            System.out.println("1. Fila de pedidos");
             System.out.println("2. Maior Demanda");
             System.out.println("3. Maximizar Producao");
             System.out.println("0. Voltar");
@@ -316,15 +340,15 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                    gerenciador.setEstrategia(new EstrategiaOrdemDeReceitas());
+                    gerenciador.setEstrategia(new EstrategiaFilaDePedidos());
                     System.out.println("Estratégia alterada para: " + gerenciador.getEstrategiaAtual().getNomeEstrategia());
                     break;
                 case 2:
-                    gerenciador.setEstrategia(new EstrategiaMaiorDemanda());
+                    gerenciador.setEstrategia(new EstrategiaPandemia());
                     System.out.println("Estratégia alterada para: " + gerenciador.getEstrategiaAtual().getNomeEstrategia());
                     break;
                 case 3:
-                    gerenciador.setEstrategia(new EstrategiaMaximoProdutos());
+                    gerenciador.setEstrategia(new EstrategiaMedicamentosSus());
                     System.out.println("Estratégia alterada para: " + gerenciador.getEstrategiaAtual().getNomeEstrategia());
                     break;
                 case 0:

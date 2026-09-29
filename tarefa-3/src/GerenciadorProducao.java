@@ -12,13 +12,15 @@ public class GerenciadorProducao {
     private EstrategiaProducao estrategiaAtual;
 
     // Construtor
-    public GerenciadorProducao(MateriaPrima materiaPrima, double budgetInicial) {
+    // No padr
+    public GerenciadorProducao(MateriaPrima materiaPrima, double budgetInicial,
+        EstrategiaProducao estrategiaInicial) {
         this.demandas = new ArrayList<>();
         this.produtosFabricados = new ArrayList<>();
         this.maquinas = new ArrayList<>();
         this.materiaPrima = materiaPrima;
         this.budget = budgetInicial;
-        this.estrategiaAtual = new EstrategiaOrdemDeReceitas();
+        this.estrategiaAtual = estrategiaInicial;
     }
 
     // Métodos do Strategy
@@ -126,7 +128,7 @@ public class GerenciadorProducao {
 
         int aprovados = 0;
         int rejeitados = 0;
-        String lote = "LOTE-" + demanda.getNumero();
+        String lote = String.format("LOTE-%04d", produtosFabricados.size() + 1);
 
         // (Processamento -> Embalagem -> Inspeção)
         for (int i = 0; i < quantidade; i++) {
@@ -208,7 +210,16 @@ public class GerenciadorProducao {
         if (produtosFabricados.isEmpty()) {
             System.out.println("O armazém está vazio no momento.");
         } else {
+            String loteAnterior = "";
             for (Produto produto : produtosFabricados) {
+                if (!produto.getLote().equals(loteAnterior)){
+                    loteAnterior = produto.getLote();
+                    System.out.printf("%n>> %s | %s | Quantidade: %d unidade (%d aprovadas) %n",
+                        loteAnterior, produto.getTipo().getNome(),
+                        contarUnidadePorLote(loteAnterior, false),
+                        contarUnidadePorLote(loteAnterior, true)
+                    );
+                }
                 System.out.printf("ID: %-3d | Nome: %-25s | Tipo: %-10s | Lote: %-8s | Qualidade: %.1f | Status: %-10s | Precisa Manutenção: %s\n",
                         produto.getId(),
                         produto.getNome(),
@@ -224,21 +235,23 @@ public class GerenciadorProducao {
     }
 
     public void gerarAuditoriaGeral() {
+        ArrayList<Auditavel> itens = new ArrayList<>();
+        itens.addAll(maquinas);
+        itens.addAll(produtosFabricados);
         System.out.println("\n==========================================");
         System.out.println("       RELATÓRIO DE AUDITORIA GERAL");
         System.out.println("==========================================");
-        System.out.println("[MÁQUINAS]");
-        for (Maquina maquina : maquinas) {
-            System.out.println(maquina.gerarRelatorioDiagnostico());
-        }
-        System.out.println("\n[PRODUTOS]");
-        if (produtosFabricados.isEmpty()) {
-            System.out.println("Nenhum produto fabricado no momento.");
-        } else {
-            for (Produto produto : produtosFabricados) {
-                System.out.println(produto.gerarRelatorioDiagnostico());
+        int alertas = 0;
+        for (Auditavel item : itens){
+            if (item.precisaManutencao()){
+                alertas++;
+                System.out.println(("[Alerta " + item.gerarRelatorioDiagnostico()));
+            }
+            else{
+                System.out.println("[OK]  " + item.gerarRelatorioDiagnostico());
             }
         }
+        System.out.println("Itens auditados: " + itens.size() + " | Em alerta: " + alertas);
         System.out.println("==========================================\n");
     }
 
@@ -253,6 +266,16 @@ public class GerenciadorProducao {
     }
 
     // Método privado
+    private int contarUnidadePorLote(String lote, boolean somenteAprovados){
+        int total = 0;
+        for (Produto produto : produtosFabricados){
+            if (produto.getLote().equals(lote) && (!somenteAprovados || produto.foiAprovado())){
+                total++;
+            }
+        }
+        return total;
+    }
+
     private double calcularCustoProducao(int quantidadeProdutos) {
         double custoPorProduto = 0;
         for (Maquina maquina : maquinas) {
