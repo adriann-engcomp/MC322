@@ -1,14 +1,9 @@
 import java.util.Scanner;
 
 /**
- * Ponto de entrada (CLI) e interface com o usuário da fábrica de medicamentos.
+ * Ponto de entrada da fábrica de medicamentos.
  * <p>
- * Inicializa os módulos de insumo, gerenciador de produção, máquinas especializadas
- * e orquestra a navegação interativa através de menus textuais no console.
- * É responsável por capturar as exceções de domínio disparadas pelas regras de negócio
- * ({@link RecursoInsuficienteException}, {@link DemandaInvalidaException}, {@link MaquinaIndisponivelException}),
- * apresentar mensagens explicativas e amigáveis ao usuário, garantir a recuperação após falhas e
- * manter o estado da aplicação rigorosamente consistente.
+ * Solicita o cenário, inicializa a fábrica e coordena o menu principal.
  * </p>
  *
  * @author Adriann e Alexsandro
@@ -22,7 +17,7 @@ public class Main {
     }
 
     /**
-     * Método principal que inicializa o sistema da fábrica e controla o loop do menu interativo.
+     * Método principal que pede o cenário, inicializa a fábrica e controla o loop do menu interativo.
      *
      * @param args Argumentos de linha de comando (não utilizados).
      */
@@ -51,7 +46,7 @@ public class Main {
             System.out.println("0. Sair");
             System.out.print("ESCOLHA: ");
 
-            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.opcao(scanner);
             if (opcao == -1) {
                 continue;
             }

@@ -1,5 +1,13 @@
 import java.util.Scanner;
 
+/**
+ * Interface de consulta dos estoques da fábrica.
+ * <p>
+ * Exibe os produtos do armazém e a matéria-prima disponível.
+ * </p>
+ *
+ * @author Adriann e Alexsandro
+ */
 public final class MenuConsultar{
     private MenuConsultar(){
     }
@@ -20,7 +28,7 @@ public final class MenuConsultar{
             System.out.println("0. Voltar");
             System.out.print("ESCOLHA: ");
 
-            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.opcao(scanner);
             if (opcao == -1) {
                 continue;
             }

@@ -8,6 +8,7 @@
  *
  * @author Adriann e Alexsandro
  */
+
 public enum Cenario {
     
     /**

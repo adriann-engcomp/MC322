@@ -1,16 +1,23 @@
-/**
- * Lê uma opção numérica inteira fornecida pelo usuário, tratando entradas não numéricas.
- *
- * @param scanner Leitor do console.
- * @return O número digitado ou -1 se a entrada for inválida ou não houver dados.
- */
-
 import java.util.Scanner;
 
+/**
+ * Classe utilitária para leitura das opções dos menus.
+ * <p>
+ * Captura números inteiros, informa entradas inválidas e identifica o fim da entrada.
+ * </p>
+ *
+ * @author Adriann e Alexsandro
+ */
 public class LeitorDeOpcoes {
     private LeitorDeOpcoes(){}
 
-    public static int lerOpcao(Scanner scanner){
+    /**
+     * Lê uma opção numérica inteira fornecida pelo usuário, tratando entradas não numéricas.
+     *
+     * @param scanner Leitor do console.
+     * @return O número digitado, -1 se a entrada não for int ou 0 se não houver dados.
+     */
+    public static int opcao(Scanner scanner){
         if (!scanner.hasNext()){
             return 0;
         }

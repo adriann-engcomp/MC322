@@ -1,5 +1,14 @@
 import java.util.Scanner;
 
+/**
+ * Interface de seleção da estratégia de produção.
+ * <p>
+ * Exibe a estratégia atual e permite alterar a política de seleção das demandas.
+ * </p>
+ *
+ * @author Adriann e Alexsandro
+ */
+
 public class MenuEstrategias {
     private MenuEstrategias(){
     }
@@ -24,7 +33,7 @@ public class MenuEstrategias {
             System.out.println("0. Voltar");
             System.out.print("ESCOLHA: ");
 
-            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.opcao(scanner);
             if (opcao == -1) {
                 continue;
             }

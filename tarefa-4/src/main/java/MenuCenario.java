@@ -1,5 +1,13 @@
 import java.util.Scanner;
 
+/**
+ * Interface de seleção do cenário operacional.
+ * <p>
+ * Apresenta os cenários disponíveis e retorna a escolha válida do usuário.
+ * </p>
+ *
+ * @author Adriann e Alexsandro
+ */
 public class MenuCenario {
 
     private MenuCenario(){
@@ -18,7 +26,7 @@ public class MenuCenario {
             System.out.println("2 - " + Cenario.FABRICA_PANDEMIA.getNome());
             System.out.print("Escolha: ");
 
-            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.opcao(scanner);
             if (opcao == 1) {
                 return Cenario.FABRICA_NORMAL;
             }

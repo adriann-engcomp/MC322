@@ -1,5 +1,15 @@
 import java.util.Random;
 
+/**
+ * Classe responsável pela configuração inicial da fábrica.
+ * <p>
+ * Cria o gerenciador, a matéria-prima, as máquinas e as demandas iniciais
+ * conforme o cenário escolhido.
+ * </p>
+ *
+ * @author Adriann e Alexsandro
+ */
+
 public class InicializoFabrica {
     private InicializoFabrica(){
     }

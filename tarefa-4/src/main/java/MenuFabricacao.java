@@ -1,5 +1,14 @@
 import  java.util.Scanner;
 
+/**
+ * Interface de execução das ordens de fabricação.
+ * <p>
+ * Permite produzir pela estratégia ativa ou selecionar uma demanda,
+ * exibindo as falhas da operação.
+ * </p>
+ *
+ * @author Adriann e Alexsandro
+ */
 public class MenuFabricacao {
     private MenuFabricacao(){
     }
@@ -20,7 +29,7 @@ public class MenuFabricacao {
             System.out.println("0. Voltar");
             System.out.print("ESCOLHA: ");
 
-            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.opcao(scanner);
             if (opcao == -1) {
                 continue;
             }
@@ -31,13 +40,13 @@ public class MenuFabricacao {
                     try {
                         gerenciador.executarProximaProducao();
                     } catch (RecursoInsuficienteException e) {
-                        ExibidorDeMensagens.exibirPainelErro("Recurso Insuficiente", e.getMessage(), "Nenhuma alteração foi realizada no estoque ou no orçamento.");
+                        ExibeErro.exibirPainelErro("Recurso Insuficiente", e.getMessage(), "Nenhuma alteração foi realizada no estoque ou no orçamento.");
                     } catch (MaquinaIndisponivelException e) {
-                        ExibidorDeMensagens.exibirPainelErro("Máquina Indisponível", e.getMessage(), "Nenhuma alteração foi realizada na esteira ou no lote.");
+                        ExibeErro.exibirPainelErro("Máquina Indisponível", e.getMessage(), "Nenhuma alteração foi realizada na esteira ou no lote.");
                     } catch (DemandaInvalidaException e) {
-                        ExibidorDeMensagens.exibirPainelErro("Demanda Inválida", e.getMessage(), "Nenhuma demanda foi modificada.");
+                        ExibeErro.exibirPainelErro("Demanda Inválida", e.getMessage(), "Nenhuma demanda foi modificada.");
                     } catch (PlantaException e) {
-                        ExibidorDeMensagens.exibirPainelErro("Falha Operacional", e.getMessage(), "O estado da fábrica foi mantido consistente.");
+                        ExibeErro.exibirPainelErro("Falha Operacional", e.getMessage(), "O estado da fábrica foi mantido consistente.");
                     }
                     break;
 
@@ -51,7 +60,7 @@ public class MenuFabricacao {
                         System.out.println((i + 1) + " - " + gerenciador.getDemandas().get(i).getMedicamento());
                     }
                     System.out.print("Escolha: ");
-                    int escolha = LeitorDeOpcoes.lerOpcao(scanner);
+                    int escolha = LeitorDeOpcoes.opcao(scanner);
                     if (escolha == -1) {
                         break;
                     }
@@ -59,13 +68,13 @@ public class MenuFabricacao {
                     try {
                         gerenciador.fabricarDemanda(escolha - 1);
                     } catch (RecursoInsuficienteException e) {
-                        ExibidorDeMensagens.exibirPainelErro("Recurso Insuficiente", e.getMessage(), "Nenhuma alteração foi realizada no estoque ou no orçamento.");
+                        ExibeErro.exibirPainelErro("Recurso Insuficiente", e.getMessage(), "Nenhuma alteração foi realizada no estoque ou no orçamento.");
                     } catch (MaquinaIndisponivelException e) {
-                        ExibidorDeMensagens.exibirPainelErro("Máquina Indisponível", e.getMessage(), "Nenhuma alteração foi realizada na esteira ou no lote.");
+                        ExibeErro.exibirPainelErro("Máquina Indisponível", e.getMessage(), "Nenhuma alteração foi realizada na esteira ou no lote.");
                     } catch (DemandaInvalidaException e) {
-                        ExibidorDeMensagens.exibirPainelErro("Demanda Inválida", e.getMessage(), "Nenhuma alteração foi realizada na demanda.");
+                        ExibeErro.exibirPainelErro("Demanda Inválida", e.getMessage(), "Nenhuma alteração foi realizada na demanda.");
                     } catch (PlantaException e) {
-                        ExibidorDeMensagens.exibirPainelErro("Falha Operacional", e.getMessage(), "O estado da fábrica foi mantido consistente.");
+                        ExibeErro.exibirPainelErro("Falha Operacional", e.getMessage(), "O estado da fábrica foi mantido consistente.");
                     }
                     break;
 

@@ -1,5 +1,14 @@
 import java.util.Scanner;
 
+/**
+ * Interface de compra de matéria-prima.
+ * <p>
+ * Solicita a quantidade, encaminha a compra e exibe erros de entrada ou operação.
+ * </p>
+ *
+ * @author Adriann e Alexsandro
+ */
+
 public class MenuMateriaPrima {
     private MenuMateriaPrima(){
     }
@@ -22,11 +31,11 @@ public class MenuMateriaPrima {
                         try {
                             gerenciador.comprarMateriaPrima(quantidade);
                         } catch (RecursoInsuficienteException e) {
-                            ExibidorDeMensagens.exibirPainelErro("Recurso Insuficiente", e.getMessage(), "Nenhuma alteração foi realizada no estoque ou no orçamento.");
+                            ExibeErro.exibirPainelErro("Recurso Insuficiente", e.getMessage(), "Nenhuma alteração foi realizada no estoque ou no orçamento.");
                         } catch (DemandaInvalidaException e) {
-                            ExibidorDeMensagens.exibirPainelErro("Quantidade Inválida", e.getMessage(), "A compra não foi efetuada.");
+                            ExibeErro.exibirPainelErro("Quantidade Inválida", e.getMessage(), "A compra não foi efetuada.");
                         } catch (PlantaException e) {
-                            ExibidorDeMensagens.exibirPainelErro("Falha na Operação", e.getMessage(), "O orçamento permaneceu inalterado.");
+                            ExibeErro.exibirPainelErro("Falha na Operação", e.getMessage(), "O orçamento permaneceu inalterado.");
                         }
                     }
     }

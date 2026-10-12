@@ -1,5 +1,14 @@
 import java.util.Scanner;
 
+/**
+ * Interface de auditoria da fábrica.
+ * <p>
+ * Exibe relatórios gerais, diagnósticos de máquinas e produtos
+ * e permite solicitar manutenção.
+ * </p>
+ *
+ * @author Adriann e Alexsandro
+ */
 public class MenuAuditoria {
     private MenuAuditoria(){
     }
@@ -22,7 +31,7 @@ public class MenuAuditoria {
             System.out.println("0. Voltar");
             System.out.print("ESCOLHA: ");
 
-            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.opcao(scanner);
             if (opcao == -1) {
                 continue;
             }

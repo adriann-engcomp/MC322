@@ -1,5 +1,14 @@
 import java.util.Scanner;
 
+/**
+ * Interface de gerenciamento das demandas.
+ * <p>
+ * Permite cadastrar, listar e atualizar pedidos, exibindo erros quando necessário.
+ * </p>
+ *
+ * @author Adriann e Alexsandro
+ */
+
 public class MenuDemandas {
     private MenuDemandas(){
     }
@@ -21,7 +30,7 @@ public class MenuDemandas {
             System.out.println("0. Voltar");
             System.out.print("ESCOLHA: ");
 
-            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.opcao(scanner);
             if (opcao == -1) {
                 continue;
             }
@@ -37,13 +46,13 @@ public class MenuDemandas {
                         System.out.println((i + 1) + " - " + gerenciador.getDemandas().get(i).getMedicamento());
                     }
                     System.out.print("Escolha: ");
-                    int escolha = LeitorDeOpcoes.lerOpcao(scanner);
+                    int escolha = LeitorDeOpcoes.opcao(scanner);
                     if (escolha == -1) {
                         break;
                     }
 
                     System.out.print("Digite a nova quantidade: ");
-                    int qtd = LeitorDeOpcoes.lerOpcao(scanner);
+                    int qtd = LeitorDeOpcoes.opcao(scanner);
                     if (qtd == -1) {
                         break;
                     }
@@ -51,9 +60,9 @@ public class MenuDemandas {
                     try {
                         gerenciador.atualizarDemanda(escolha - 1, qtd);
                     } catch (DemandaInvalidaException e) {
-                        ExibidorDeMensagens.exibirPainelErro("Demanda Inválida", e.getMessage(), "O pedido permaneceu inalterado.");
+                        ExibeErro.exibirPainelErro("Demanda Inválida", e.getMessage(), "O pedido permaneceu inalterado.");
                     } catch (PlantaException e) {
-                        ExibidorDeMensagens.exibirPainelErro("Operação da Planta", e.getMessage(), "Nenhuma alteração foi realizada.");
+                        ExibeErro.exibirPainelErro("Operação da Planta", e.getMessage(), "Nenhuma alteração foi realizada.");
                     }
                     break;
 
@@ -69,12 +78,12 @@ public class MenuDemandas {
                     }
                     String nomeMedicamento = scanner.nextLine().trim();
                     if (nomeMedicamento.isEmpty()) {
-                        ExibidorDeMensagens.exibirPainelErro("Entrada Inválida", "O nome do medicamento não pode ser vazio.", "Demanda não registrada.");
+                        ExibeErro.exibirPainelErro("Entrada Inválida", "O nome do medicamento não pode ser vazio.", "Demanda não registrada.");
                         break;
                     }
 
                     System.out.print("Digite a quantidade da demanda: ");
-                    int quantidade = LeitorDeOpcoes.lerOpcao(scanner);
+                    int quantidade = LeitorDeOpcoes.opcao(scanner);
                     if (quantidade == -1) {
                         break;
                     }
@@ -94,7 +103,7 @@ public class MenuDemandas {
                     System.out.println("2 - CONTINUO");
                     System.out.println("3 - GENERICO");
                     System.out.print("Escolha: ");
-                    int tipoEscolha = LeitorDeOpcoes.lerOpcao(scanner);
+                    int tipoEscolha = LeitorDeOpcoes.opcao(scanner);
                     if (tipoEscolha == -1) {
                         break;
                     }
@@ -111,7 +120,7 @@ public class MenuDemandas {
                             tipo = TipoMedicamento.GENERICO;
                             break;
                         default:
-                            ExibidorDeMensagens.exibirPainelErro("Tipo Inválido", "Opção de tipo não reconhecida (escolha 1, 2 ou 3).", "Demanda não registrada.");
+                            ExibeErro.exibirPainelErro("Tipo Inválido", "Opção de tipo não reconhecida (escolha 1, 2 ou 3).", "Demanda não registrada.");
                             continue;
                     }
 
@@ -119,9 +128,9 @@ public class MenuDemandas {
                         gerenciador.registrarDemanda(new Demanda(tipo, nomeMedicamento, quantidade, preco));
                         System.out.println("Demanda registrada com sucesso!");
                     } catch (DemandaInvalidaException e) {
-                        ExibidorDeMensagens.exibirPainelErro("Demanda Inválida", e.getMessage(), "Demanda não registrada.");
+                        ExibeErro.exibirPainelErro("Demanda Inválida", e.getMessage(), "Demanda não registrada.");
                     } catch (PlantaException e) {
-                        ExibidorDeMensagens.exibirPainelErro("Operação da Planta", e.getMessage(), "Demanda não registrada.");
+                        ExibeErro.exibirPainelErro("Operação da Planta", e.getMessage(), "Demanda não registrada.");
                     }
                     break;
 
