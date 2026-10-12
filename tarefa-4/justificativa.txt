@@ -4,7 +4,7 @@ Dupla: Adriann e Alex
 
 Data de entrega: __/09/2026 
 
-  
+# Tarefa 1 ########################################################################################################################
 
 1. Por que escolhemos uma fábrica de medicamentos? 
 
@@ -41,12 +41,12 @@ Na Tarefa 2 já passamos a usar ArrayList para as demandas, as máquinas e o arm
 4. Evolução para a Tarefa 2: Expansão e Complexidade 
 
   
+# Tarefa 2 ########################################################################################################################
+Na Tarefa 1, nossa fábrica produzia um medicamento por vez, e toda unidade era aprovada. 
+Na Tarefa 2, aproximamos o código do que vimos no vídeo [2]: medicamentos com exigências diferentes, 
+máquinas que podem errar e um orçamento que precisa ser respeitado. 
 
-Na Tarefa 1, nossa fábrica produzia um medicamento por vez, e toda unidade era aprovada. Na Tarefa 2, aproximamos o código do que vimos no vídeo [2]: medicamentos com exigências diferentes, máquinas que podem errar e um orçamento que precisa ser respeitado. 
-
-  
-
-4.1. Os três tipos de medicamento (herança em Produto) 
+1. Os três tipos de medicamento (herança em Produto) 
 
 Seguindo o enunciado da Tarefa 2, criamos a classe abstrata Produto, com o que todo medicamento tem (id, nome, status, matéria-prima por unidade, qualidade e falha acumulada) e um contador estático de quantas unidades já foram fabricadas. Dela saem três subclasses: 
 
@@ -57,38 +57,37 @@ Seguindo o enunciado da Tarefa 2, criamos a classe abstrata Produto, com o que t
 - MedicamentoBaixaQualidade (qualidade 0,5): pensamos no Paracetamol 500mg e na Dipirona 500mg, feitos em grande volume. Gasta 1 kg por unidade e leva 5 minutos. 
 
   
-
-4.2. Por que o medicamento mais exigente é mais rejeitado? 
+2. Por que o medicamento mais exigente é mais rejeitado? 
 
 Porque, quanto mais exigente o medicamento, menor é a tolerância a qualquer imperfeição na inspeção, como no controle de qualidade exigido pela Anvisa [3]. No código, a chance de rejeição é: falha acumulada x (qualidade / 0,5). Por exemplo, um comprimido que acumulou 0,10 de falha na linha tem 18% de chance de ser rejeitado se for de alta qualidade (0,10 x 0,9 / 0,5) e 10% se for de baixa qualidade (0,10 x 0,5 / 0,5). 
 
   
 
-4.3. A linha de produção (herança em Maquina) 
+3. A linha de produção (herança em Maquina) 
 
 Na Tarefa 1, a esteira levava a matéria-prima até uma única máquina. Agora a linha virou uma lista de máquinas (ArrayList<Maquina>) percorrida em ordem. Todas herdam da classe abstrata Maquina, que guarda o nome, se está ligada, a capacidade, a chance de falha e o custo de operação por unidade: 
 
-1. MaquinaProcessamento (reator de mistura): não quebra, mas em 15% das vezes a mistura sai irregular e a falha acumulada do produto aumenta 0,10. Custa R$ 1,50 por unidade. 
+    A. MaquinaProcessamento (reator de mistura): não quebra, mas em 15% das vezes a mistura sai irregular e a falha acumulada do produto aumenta 0,10. Custa R$ 1,50 por unidade. 
 
-2. MaquinaEmbalagem (embaladora de blister): em 10% das vezes a selagem sai imperfeita e a falha acumulada aumenta 0,05. Custa R$ 1,00 por unidade. 
+    B. MaquinaEmbalagem (embaladora de blister): em 10% das vezes a selagem sai imperfeita e a falha acumulada aumenta 0,05. Custa R$ 1,00 por unidade. 
 
-3. MaquinaInspecao (espectrômetro): é a única máquina que pode falhar sozinha, em 5% das inspeções. Quando isso acontece, a decisão sai invertida: um produto bom pode ser rejeitado e um defeituoso pode passar. Custa R$ 2,00 por unidade. 
+    C. MaquinaInspecao (espectrômetro): é a única máquina que pode falhar sozinha, em 5% das inspeções. Quando isso acontece, a decisão sai invertida: um produto bom pode ser rejeitado e um defeituoso pode passar. Custa R$ 2,00 por unidade. 
 
 Somando as três, cada unidade custa R$ 4,50 para passar pela linha. Como na nossa rotina, as máquinas são ligadas no início da produção e desligadas no fim, e uma máquina desligada não processa nada. 
 
   
 
-4.4. O gerente da fábrica (GerenciadorProducao) 
+4. O gerente da fábrica (GerenciadorProducao) 
 
 O GerenciadorProducao faz no código o papel que João faz no dia a dia. A fábrica começa com R$ 1.000,00 de orçamento e 500 kg de princípio ativo, que custa R$ 10,00 o quilo. Quando chega uma demanda, por exemplo 50 unidades de Paracetamol, ele: 
 
-1. confere se há matéria-prima suficiente (50 x 1 kg = 50 kg), como Francisco confere o caminhão; 
+    A. confere se há matéria-prima suficiente (50 x 1 kg = 50 kg), como Francisco confere o caminhão; 
 
-2. confere se o orçamento cobre o custo das máquinas (50 x R$ 4,50 = R$ 225,00), usando o método privado calcularCustoProducao(); 
+    B. confere se o orçamento cobre o custo das máquinas (50 x R$ 4,50 = R$ 225,00), usando o método privado calcularCustoProducao(); 
 
-3. só então consome a matéria-prima, desconta o orçamento, liga as máquinas e fabrica unidade por unidade; 
+    C. só então consome a matéria-prima, desconta o orçamento, liga as máquinas e fabrica unidade por unidade; 
 
-4. guarda cada unidade no armazém (ArrayList<Produto>), aprovada ou rejeitada, e marca a demanda como atendida. 
+    D. guarda cada unidade no armazém (ArrayList<Produto>), aprovada ou rejeitada, e marca a demanda como atendida. 
 
 Ao final desse exemplo, restam 450 kg de princípio ativo e R$ 775,00 de orçamento. Se depois comprarmos 10 kg de matéria-prima, pagamos 10 x R$ 10,00 = R$ 100,00, e o orçamento cai para R$ 675,00. O orçamento só diminui nesses dois momentos: na compra de matéria-prima e no uso das máquinas. Se a quantidade de uma demanda mudar, ela pode ser fabricada de novo. 
 
@@ -96,50 +95,44 @@ Com a Tarefa 2, nossa fábrica ficou mais parecida com uma fábrica de verdade: 
 
  
 
-Tarefa3: 
+# Tarefa 3 ######################################################################################################################## 
 
 Com a tarefa 2, a fábrica já produzia, mas quem decidia o que fabricar ou não era o numero digitado no menu. No caso, o GerenciarProdução escolhia a demanda pelo índice dela e disso decidia o que produzia ou não. Agora, na tarefa3, a fábrica fica mais real e recebe pedidos de distribuidoras, hospitais, orgãos do governo ou mesmo farmácias e tem que saber lidar com isso. 
 
 Nesse contexto, aplicamos o padrão Strategy para que a nossa fábrica saiba lidar com diferentes situações de demandas. Nesse caso, cada regra virou uma classe que deriva da EstrategiaProdução para diferentes situações, veja: 
 
-    EstrategiaFilaDePedidos: Atendo primeiro quem pediu primeiro; 
+    A. EstrategiaFilaDePedidos: Atendo primeiro quem pediu primeiro; 
 
-    EstrategiaPandemia: Atendo primeiro que pediu mais, mas devido a alta demanda assumo riscos no or 
+    B. EstrategiaPandemia: Atendo primeiro que pediu mais, mas devido a alta demanda assumo riscos no or 
 
-    EstrategiaMedicamentosSus: Atendo primeiro que pediu mais, mas vejo o que consigo produzir, senão perco a licitação. 
+    C. EstrategiaMedicamentosSus: Atendo primeiro que pediu mais, mas vejo o que consigo produzir, senão perco a licitação. 
 
 Além disso, na tarefa 2 o status de um produto era um texto ("Aprovado", "Processado") e a demanda tinha um boolean atendida. Agora, na tarefa 3 usamos os enums: 
 
 1. StatusDemanda = PENDENTE, EM_PRODUCAO, CONCLUIDA, CANCELADA, que já sabe quais mudanças são válidas: um pedido pendente pode entrar em produção ou ser cancelado; um pedido em produção só pode ser concluído; um pedido concluído pode voltar a pendente, quando o cliente pede de novo; e um pedido cancelado não volta mais; 
 
-	2. StatusProduto e StatusMaquina, comparados com == e não com equals(); 
+2. StatusProduto e StatusMaquina, comparados com == e não com equals(); 
 
-    TipoMedicamento, em que cada tipo cria o seu próprio medicamento (criarProduto); 
+    A. TipoMedicamento, em que cada tipo cria o seu próprio medicamento (criarProduto); 
 
-    Cenario, que guarda os parâmetros de cada cenário de operação. 
+    B. Cenario, que guarda os parâmetros de cada cenário de operação. 
 
 Ademais, A interface Auditável audita as máquinas e produtos juntos e para isso existem 2 métodos para isso: gerarRelatorioDiagnostico(), que descreve o estado do item, e precisaManutencao(), que diz se ele precisa de atenção. No início, o usuário escolhe o cenário: a fábrica normal ou a apocalíptica, inspirada na COVID-19 e o armazém agora é organizado por lote, com a quantidade e os aprovados de cada um, garantindo a rastreabilidade exigida pela Anvisa [3]. 
-
- 
-
 Conclusão: Na Tarefa3, a fabrica deixou de depender do número digitidato no menu e agora decidi o que produz baseado em regras que podem ser alteradas conforme a situação. 
 
- 
 
-Referências bibliográficas: 
+# Tarefa 4 ########################################################################################################################
+1. O que deveriámos aprender/aplicar na tarefa4?
+Deveríamos aprender/aplicar isso:
+    A. Gradle: Que é estruturar, configurar build.gradle e settings.gradle, fazer funcionar o build e Gradle Wrapper e disso automatizar a execução do programa;
+    B. Documentação Javadoc;
+    C. Tratar erros;
+    D. Organizar o código melhor;
 
-  
-
+# Referências bibliográficas ######################################################################################################
 [1] WAZLAWICK, Raul Sidnei. Metodologia de pesquisa para ciência da computação. 2. ed. Rio de Janeiro: Elsevier, 2014. 
-
-  
-
 [2] AUTOM8. Inside Pharma's High Tech Factory. YouTube, 22 jun. 2025. 1 vídeo (11 min). Disponível em: <https://www.youtube.com/watch?v=hEI2VqbOsr0&t=211s>. Acesso em: 2 set. 2026. 
-
-  
-
 [3] AGÊNCIA NACIONAL DE VIGILÂNCIA SANITÁRIA (Brasil). Resolução da Diretoria Colegiada - RDC nº 658, de 30 de março de 2022. Dispõe sobre as Diretrizes Gerais de Boas Práticas de Fabricação de Medicamentos. Brasília: Anvisa, 2022. Disponível em: <https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000658&seqAto=000&valorAno=2022&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=1696&cod_modulo=134&pesquisa=true>. Acesso em: 14 set. 2026. 
-
 [4] VARELLA, Drauzio. Como é feito um medicamento? YouTube, 12 mar. 2017. 1 vídeo (6 min). Disponível em: <https://www.youtube.com/watch?v=DRYvpKRFx2A>. Acesso em: 28 set. 2026. 
 
  
