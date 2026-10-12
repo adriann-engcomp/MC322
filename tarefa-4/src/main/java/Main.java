@@ -71,7 +71,7 @@ public class Main {
             System.out.println("0. Sair");
             System.out.print("ESCOLHA: ");
 
-            int opcao = lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
             if (opcao == -1) {
                 continue;
             }
@@ -98,11 +98,11 @@ public class Main {
                         try {
                             gerenciador.comprarMateriaPrima(quantidade);
                         } catch (RecursoInsuficienteException e) {
-                            exibirPainelErro("Recurso Insuficiente", e.getMessage(), "Nenhuma alteração foi realizada no estoque ou no orçamento.");
+                            ExibidorDeMensagens.exibirPainelErro("Recurso Insuficiente", e.getMessage(), "Nenhuma alteração foi realizada no estoque ou no orçamento.");
                         } catch (DemandaInvalidaException e) {
-                            exibirPainelErro("Quantidade Inválida", e.getMessage(), "A compra não foi efetuada.");
+                            ExibidorDeMensagens.exibirPainelErro("Quantidade Inválida", e.getMessage(), "A compra não foi efetuada.");
                         } catch (PlantaException e) {
-                            exibirPainelErro("Falha na Operação", e.getMessage(), "O orçamento permaneceu inalterado.");
+                            ExibidorDeMensagens.exibirPainelErro("Falha na Operação", e.getMessage(), "O orçamento permaneceu inalterado.");
                         }
                     }
                     break;
@@ -125,41 +125,6 @@ public class Main {
         scanner.close();
     }
 
-    /**
-     * Exibe o painel visual padronizado de erro com o diagnóstico e a garantia de consistência do estado.
-     *
-     * @param titulo           Título descritivo da falha ou categoria do erro.
-     * @param mensagem         Mensagem explicativa sobre a causa do problema.
-     * @param estadoPreservado Descrição das garantias de integridade do estado da aplicação.
-     */
-    private static void exibirPainelErro(String titulo, String mensagem, String estadoPreservado) {
-        System.out.println("\n========================================");
-        System.out.println("ERRO: " + titulo.toUpperCase());
-        System.out.println("========================================");
-        System.out.println(mensagem);
-        if (estadoPreservado != null && !estadoPreservado.isBlank()) {
-            System.out.println(estadoPreservado);
-        }
-        System.out.println("========================================\n");
-    }
-
-    /**
-     * Lê uma opção numérica inteira fornecida pelo usuário, tratando entradas não numéricas.
-     *
-     * @param scanner Leitor do console.
-     * @return O número digitado ou -1 se a entrada for inválida ou não houver dados.
-     */
-    private static int lerOpcao(Scanner scanner) {
-        if (!scanner.hasNext()) {
-            return 0;
-        }
-        if (!scanner.hasNextInt()) {
-            System.out.println("Entrada inválida! Digite apenas números inteiros.");
-            scanner.next();
-            return -1;
-        }
-        return scanner.nextInt();
-    }
 
     /**
      * Exibe o menu interativo para escolha do cenário operacional inicial da fábrica.
@@ -174,7 +139,7 @@ public class Main {
             System.out.println("2 - " + Cenario.FABRICA_PANDEMIA.getNome());
             System.out.print("Escolha: ");
 
-            int opcao = lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
             if (opcao == 1) {
                 return Cenario.FABRICA_NORMAL;
             }
@@ -204,7 +169,7 @@ public class Main {
             System.out.println("0. Voltar");
             System.out.print("ESCOLHA: ");
 
-            int opcao = lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
             if (opcao == -1) {
                 continue;
             }
@@ -220,13 +185,13 @@ public class Main {
                         System.out.println((i + 1) + " - " + gerenciador.getDemandas().get(i).getMedicamento());
                     }
                     System.out.print("Escolha: ");
-                    int escolha = lerOpcao(scanner);
+                    int escolha = LeitorDeOpcoes.lerOpcao(scanner);
                     if (escolha == -1) {
                         break;
                     }
 
                     System.out.print("Digite a nova quantidade: ");
-                    int qtd = lerOpcao(scanner);
+                    int qtd = LeitorDeOpcoes.lerOpcao(scanner);
                     if (qtd == -1) {
                         break;
                     }
@@ -234,9 +199,9 @@ public class Main {
                     try {
                         gerenciador.atualizarDemanda(escolha - 1, qtd);
                     } catch (DemandaInvalidaException e) {
-                        exibirPainelErro("Demanda Inválida", e.getMessage(), "O pedido permaneceu inalterado.");
+                        ExibidorDeMensagens.exibirPainelErro("Demanda Inválida", e.getMessage(), "O pedido permaneceu inalterado.");
                     } catch (PlantaException e) {
-                        exibirPainelErro("Operação da Planta", e.getMessage(), "Nenhuma alteração foi realizada.");
+                        ExibidorDeMensagens.exibirPainelErro("Operação da Planta", e.getMessage(), "Nenhuma alteração foi realizada.");
                     }
                     break;
 
@@ -252,12 +217,12 @@ public class Main {
                     }
                     String nomeMedicamento = scanner.nextLine().trim();
                     if (nomeMedicamento.isEmpty()) {
-                        exibirPainelErro("Entrada Inválida", "O nome do medicamento não pode ser vazio.", "Demanda não registrada.");
+                        ExibidorDeMensagens.exibirPainelErro("Entrada Inválida", "O nome do medicamento não pode ser vazio.", "Demanda não registrada.");
                         break;
                     }
 
                     System.out.print("Digite a quantidade da demanda: ");
-                    int quantidade = lerOpcao(scanner);
+                    int quantidade = LeitorDeOpcoes.lerOpcao(scanner);
                     if (quantidade == -1) {
                         break;
                     }
@@ -277,7 +242,7 @@ public class Main {
                     System.out.println("2 - CONTINUO");
                     System.out.println("3 - GENERICO");
                     System.out.print("Escolha: ");
-                    int tipoEscolha = lerOpcao(scanner);
+                    int tipoEscolha = LeitorDeOpcoes.lerOpcao(scanner);
                     if (tipoEscolha == -1) {
                         break;
                     }
@@ -294,7 +259,7 @@ public class Main {
                             tipo = TipoMedicamento.GENERICO;
                             break;
                         default:
-                            exibirPainelErro("Tipo Inválido", "Opção de tipo não reconhecida (escolha 1, 2 ou 3).", "Demanda não registrada.");
+                            ExibidorDeMensagens.exibirPainelErro("Tipo Inválido", "Opção de tipo não reconhecida (escolha 1, 2 ou 3).", "Demanda não registrada.");
                             continue;
                     }
 
@@ -302,9 +267,9 @@ public class Main {
                         gerenciador.registrarDemanda(new Demanda(tipo, nomeMedicamento, quantidade, preco));
                         System.out.println("Demanda registrada com sucesso!");
                     } catch (DemandaInvalidaException e) {
-                        exibirPainelErro("Demanda Inválida", e.getMessage(), "Demanda não registrada.");
+                        ExibidorDeMensagens.exibirPainelErro("Demanda Inválida", e.getMessage(), "Demanda não registrada.");
                     } catch (PlantaException e) {
-                        exibirPainelErro("Operação da Planta", e.getMessage(), "Demanda não registrada.");
+                        ExibidorDeMensagens.exibirPainelErro("Operação da Planta", e.getMessage(), "Demanda não registrada.");
                     }
                     break;
 
@@ -335,7 +300,7 @@ public class Main {
             System.out.println("0. Voltar");
             System.out.print("ESCOLHA: ");
 
-            int opcao = lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
             if (opcao == -1) {
                 continue;
             }
@@ -346,13 +311,13 @@ public class Main {
                     try {
                         gerenciador.executarProximaProducao();
                     } catch (RecursoInsuficienteException e) {
-                        exibirPainelErro("Recurso Insuficiente", e.getMessage(), "Nenhuma alteração foi realizada no estoque ou no orçamento.");
+                        ExibidorDeMensagens.exibirPainelErro("Recurso Insuficiente", e.getMessage(), "Nenhuma alteração foi realizada no estoque ou no orçamento.");
                     } catch (MaquinaIndisponivelException e) {
-                        exibirPainelErro("Máquina Indisponível", e.getMessage(), "Nenhuma alteração foi realizada na esteira ou no lote.");
+                        ExibidorDeMensagens.exibirPainelErro("Máquina Indisponível", e.getMessage(), "Nenhuma alteração foi realizada na esteira ou no lote.");
                     } catch (DemandaInvalidaException e) {
-                        exibirPainelErro("Demanda Inválida", e.getMessage(), "Nenhuma demanda foi modificada.");
+                        ExibidorDeMensagens.exibirPainelErro("Demanda Inválida", e.getMessage(), "Nenhuma demanda foi modificada.");
                     } catch (PlantaException e) {
-                        exibirPainelErro("Falha Operacional", e.getMessage(), "O estado da fábrica foi mantido consistente.");
+                        ExibidorDeMensagens.exibirPainelErro("Falha Operacional", e.getMessage(), "O estado da fábrica foi mantido consistente.");
                     }
                     break;
 
@@ -366,7 +331,7 @@ public class Main {
                         System.out.println((i + 1) + " - " + gerenciador.getDemandas().get(i).getMedicamento());
                     }
                     System.out.print("Escolha: ");
-                    int escolha = lerOpcao(scanner);
+                    int escolha = LeitorDeOpcoes.lerOpcao(scanner);
                     if (escolha == -1) {
                         break;
                     }
@@ -374,13 +339,13 @@ public class Main {
                     try {
                         gerenciador.fabricarDemanda(escolha - 1);
                     } catch (RecursoInsuficienteException e) {
-                        exibirPainelErro("Recurso Insuficiente", e.getMessage(), "Nenhuma alteração foi realizada no estoque ou no orçamento.");
+                        ExibidorDeMensagens.exibirPainelErro("Recurso Insuficiente", e.getMessage(), "Nenhuma alteração foi realizada no estoque ou no orçamento.");
                     } catch (MaquinaIndisponivelException e) {
-                        exibirPainelErro("Máquina Indisponível", e.getMessage(), "Nenhuma alteração foi realizada na esteira ou no lote.");
+                        ExibidorDeMensagens.exibirPainelErro("Máquina Indisponível", e.getMessage(), "Nenhuma alteração foi realizada na esteira ou no lote.");
                     } catch (DemandaInvalidaException e) {
-                        exibirPainelErro("Demanda Inválida", e.getMessage(), "Nenhuma alteração foi realizada na demanda.");
+                        ExibidorDeMensagens.exibirPainelErro("Demanda Inválida", e.getMessage(), "Nenhuma alteração foi realizada na demanda.");
                     } catch (PlantaException e) {
-                        exibirPainelErro("Falha Operacional", e.getMessage(), "O estado da fábrica foi mantido consistente.");
+                        ExibidorDeMensagens.exibirPainelErro("Falha Operacional", e.getMessage(), "O estado da fábrica foi mantido consistente.");
                     }
                     break;
 
@@ -411,7 +376,7 @@ public class Main {
             System.out.println("0. Voltar");
             System.out.print("ESCOLHA: ");
 
-            int opcao = lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
             if (opcao == -1) {
                 continue;
             }
@@ -451,7 +416,7 @@ public class Main {
             System.out.println("0. Voltar");
             System.out.print("ESCOLHA: ");
 
-            int opcao = lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
             if (opcao == -1) {
                 continue;
             }
@@ -497,7 +462,7 @@ public class Main {
             System.out.println("0. Voltar");
             System.out.print("ESCOLHA: ");
 
-            int opcao = lerOpcao(scanner);
+            int opcao = LeitorDeOpcoes.lerOpcao(scanner);
             if (opcao == -1) {
                 continue;
             }
