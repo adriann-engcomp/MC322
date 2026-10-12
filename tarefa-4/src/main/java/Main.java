@@ -1,4 +1,3 @@
-import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -31,26 +30,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         Cenario cenario = MenuCenario.exibir(scanner);
-        Random random = new Random(cenario.getSementeAleatoria());
-
-        // 1. Instanciar Matéria-Prima e Gerenciador de Produção
-        MateriaPrima materiaPrima = new MateriaPrima(1, "Princípio Ativo Farmacêutico (Insumo)", cenario.getEstoqueInicialMateriaPrima(), "kg", 10.0);
-        GerenciadorProducao gerenciador = new GerenciadorProducao(materiaPrima, cenario.getBudgetInicial(), new EstrategiaFilaDePedidos());
-
-        // 2. Instanciar e registrar as Máquinas da linha de produção
-        MaquinaProcessamento maquinaProcessamento = new MaquinaProcessamento("Reator Farmacêutico / Mistura", 500, 0.15, 1.50, cenario, random);
-        MaquinaEmbalagem maquinaEmbalagem = new MaquinaEmbalagem("Embaladora Blister / Selagem", 500, 0.10, 1.00, cenario, random);
-        MaquinaInspecao maquinaInspecao = new MaquinaInspecao("Espectrômetro de Inspeção / Controle Anvisa", 500, 0.05, 2.00, cenario, random);
-
-        gerenciador.adicionarMaquina(maquinaProcessamento);
-        gerenciador.adicionarMaquina(maquinaEmbalagem);
-        gerenciador.adicionarMaquina(maquinaInspecao);
-
-        // 3. Registrar Demandas Iniciais de Medicamentos
-        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.CONTROLADO, "Ritalina 40mg", 10, 4.50));
-        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.CONTINUO, "Losartana 50mg", 20, 4.50));
-        gerenciador.registrarDemanda(new Demanda(TipoMedicamento.GENERICO, "Dipirona 500mg", 30, 4.50));
-
+        GerenciadorProducao gerenciador = InicializoFabrica.inicializar(cenario);
         boolean executando = true;
 
         while (executando) {
@@ -87,24 +67,7 @@ public class Main {
                     MenuConsultar.exibir(scanner, gerenciador);
                     break;
                 case 4:
-                    System.out.print("Digite a quantidade de matéria-prima a ser comprada (kg): ");
-                    if (!scanner.hasNextDouble()) {
-                        System.out.println("Entrada inválida! Digite apenas números.");
-                        if (scanner.hasNext()) {
-                            scanner.next();
-                        }
-                    } else {
-                        double quantidade = scanner.nextDouble();
-                        try {
-                            gerenciador.comprarMateriaPrima(quantidade);
-                        } catch (RecursoInsuficienteException e) {
-                            ExibidorDeMensagens.exibirPainelErro("Recurso Insuficiente", e.getMessage(), "Nenhuma alteração foi realizada no estoque ou no orçamento.");
-                        } catch (DemandaInvalidaException e) {
-                            ExibidorDeMensagens.exibirPainelErro("Quantidade Inválida", e.getMessage(), "A compra não foi efetuada.");
-                        } catch (PlantaException e) {
-                            ExibidorDeMensagens.exibirPainelErro("Falha na Operação", e.getMessage(), "O orçamento permaneceu inalterado.");
-                        }
-                    }
+                    MenuMateriaPrima.exibir(scanner, gerenciador);
                     break;
                 case 5:
                     MenuEstrategias.exibir(scanner, gerenciador);
@@ -121,7 +84,6 @@ public class Main {
                     break;
             }
         }
-
         scanner.close();
     }
 }
