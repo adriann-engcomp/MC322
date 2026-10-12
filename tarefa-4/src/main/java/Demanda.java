@@ -25,13 +25,13 @@ public class Demanda {
      *
      * @param tipo                       Tipo regulatório e formulário do medicamento.
      * @param medicamento                Nome comercial ou princípio ativo do medicamento.
-     * @param quantidade                 Quantidade de unidades a serem produzidas (não-negativa).
+     * @param quantidade                 Quantidade de unidades a serem produzidas (estritamente positiva).
      * @param custoOperacionalPorUnidade Custo estimado de operação das máquinas por unidade.
-     * @throws IllegalArgumentException Se o tipo for nulo ou se a quantidade for negativa.
+     * @throws DemandaInvalidaException Se o tipo for nulo ou se a quantidade for menor ou igual a zero.
      */
     public Demanda(TipoMedicamento tipo, String medicamento, int quantidade, double custoOperacionalPorUnidade) {
-        if (tipo == null || quantidade < 0) {
-            throw new IllegalArgumentException("É obrigatório definir o tipo do medicamento e a quantidade não pode ser negativa");
+        if (tipo == null || quantidade <= 0) {
+            throw new DemandaInvalidaException("É obrigatório definir o tipo do medicamento e a quantidade deve ser maior que zero.");
         }
         this.numero = proximoNumero++;
         this.tipo = tipo;
@@ -45,12 +45,12 @@ public class Demanda {
      * Altera o status atual da demanda respeitando as regras de transição de estado.
      *
      * @param novo Novo status pretendido para a demanda.
-     * @throws IllegalArgumentException Se a transição para o novo status não for permitida.
+     * @throws DemandaInvalidaException Se a transição para o novo status não for permitida.
      */
     private void mudarStatus(StatusDemanda novo) {
         if (!status.mudaPara(novo)) {
-            throw new IllegalArgumentException(String.format(
-                "Transição inválida no seu pedido #%d: %s -> %s",
+            throw new DemandaInvalidaException(String.format(
+                "Transição de status inválida no pedido #%d: %s -> %s",
                 numero, status.getDescricao(), novo.getDescricao()));
         }
         this.status = novo;
@@ -59,7 +59,7 @@ public class Demanda {
     /**
      * Transiciona o status da demanda para {@link StatusDemanda#EM_PRODUCAO}.
      *
-     * @throws IllegalArgumentException Se o estado atual não permitir iniciar produção.
+     * @throws DemandaInvalidaException Se o estado atual não permitir iniciar produção.
      */
     public void iniciarProducao() {
         mudarStatus(StatusDemanda.EM_PRODUCAO);
@@ -68,7 +68,7 @@ public class Demanda {
     /**
      * Transiciona o status da demanda para {@link StatusDemanda#CONCLUIDA}.
      *
-     * @throws IllegalArgumentException Se o estado atual não permitir a conclusão.
+     * @throws DemandaInvalidaException Se o estado atual não permitir a conclusão.
      */
     public void concluir() {
         mudarStatus(StatusDemanda.CONCLUIDA);
@@ -77,7 +77,7 @@ public class Demanda {
     /**
      * Transiciona o status da demanda para {@link StatusDemanda#CANCELADA}.
      *
-     * @throws IllegalArgumentException Se o estado atual não permitir o cancelamento.
+     * @throws DemandaInvalidaException Se o estado atual não permitir o cancelamento.
      */
     public void cancelar() {
         mudarStatus(StatusDemanda.CANCELADA);
@@ -97,16 +97,15 @@ public class Demanda {
      * Atualiza a quantidade de unidades da demanda. Se a demanda já estava concluída,
      * ela retorna automaticamente ao status {@link StatusDemanda#PENDENTE}.
      *
-     * @param novaQuantidade Nova quantidade desejada (não-negativa).
-     * @throws IllegalArgumentException Se a quantidade informada for negativa.
-     * @throws IllegalStateException    Se a demanda estiver em produção ou cancelada.
+     * @param novaQuantidade Nova quantidade desejada (deve ser estritamente positiva).
+     * @throws DemandaInvalidaException Se a quantidade for menor ou igual a zero ou se o estado atual não permitir alteração.
      */
     public void atualizarQuantidade(int novaQuantidade) {
-        if (novaQuantidade < 0) {
-            throw new IllegalArgumentException("A quantidade nunca é negativa");
+        if (novaQuantidade <= 0) {
+            throw new DemandaInvalidaException("A quantidade da demanda deve ser estritamente positiva.");
         }
         if (!podeSerAtualizada()) {
-            throw new IllegalStateException("Pedido #" + numero + " está " + status.getDescricao() + " e não pode ser alterado.");
+            throw new DemandaInvalidaException("Pedido #" + numero + " está com status " + status.getDescricao() + " e não pode ter a quantidade alterada.");
         }
         this.quantidade = novaQuantidade;
         if (status == StatusDemanda.CONCLUIDA) {

@@ -6,7 +6,9 @@ import java.util.ArrayList;
  * Gerencia todo o fluxo de produção, integrando o cadastro de demandas, o acionamento
  * sequencial das máquinas na linha fabril, o estoque de matérias-primas, o orçamento financeiro
  * e a política ativa de escalonamento baseada no padrão Strategy ({@link EstrategiaProducao}).
- * Também atua na geração de relatórios de armazém e auditoria geral.
+ * As operações de fabricação, compra e atualização validam todas as pré-condições antes de
+ * modificar qualquer estado, assegurando atomicidade e consistência através do lançamento de
+ * exceções de domínio especializadas ({@link PlantaException}).
  * </p>
  *
  * @author Adriann e Alexsandro
@@ -57,28 +59,33 @@ public class GerenciadorProducao {
 
     /**
      * Executa a fabricação da próxima demanda selecionada pela estratégia de produção ativa.
-     * Se nenhuma demanda for elegível ou não houver estratégia definida, emite aviso ao operador.
+     *
+     * @throws DemandaInvalidaException     Se nenhuma estratégia estiver definida ou nenhuma demanda for elegível.
+     * @throws MaquinaIndisponivelException Se alguma máquina da linha estiver quebrada.
+     * @throws RecursoInsuficienteException Se faltar matéria-prima ou orçamento para a produção.
      */
     public void executarProximaProducao() {
         if (estrategiaAtual == null) {
-            System.out.println("Nenhuma estratégia definida.");
-            return;
+            throw new DemandaInvalidaException("Nenhuma estratégia de produção está definida.");
         }
         Demanda selecionada = estrategiaAtual.selecionarDemanda(demandas, budget);
-        if (selecionada != null) {
-            int indice = demandas.indexOf(selecionada);
-            fabricarDemanda(indice);
-        } else {
-            System.out.println("Nenhuma demanda elegível encontrada pela estratégia " + estrategiaAtual.getNomeEstrategia());
+        if (selecionada == null) {
+            throw new DemandaInvalidaException("Nenhuma demanda elegível encontrada pela estratégia [" + estrategiaAtual.getNomeEstrategia() + "].");
         }
+        int indice = demandas.indexOf(selecionada);
+        fabricarDemanda(indice);
     }
 
     /**
      * Registra uma nova demanda na lista de pedidos da fábrica.
      *
      * @param demanda Demanda a ser cadastrada.
+     * @throws DemandaInvalidaException Se a demanda fornecida for nula.
      */
     public void registrarDemanda(Demanda demanda) {
+        if (demanda == null) {
+            throw new DemandaInvalidaException("Não é possível registrar uma demanda nula.");
+        }
         demandas.add(demanda);
     }
 
@@ -86,12 +93,12 @@ public class GerenciadorProducao {
      * Atualiza a quantidade solicitada de uma demanda existente pelo seu índice na lista.
      *
      * @param indice         Posição da demanda na lista (0-indexada).
-     * @param novaQuantidade Nova quantidade desejada (não-negativa).
+     * @param novaQuantidade Nova quantidade desejada (estritamente positiva).
+     * @throws DemandaInvalidaException Se o índice for inexistente ou a quantidade/estado for inválido.
      */
     public void atualizarDemanda(int indice, int novaQuantidade) {
-        if (novaQuantidade < 0) {
-            System.out.println("Erro: A quantidade da demanda não pode ser negativa.");
-            return;
+        if (indice < 0 || indice >= demandas.size()) {
+            throw new DemandaInvalidaException("Demanda não encontrada: índice " + (indice + 1) + " inexistente.");
         }
         demandas.get(indice).atualizarQuantidade(novaQuantidade);
         System.out.println("Demanda de \"" + demandas.get(indice).getMedicamento() + "\" atualizada para " + novaQuantidade + " unidades.");
@@ -127,48 +134,72 @@ public class GerenciadorProducao {
     }
     
     /**
-     * Processa a fabricação completa de uma demanda específica.
+     * Processa a fabricação completa de uma demanda específica garantindo atomicidade e consistência.
      * <p>
-     * Valida o status da demanda, checa a disponibilidade física de matéria-prima e o saldo
-     * no orçamento para cobrir os custos operacionais das máquinas. Em caso afirmativo,
-     * consome os insumos, debita o orçamento, liga as máquinas, processa cada unidade
-     * através da linha (mistura -> embalagem -> inspeção), armazena no armazém, registra
-     * o ciclo de uso com desgaste e conclui a demanda emitindo relatório.
+     * Todas as condições necessárias (existência da demanda, compatibilidade de status, integridade
+     * das máquinas, estoque físico de matéria-prima e saldo orçamentário) são verificadas antes de
+     * qualquer mutação de estado. Se qualquer requisito não for atendido, uma exceção de domínio
+     * é disparada sem que o estoque ou orçamento sofram qualquer alteração.
      * </p>
      *
-     * @param indiceDemanda Posição da demanda na lista de pedidos.
+     * @param indiceDemanda Posição da demanda na lista de pedidos (0-indexada).
+     * @throws DemandaInvalidaException     Se o índice for inválido, ou a demanda estiver em estado incompatível.
+     * @throws MaquinaIndisponivelException Se alguma máquina da linha estiver quebrada.
+     * @throws RecursoInsuficienteException Se matéria-prima ou orçamento forem insuficientes.
      */
     public void fabricarDemanda(int indiceDemanda) {
+        if (demandas.isEmpty()) {
+            throw new DemandaInvalidaException("Não há demandas cadastradas para fabricação.");
+        }
+        if (indiceDemanda < 0 || indiceDemanda >= demandas.size()) {
+            throw new DemandaInvalidaException("Demanda inexistente: índice selecionado (" + (indiceDemanda + 1) + ") não encontrado.");
+        }
+
         Demanda demanda = demandas.get(indiceDemanda);
 
+        // 1. Validação de regras da Demanda
         if (demanda.getStatus() == StatusDemanda.CONCLUIDA) {
-            System.out.println("Aviso: Esta demanda já foi atendida anteriormente.");
-            return;
+            throw new DemandaInvalidaException("Operação incompatível: A demanda de '" + demanda.getMedicamento() + "' já foi concluída anteriormente.");
+        }
+        if (demanda.getStatus() == StatusDemanda.EM_PRODUCAO) {
+            throw new DemandaInvalidaException("Operação incompatível: A demanda de '" + demanda.getMedicamento() + "' já está em produção.");
+        }
+        if (demanda.getStatus() == StatusDemanda.CANCELADA) {
+            throw new DemandaInvalidaException("Operação incompatível: A demanda de '" + demanda.getMedicamento() + "' foi cancelada e não pode ser fabricada.");
         }
 
         int quantidade = demanda.getQuantidade();
         if (quantidade <= 0) {
-            System.out.println("Aviso: A quantidade da demanda é zero. Atualize a demanda antes de fabricar.");
-            return;
+            throw new DemandaInvalidaException("A quantidade da demanda é zero ou inválida. Atualize a demanda antes de fabricar.");
         }
 
+        // 2. Validação da integridade das Máquinas
+        for (Maquina maquina : maquinas) {
+            if (maquina.estaQuebrada()) {
+                throw new MaquinaIndisponivelException(String.format(
+                    "Não foi possível iniciar a produção: A máquina '%s' está quebrada e necessita de manutenção antes de operar.",
+                    maquina.getNome()));
+            }
+        }
+
+        // 3. Validação de Matéria-Prima
         double materiaPrimaNecessaria = demanda.calcularConsumoPorDemanda();
         if (!materiaPrima.verificarDisponibilidade(materiaPrimaNecessaria)) {
-            System.out.printf("Erro: Matéria-prima insuficiente! Necessário: %.2f %s | Disponível: %.2f %s\n",
-                    materiaPrimaNecessaria, materiaPrima.getUnidade(), materiaPrima.getQuantidade(), materiaPrima.getUnidade());
-            System.out.println("Compre mais matéria-prima antes de iniciar a produção.");
-            return;
+            throw new RecursoInsuficienteException(String.format(
+                "Matéria-prima insuficiente para fabricar o lote solicitado!\nNecessário: %.2f %s | Disponível: %.2f %s.\nCompre mais matéria-prima antes de iniciar a produção.",
+                materiaPrimaNecessaria, materiaPrima.getUnidade(), materiaPrima.getQuantidade(), materiaPrima.getUnidade()));
         }
 
+        // 4. Validação de Orçamento
         double custoOperacional = calcularCustoProducao(quantidade);
         if (budget < custoOperacional) {
-            System.out.printf("Erro: Budget insuficiente para pagar a operação das máquinas! Necessário: R$ %.2f | Disponível: R$ %.2f\n",
-                    custoOperacional, budget);
-            return;
+            throw new RecursoInsuficienteException(String.format(
+                "Orçamento insuficiente para custear a operação das máquinas!\nNecessário: R$ %.2f | Orçamento disponível: R$ %.2f.",
+                custoOperacional, budget));
         }
 
+        // --- Transição de estado atômica: Todas as validações foram aprovadas ---
         demanda.iniciarProducao();
-
         materiaPrima.consumir(materiaPrimaNecessaria);
         budget -= custoOperacional;
 
@@ -223,25 +254,43 @@ public class GerenciadorProducao {
      * e atualizando o estoque de insumos.
      *
      * @param quantidade Quantidade de insumos a ser comprada (em kg, deve ser positiva).
+     * @throws DemandaInvalidaException     Se a quantidade for menor ou igual a zero.
+     * @throws RecursoInsuficienteException Se o orçamento disponível for insuficiente.
      */
     public void comprarMateriaPrima(double quantidade) {
-        if (!(quantidade > 0)) {
-            System.out.println("Erro: A quantidade a ser comprada deve ser maior que zero.");
-            return;
+        if (quantidade <= 0) {
+            throw new DemandaInvalidaException("A quantidade de matéria-prima a ser comprada deve ser maior que zero.");
         }
 
         double custoTotal = quantidade * materiaPrima.getCustoPorUnidade();
 
         if (custoTotal > budget) {
-            System.out.printf("Erro: Budget insuficiente! Custo da compra: R$ %.2f | Budget disponível: R$ %.2f\n",
-                    custoTotal, budget);
-            return;
+            throw new RecursoInsuficienteException(String.format(
+                "Orçamento insuficiente para realizar a compra!\nCusto da compra: R$ %.2f | Orçamento disponível: R$ %.2f.",
+                custoTotal, budget));
         }
 
         budget -= custoTotal;
         materiaPrima.adicionarEstoque(quantidade);
-        System.out.printf("Compra de %.2f %s realizada com sucesso! Custo: R$ %.2f | Novo Budget: R$ %.2f\n",
+        System.out.printf("\nCompra de %.2f %s realizada com sucesso! Custo: R$ %.2f | Novo Budget: R$ %.2f\n",
                 quantidade, materiaPrima.getUnidade(), custoTotal, budget);
+    }
+
+    /**
+     * Realiza a manutenção e o reparo de todas as máquinas da planta que estejam quebradas
+     * ou com saúde inferior ao limiar mínimo operacional.
+     *
+     * @return Quantidade de máquinas reparadas com sucesso.
+     */
+    public int repararMaquinas() {
+        int reparadas = 0;
+        for (Maquina m : maquinas) {
+            if (m.estaQuebrada() || m.precisaManutencao()) {
+                m.reparar();
+                reparadas++;
+            }
+        }
+        return reparadas;
     }
 
     /**
