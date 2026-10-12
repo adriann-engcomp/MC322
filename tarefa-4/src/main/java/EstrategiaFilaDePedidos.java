@@ -10,13 +10,6 @@ import java.util.List;
  * @author Adriann e Alexsandro
  */
 public class EstrategiaFilaDePedidos implements EstrategiaProducao {
-
-    /**
-     * Construtor padrão da estratégia de fila de pedidos.
-     */
-    public EstrategiaFilaDePedidos() {
-    }
-
     /**
      * Seleciona a demanda elegível com o menor identificador sequencial (pedido mais antigo).
      *

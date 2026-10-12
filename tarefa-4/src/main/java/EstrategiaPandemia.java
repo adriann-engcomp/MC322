@@ -10,13 +10,6 @@ import java.util.List;
  * @author Adriann e Alexsandro
  */
 public class EstrategiaPandemia implements EstrategiaProducao {
-
-    /**
-     * Construtor padrão da estratégia de pandemia.
-     */
-    public EstrategiaPandemia() {
-    }
-
     /**
      * Seleciona a demanda elegível que possuir a maior quantidade solicitada de unidades.
      *
