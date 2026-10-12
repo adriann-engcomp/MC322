@@ -1,9 +1,18 @@
-
 import java.util.ArrayList;
 
+/**
+ * Classe controladora central da planta farmacêutica (padrão Controller/Manager).
+ * <p>
+ * Gerencia todo o fluxo de produção, integrando o cadastro de demandas, o acionamento
+ * sequencial das máquinas na linha fabril, o estoque de matérias-primas, o orçamento financeiro
+ * e a política ativa de escalonamento baseada no padrão Strategy ({@link EstrategiaProducao}).
+ * Também atua na geração de relatórios de armazém e auditoria geral.
+ * </p>
+ *
+ * @author Adriann e Alexsandro
+ */
 public class GerenciadorProducao {
 
-    // Atributos
     private ArrayList<Demanda> demandas;
     private ArrayList<Produto> produtosFabricados;
     private ArrayList<Maquina> maquinas;
@@ -11,7 +20,13 @@ public class GerenciadorProducao {
     private double budget;
     private EstrategiaProducao estrategiaAtual;
 
-    // Construtor
+    /**
+     * Construtor do gerenciador da fábrica farmacêutica.
+     *
+     * @param materiaPrima      Instância que gerencia o insumo farmacêutico disponível.
+     * @param budgetInicial     Valor inicial do orçamento financeiro (em R$).
+     * @param estrategiaInicial Estratégia inicial adotada para seleção de demandas.
+     */
     public GerenciadorProducao(MateriaPrima materiaPrima, double budgetInicial,
         EstrategiaProducao estrategiaInicial) {
         this.demandas = new ArrayList<>();
@@ -22,15 +37,28 @@ public class GerenciadorProducao {
         this.estrategiaAtual = estrategiaInicial;
     }
 
-    // Métodos do Strategy
+    /**
+     * Define uma nova estratégia de seleção e atendimento de demandas.
+     *
+     * @param novaEstrategia Nova política concreta de {@link EstrategiaProducao}.
+     */
     public void setEstrategia(EstrategiaProducao novaEstrategia) {
         this.estrategiaAtual = novaEstrategia;
     }
 
+    /**
+     * Obtém a estratégia de produção que está ativa no momento.
+     *
+     * @return Estratégia atualmente em vigor.
+     */
     public EstrategiaProducao getEstrategiaAtual() {
         return estrategiaAtual;
     }
 
+    /**
+     * Executa a fabricação da próxima demanda selecionada pela estratégia de produção ativa.
+     * Se nenhuma demanda for elegível ou não houver estratégia definida, emite aviso ao operador.
+     */
     public void executarProximaProducao() {
         if (estrategiaAtual == null) {
             System.out.println("Nenhuma estratégia definida.");
@@ -45,11 +73,21 @@ public class GerenciadorProducao {
         }
     }
 
-    // Métodos de Demanda
+    /**
+     * Registra uma nova demanda na lista de pedidos da fábrica.
+     *
+     * @param demanda Demanda a ser cadastrada.
+     */
     public void registrarDemanda(Demanda demanda) {
         demandas.add(demanda);
     }
 
+    /**
+     * Atualiza a quantidade solicitada de uma demanda existente pelo seu índice na lista.
+     *
+     * @param indice         Posição da demanda na lista (0-indexada).
+     * @param novaQuantidade Nova quantidade desejada (não-negativa).
+     */
     public void atualizarDemanda(int indice, int novaQuantidade) {
         if (novaQuantidade < 0) {
             System.out.println("Erro: A quantidade da demanda não pode ser negativa.");
@@ -59,12 +97,18 @@ public class GerenciadorProducao {
         System.out.println("Demanda de \"" + demandas.get(indice).getMedicamento() + "\" atualizada para " + novaQuantidade + " unidades.");
     }
 
-    // Métodos de Máquinas
+    /**
+     * Adiciona uma máquina à esteira da linha de fabricação da fábrica.
+     *
+     * @param maquina Máquina a ser inserida na sequência de produção.
+     */
     public void adicionarMaquina(Maquina maquina) {
         maquinas.add(maquina);
     }
 
-    // Produção
+    /**
+     * Exibe no terminal a listagem de todas as demandas cadastradas e seus respectivos status.
+     */
     public void exibirDemandas() {
         System.out.println("\n==========================================");
         System.out.println("          DEMANDAS REGISTRADAS");
@@ -82,10 +126,21 @@ public class GerenciadorProducao {
         }
     }
     
+    /**
+     * Processa a fabricação completa de uma demanda específica.
+     * <p>
+     * Valida o status da demanda, checa a disponibilidade física de matéria-prima e o saldo
+     * no orçamento para cobrir os custos operacionais das máquinas. Em caso afirmativo,
+     * consome os insumos, debita o orçamento, liga as máquinas, processa cada unidade
+     * através da linha (mistura -> embalagem -> inspeção), armazena no armazém, registra
+     * o ciclo de uso com desgaste e conclui a demanda emitindo relatório.
+     * </p>
+     *
+     * @param indiceDemanda Posição da demanda na lista de pedidos.
+     */
     public void fabricarDemanda(int indiceDemanda) {
         Demanda demanda = demandas.get(indiceDemanda);
 
-        // Verificar se a demanda já foi atendida
         if (demanda.getStatus() == StatusDemanda.CONCLUIDA) {
             System.out.println("Aviso: Esta demanda já foi atendida anteriormente.");
             return;
@@ -97,7 +152,6 @@ public class GerenciadorProducao {
             return;
         }
 
-        // Verificar disponibilidade de matéria-prima necessária
         double materiaPrimaNecessaria = demanda.calcularConsumoPorDemanda();
         if (!materiaPrima.verificarDisponibilidade(materiaPrimaNecessaria)) {
             System.out.printf("Erro: Matéria-prima insuficiente! Necessário: %.2f %s | Disponível: %.2f %s\n",
@@ -106,7 +160,6 @@ public class GerenciadorProducao {
             return;
         }
 
-        // Verificar budget para debitar custo de operação das máquinas
         double custoOperacional = calcularCustoProducao(quantidade);
         if (budget < custoOperacional) {
             System.out.printf("Erro: Budget insuficiente para pagar a operação das máquinas! Necessário: R$ %.2f | Disponível: R$ %.2f\n",
@@ -116,11 +169,9 @@ public class GerenciadorProducao {
 
         demanda.iniciarProducao();
 
-        // Consumir matéria-prima e debitar budget
         materiaPrima.consumir(materiaPrimaNecessaria);
         budget -= custoOperacional;
 
-        // Ligar máquinas para a produção
         for (Maquina maquina : maquinas) {
             maquina.ligar();
         }
@@ -129,17 +180,14 @@ public class GerenciadorProducao {
         int rejeitados = 0;
         String lote = "LOTE-" + demanda.getNumero();
 
-        // (Processamento -> Embalagem -> Inspeção)
         for (int i = 0; i < quantidade; i++) {
             Produto produto = demanda.getTipo().criarProduto(demanda.getMedicamento() + " #" + (i + 1), lote);
             produto.iniciarProcessamento();
 
-            // Passagem pelas máquinas da linha de produção
             for (Maquina maquina : maquinas) {
                 maquina.processar(produto);
             }
 
-            // Adicionar ao armazém
             produtosFabricados.add(produto);
 
             if (produto.foiAprovado()) {
@@ -149,16 +197,13 @@ public class GerenciadorProducao {
             }
         }
 
-        // Registrar ciclo de uso e desligar máquinas após a produção
         for (Maquina m : maquinas) {
             m.registrarCicloDeUso();
             m.desligar();
         }
 
-        // Marcar demanda como concluída
         demanda.concluir();
 
-        // Exibir relatório da fabricação
         System.out.println("\n==========================================");
         System.out.println("       RELATÓRIO DE FABRICAÇÃO");
         System.out.println("==========================================");
@@ -173,35 +218,42 @@ public class GerenciadorProducao {
         System.out.println("==========================================\n");
     }
 
-    // Matéria-Prima
+    /**
+     * Realiza a compra de matéria-prima, verificando a disponibilidade de orçamento
+     * e atualizando o estoque de insumos.
+     *
+     * @param quantidade Quantidade de insumos a ser comprada (em kg, deve ser positiva).
+     */
     public void comprarMateriaPrima(double quantidade) {
         if (!(quantidade > 0)) {
             System.out.println("Erro: A quantidade a ser comprada deve ser maior que zero.");
             return;
         }
 
-        // Calcular custo total da matéria-prima (quantidade * custoPorUnidade)
         double custoTotal = quantidade * materiaPrima.getCustoPorUnidade();
 
-        // Validar budget disponível
         if (custoTotal > budget) {
             System.out.printf("Erro: Budget insuficiente! Custo da compra: R$ %.2f | Budget disponível: R$ %.2f\n",
                     custoTotal, budget);
             return;
         }
 
-        // Debitar do budget e adicionar ao estoque
         budget -= custoTotal;
         materiaPrima.adicionarEstoque(quantidade);
         System.out.printf("Compra de %.2f %s realizada com sucesso! Custo: R$ %.2f | Novo Budget: R$ %.2f\n",
                 quantidade, materiaPrima.getUnidade(), custoTotal, budget);
     }
 
-    // Prints e Consultas
+    /**
+     * Exibe o orçamento financeiro atualmente disponível na fábrica.
+     */
     public void exibirBudget() {
         System.out.printf("BUDGET ATUAL: R$ %.2f\n", budget);
     }
 
+    /**
+     * Exibe a listagem de todos os produtos acabados armazenados no armazém da fábrica.
+     */
     public void exibirArmazem() {
         System.out.println("\n==========================================");
         System.out.println("          PRODUTOS NO ARMAZÉM");
@@ -224,6 +276,10 @@ public class GerenciadorProducao {
         System.out.println("==========================================\n");
     }
 
+    /**
+     * Emite o relatório de auditoria geral integrando máquinas e produtos armazenados
+     * por meio do contrato {@link Auditavel}.
+     */
     public void gerarAuditoriaGeral() {
         System.out.println("\n==========================================");
         System.out.println("       RELATÓRIO DE AUDITORIA GERAL");
@@ -243,6 +299,9 @@ public class GerenciadorProducao {
         System.out.println("==========================================\n");
     }
 
+    /**
+     * Exibe o relatório detalhado do estoque atual de matéria-prima.
+     */
     public void exibirEstoqueMateriaPrima() {
         System.out.println("\n==========================================");
         System.out.println("        ESTOQUE DE MATÉRIA-PRIMA");
@@ -253,7 +312,12 @@ public class GerenciadorProducao {
         System.out.println("==========================================\n");
     }
 
-    // Método privado
+    /**
+     * Calcula o custo operacional somado de todas as máquinas para a produção de uma dada quantidade de itens.
+     *
+     * @param quantidadeProdutos Quantidade de itens a processar.
+     * @return Custo total somado em reais (R$).
+     */
     private double calcularCustoProducao(int quantidadeProdutos) {
         double custoPorProduto = 0;
         for (Maquina maquina : maquinas) {
@@ -262,43 +326,92 @@ public class GerenciadorProducao {
         return custoPorProduto * quantidadeProdutos;
     }
 
-    // Getters e Setters
+    /**
+     * Obtém a lista de demandas registradas na fábrica.
+     *
+     * @return Lista de demandas.
+     */
     public ArrayList<Demanda> getDemandas() {
         return demandas;
     }
 
+    /**
+     * Define a lista de demandas da fábrica.
+     *
+     * @param demandas Nova lista de demandas.
+     */
     public void setDemandas(ArrayList<Demanda> demandas) {
         this.demandas = demandas;
     }
 
+    /**
+     * Obtém a lista de produtos já fabricados e guardados no armazém.
+     *
+     * @return Lista de produtos fabricados.
+     */
     public ArrayList<Produto> getProdutosFabricados() {
         return produtosFabricados;
     }
 
+    /**
+     * Define a lista de produtos fabricados no armazém.
+     *
+     * @param produtosFabricados Nova lista de produtos.
+     */
     public void setProdutosFabricados(ArrayList<Produto> produtosFabricados) {
         this.produtosFabricados = produtosFabricados;
     }
 
+    /**
+     * Obtém a lista de máquinas instaladas na esteira de produção.
+     *
+     * @return Lista de máquinas.
+     */
     public ArrayList<Maquina> getMaquinas() {
         return maquinas;
     }
 
+    /**
+     * Define a lista de máquinas da linha de produção.
+     *
+     * @param maquinas Nova lista de máquinas.
+     */
     public void setMaquinas(ArrayList<Maquina> maquinas) {
         this.maquinas = maquinas;
     }
 
+    /**
+     * Obtém a matéria-prima gerenciada pela fábrica.
+     *
+     * @return Objeto {@link MateriaPrima}.
+     */
     public MateriaPrima getMateriaPrima() {
         return materiaPrima;
     }
 
+    /**
+     * Define a matéria-prima gerenciada pela fábrica.
+     *
+     * @param materiaPrima Novo objeto de matéria-prima.
+     */
     public void setMateriaPrima(MateriaPrima materiaPrima) {
         this.materiaPrima = materiaPrima;
     }
 
+    /**
+     * Obtém o orçamento financeiro atual da fábrica.
+     *
+     * @return Orçamento em reais (R$).
+     */
     public double getBudget() {
         return budget;
     }
 
+    /**
+     * Define o orçamento financeiro da fábrica.
+     *
+     * @param budget Novo saldo de orçamento em reais (R$).
+     */
     public void setBudget(double budget) {
         this.budget = budget;
     }

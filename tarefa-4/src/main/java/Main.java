@@ -1,8 +1,28 @@
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * Ponto de entrada (CLI) e interface com o usuário da fábrica de medicamentos.
+ * <p>
+ * Inicializa os módulos de insumo, gerenciador de produção, máquinas especializadas
+ * e orquestra a navegação interativa através de menus textuais no console.
+ * </p>
+ *
+ * @author Adriann e Alexsandro
+ */
 public class Main {
 
+    /**
+     * Construtor privado para prevenir instanciação direta da classe utilitária de entrada.
+     */
+    private Main() {
+    }
+
+    /**
+     * Método principal que inicializa o sistema da fábrica e controla o loop do menu interativo.
+     *
+     * @param args Argumentos de linha de comando (não utilizados).
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -96,7 +116,13 @@ public class Main {
         scanner.close();
     }
 
-    private static Cenario menuCenario(Scanner scanner){
+    /**
+     * Exibe o menu interativo para escolha do cenário operacional inicial da fábrica.
+     *
+     * @param scanner Leitor de entrada padrão do console.
+     * @return O {@link Cenario} escolhido pelo usuário.
+     */
+    private static Cenario menuCenario(Scanner scanner) {
         while (true){
             System.out.println("\nEscolha o cenário da fábrica:");
             System.out.println("1 - " + Cenario.FABRICA_NORMAL.getNome());
@@ -120,6 +146,12 @@ public class Main {
         }
     }
 
+    /**
+     * Exibe o submenu para gerenciamento de demandas (atualização, listagem e cadastro de novos pedidos).
+     *
+     * @param scanner     Leitor de entrada padrão do console.
+     * @param gerenciador Instância ativa do gerenciador da fábrica.
+     */
     private static void menuDemandas(Scanner scanner, GerenciadorProducao gerenciador) {
         boolean voltar = false;
         while (!voltar) {
@@ -229,6 +261,12 @@ public class Main {
         }
     }
 
+    /**
+     * Exibe o submenu para execução de ordens de fabricação (estratégica ou manual de item específico).
+     *
+     * @param scanner     Leitor de entrada padrão do console.
+     * @param gerenciador Instância ativa do gerenciador da fábrica.
+     */
     private static void menuFabricacao(Scanner scanner, GerenciadorProducao gerenciador) {
         boolean voltar = false;
         while (!voltar) {
@@ -282,6 +320,12 @@ public class Main {
         }
     }
 
+    /**
+     * Exibe o submenu para consulta do armazém e do estoque atual de matéria-prima.
+     *
+     * @param scanner     Leitor de entrada padrão do console.
+     * @param gerenciador Instância ativa do gerenciador da fábrica.
+     */
     private static void menuConsultar(Scanner scanner, GerenciadorProducao gerenciador) {
         boolean voltar = false;
         while (!voltar) {
@@ -317,6 +361,12 @@ public class Main {
         }
     }
 
+    /**
+     * Exibe o submenu para seleção e troca dinâmica da estratégia de produção ativa.
+     *
+     * @param scanner     Leitor de entrada padrão do console.
+     * @param gerenciador Instância ativa do gerenciador da fábrica.
+     */
     private static void menuEstrategia(Scanner scanner, GerenciadorProducao gerenciador) {
         boolean voltar = false;
         while (!voltar) {
@@ -360,6 +410,12 @@ public class Main {
         }
     }
 
+    /**
+     * Exibe o submenu para emissão de relatórios de auditoria e diagnóstico de máquinas e produtos.
+     *
+     * @param scanner     Leitor de entrada padrão do console.
+     * @param gerenciador Instância ativa do gerenciador da fábrica.
+     */
     private static void menuAuditoria(Scanner scanner, GerenciadorProducao gerenciador) {
         boolean voltar = false;
         while (!voltar) {
