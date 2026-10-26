@@ -121,13 +121,41 @@ Ademais, A interface Auditável audita as máquinas e produtos juntos e para iss
 Conclusão: Na Tarefa3, a fabrica deixou de depender do número digitidato no menu e agora decidi o que produz baseado em regras que podem ser alteradas conforme a situação. 
 
 
-# Tarefa 4 ########################################################################################################################
-1. O que deveriámos aprender/aplicar na tarefa4?
-Deveríamos aprender/aplicar isso:
-    A. Gradle: Que é estruturar, configurar build.gradle e settings.gradle, fazer funcionar o build e Gradle Wrapper e disso automatizar a execução do programa;
-    B. Documentação Javadoc;
-    C. Tratar erros;
-    D. Organizar o código melhor;
+# Tarefa 5 ########################################################################################################################
+1. Contextualização e Motivação da Refatoração Estrutural
+Nas etapas anteriores, a unidade produtiva central da fábrica de medicamentos era representada pela classe abstrata Maquina de maneira monolítica. Entretanto, na indústria farmacêutica regulamentada pelas Boas Práticas de Fabricação (Anvisa RDC 658/2022 [3]), um equipamento fabril nunca é um bloco isolado: ele é composto por subcomponentes eletromecânicos, analíticos e pneumáticos que operam sob responsabilidades específicas e cujo ciclo de vida está estritamente atrelado à máquina.
+
+Na Tarefa 5, decompusemos a unidade produtiva ("O Todo") e introduzimos um Agrupador fabril, estruturando o sistema em relações de Composição Estrita e Agregação, com encapsulamento rigoroso baseado na Lei de Deméter e auditoria estrutural em cascata.
+
+2. Modelagem da Composição Temática (O Todo e as Partes)
+- O Todo: A classe abstrata Maquina (especializada em MaquinaProcessamento / Reator, MaquinaEmbalagem / Blister e MaquinaInspecao / Espectrômetro Anvisa).
+- As Partes (Subcomponentes internos):
+    A. MotorInducao (Cardinalidade 1:1): Motor elétrico de precisão responsável pelo acionamento mecânico (pás homogeneizadoras no reator, esteiras transportadoras na embalagem ou cabeçote de posicionamento na inspeção). Possui regras térmicas (°C) e desgaste físico acumulado. Se sobreaquecer ou desgastar excessivamente, compromete a máquina e eleva o risco de falha.
+    B. SensorCalibracao (Cardinalidade 1:1): Sensor analítico que monitora desvios analíticos e conformidade com a Anvisa RDC 658. A cada lote, sofre perturbação e descalibração. Se perder a calibração, acusa inconformidade regulatória e amplifica a chance de falha do lote.
+    C. AtuadoresValvula (Cardinalidade 1:N): Conjunto de válvulas sanitárias e atuadores pneumáticos (mínimo de 2 por máquina) responsáveis pela dosagem de insumos, vácuo de selagem e ejeção pneumática de itens não conformes. Monitora ciclos operados, pressão em bar e risco de travamento de vedação.
+
+3. Composição Estrita e Ciclo de Vida (Fases de Construção)
+A relação Maquina, MotorInducao, SensorCalibracao e AtuadorValvula é uma Composição Estrita:
+- As partes são instanciadas obrigatoriamente dentro do construtor da classe Maquina via operador "new".
+- Não há injeção de instâncias pré-existentes de componentes, garantindo que nenhum subcomponente seja compartilhado entre máquinas.
+- O ciclo de vida das partes é governado pela máquina: ao reparar a máquina (reparar()), todas as suas partes internas são revisadas, calibradas e destravadas conjuntamente.
+
+4. Agrupador Fabril: LinhaDeProducao (Agregação 1:N)
+Em vez de as máquinas ficarem soltas em uma lista gerenciadora, criamos a classe intermediária LinhaDeProducao:
+- Relação de Agregação: LinhaDeProducao e Maquina. A linha agrupa máquinas em uma esteira sequencial ordenada. O ciclo de vida da máquina não depende da linha: máquinas podem ser adicionadas ou removidas da esteira independentemente.
+- Proteção de Coleções (Cópia Defensiva): O método getMaquinas() retorna estritamente Collections.unmodifiableList(maquinas). Qualquer tentativa de código externo de invocar .add() ou .remove() diretamente na lista lança UnsupportedOperationException, blindando o estado interno da linha.
+
+5. Aplicação da Lei de Deméter (Tell, Don't Ask)
+Para evitar o antipadrão "Train Wreck" (ex: maquina.getMotor().acionar()), Maquina atua como uma Fachada Interna e NÃO expõe getters das suas partes internas:
+- Métodos de alto nível e delegação: isMotorOperacional(), isSensorCalibrado(), areAtuadoresOperacionais(), getQuantidadeAtuadores(), registrarCicloDeUso(), reparar().
+- O cliente externo (GerenciadorProducao, menus e testes) interage apenas com o Todo e com o Agrupador, desconhecendo a implementação concreta e o acoplamento interno das partes.
+
+6. Auditoria Estrutural em Cascata
+A interface Auditavel foi implementada em todos os níveis da hierarquia:
+- Nível 1 (Agrupador): LinhaDeProducao.gerarRelatorioDiagnostico()
+- Nível 2 (O Todo): Maquina.gerarRelatorioDiagnosticoComIndentacao()
+- Nível 3 (As Partes): MotorInducao, SensorCalibracao e AtuadorValvula
+Ao solicitar a auditoria da fábrica, o relatório é emitido em uma estrutura arbórea indentada e legível no terminal, detalhando a integridade de cada elo produtivo da esteira.
 
 # Referências bibliográficas ######################################################################################################
 [1] WAZLAWICK, Raul Sidnei. Metodologia de pesquisa para ciência da computação. 2. ed. Rio de Janeiro: Elsevier, 2014. 
