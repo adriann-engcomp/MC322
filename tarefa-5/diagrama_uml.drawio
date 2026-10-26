@@ -1,0 +1,250 @@
+<mxfile host="app.diagrams.net" agent="Antigravity">
+  <diagram id="d_uml_tarefa5" name="UML Tarefa 5 — Planta Farmacêutica MC322">
+    <mxGraphModel dx="843" dy="401" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1900" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="10" parent="1" style="swimlane;fontStyle=2;align=center;startSize=40;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#333333;fontSize=11;" value="&lt;&lt;interface&gt;&gt;&#xa;Auditavel" vertex="1">
+          <mxGeometry height="80" width="250" x="1000" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="11" parent="10" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="+ gerarRelatorioDiagnostico() : String&#xa;+ precisaManutencao() : boolean" vertex="1">
+          <mxGeometry height="40" width="250" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="20" parent="1" style="swimlane;fontStyle=1;align=center;startSize=26;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=11;" value="GerenciadorProducao" vertex="1">
+          <mxGeometry height="280" width="285" x="20" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="21" parent="20" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="- demandas : List&lt;Demanda&gt;&#xa;- produtosFabricados : List&lt;Produto&gt;&#xa;- linhaDeProducao : LinhaDeProducao&#xa;- materiaPrima : MateriaPrima&#xa;- budget : double&#xa;- estrategiaAtual : EstrategiaProducao" vertex="1">
+          <mxGeometry height="96" width="285" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="22" parent="20" style="line;strokeColor=inherit;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="8" width="285" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="23" parent="20" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="+ registrarDemanda(Demanda) : void&#xa;+ fabricarDemanda(int) : void&#xa;+ executarProximaProducao() : void&#xa;+ adicionarMaquina(Maquina) : void&#xa;+ comprarMateriaPrima(double) : void&#xa;+ repararMaquinas() : int&#xa;+ gerarAuditoriaGeral() : void&#xa;+ setEstrategia(EstrategiaProducao) : void&#xa;+ getLinhaDeProducao() : LinhaDeProducao&#xa;+ getBudget() : double" vertex="1">
+          <mxGeometry height="150" width="285" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="30" parent="1" style="swimlane;fontStyle=1;align=center;startSize=26;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#333333;fontSize=11;" value="LinhaDeProducao" vertex="1">
+          <mxGeometry height="320" width="305" x="330" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="31" parent="30" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="- idLinha : String&#xa;- nome : String&#xa;- maquinas : List&lt;Maquina&gt;" vertex="1">
+          <mxGeometry height="48" width="305" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="32" parent="30" style="line;strokeColor=inherit;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="8" width="305" y="74" as="geometry" />
+        </mxCell>
+        <mxCell id="33" parent="30" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="+ adicionarMaquina(Maquina) : void&#xa;+ removerMaquina(Maquina) : boolean&#xa;+ getMaquinas() : List&lt;Maquina&gt;&#xa;+ ligarTodas() : void&#xa;+ desligarTodas() : void&#xa;+ registrarCicloDeUso() : void&#xa;+ processar(Produto) : void&#xa;+ possuiMaquinasQuebradas() : boolean&#xa;+ repararTodasMaquinas() : int&#xa;+ calcularCustoProducao(int) : double&#xa;+ gerarRelatorioDiagnostico() : String&#xa;+ precisaManutencao() : boolean" vertex="1">
+          <mxGeometry height="238" width="305" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="40" parent="1" style="swimlane;fontStyle=2;align=center;startSize=26;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#333333;fontSize=11;html=1;" value="&lt;i&gt;Maquina&lt;/i&gt;" vertex="1">
+          <mxGeometry height="450" width="340" x="660" y="180" as="geometry">
+            <mxRectangle height="26" width="77" x="660" y="180" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="41" parent="40" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="- nome : String&#xa;- status : StatusMaquina&#xa;- capacidadeMaxima : int&#xa;- probabilidadeFalha : double&#xa;- custoOperacao : double&#xa;- saude : double&#xa;- saudeMinima : double&#xa;- historicoDeFalhas : int&#xa;# random : Random&#xa;+ SAUDE_MAX : double = 100.0" vertex="1">
+          <mxGeometry height="160" width="340" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="42" parent="40" style="line;strokeColor=inherit;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="8" width="340" y="186" as="geometry" />
+        </mxCell>
+        <mxCell id="43" parent="40" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;html=1;" value="+ &lt;i&gt;processar(Produto) : void&lt;/i&gt;&#xa;+ &lt;i&gt;getTipo() : String&lt;/i&gt;&#xa;+ ligar() : void&#xa;+ desligar() : void&#xa;+ estaLigada() : boolean&#xa;+ estaQuebrada() : boolean&#xa;+ reparar() : void&#xa;+ registrarCicloDeUso() : double&#xa;+ getProbabilidadeFalhaAtual() : double&#xa;+ precisaManutencao() : boolean&#xa;+ gerarRelatorioDiagnostico() : String&#xa;+ isMotorOperacional() : boolean&#xa;+ isSensorCalibrado() : boolean&#xa;+ getQuantidadeAtuadores() : int" vertex="1">
+          <mxGeometry height="256" width="340" y="194" as="geometry" />
+        </mxCell>
+        <mxCell id="50" parent="1" style="swimlane;fontStyle=1;align=center;startSize=26;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#333333;fontSize=11;" value="MaquinaProcessamento" vertex="1">
+          <mxGeometry height="80" width="220" x="345" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="51" parent="50" style="line;strokeColor=inherit;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="52" parent="50" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="+ processar(Produto) : void&#xa;+ getTipo() : String" vertex="1">
+          <mxGeometry height="46" width="220" y="34" as="geometry" />
+        </mxCell>
+        <mxCell id="60" parent="1" style="swimlane;fontStyle=1;align=center;startSize=26;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#333333;fontSize=11;" value="MaquinaEmbalagem" vertex="1">
+          <mxGeometry height="80" width="220" x="585" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="61" parent="60" style="line;strokeColor=inherit;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="62" parent="60" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="+ processar(Produto) : void&#xa;+ getTipo() : String" vertex="1">
+          <mxGeometry height="46" width="220" y="34" as="geometry" />
+        </mxCell>
+        <mxCell id="70" parent="1" style="swimlane;fontStyle=1;align=center;startSize=26;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#333333;fontSize=11;" value="MaquinaInspecao" vertex="1">
+          <mxGeometry height="80" width="220" x="825" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="71" parent="70" style="line;strokeColor=inherit;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="72" parent="70" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="+ processar(Produto) : void&#xa;+ getTipo() : String" vertex="1">
+          <mxGeometry height="46" width="220" y="34" as="geometry" />
+        </mxCell>
+        <mxCell id="80" parent="1" style="swimlane;fontStyle=1;align=center;startSize=26;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#333333;fontSize=11;" value="MotorInducao" vertex="1">
+          <mxGeometry height="270" width="275" x="1080" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="81" parent="80" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="- identificador : String&#xa;- potenciaHP : double&#xa;- rpm : int&#xa;- temperaturaMaxima : double&#xa;- temperaturaAtual : double&#xa;- desgasteMecanico : double&#xa;- sobreaquecido : boolean" vertex="1">
+          <mxGeometry height="112" width="275" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="82" parent="80" style="line;strokeColor=inherit;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="8" width="275" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="83" parent="80" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="+ acionar(double) : void&#xa;+ resfriar() : void&#xa;+ revisar() : void&#xa;+ estaOperacional() : boolean&#xa;+ getImpactoRiscoFalha() : double&#xa;+ precisaManutencao() : boolean&#xa;+ gerarRelatorioDiagnostico() : String" vertex="1">
+          <mxGeometry height="124" width="275" y="146" as="geometry" />
+        </mxCell>
+        <mxCell id="90" parent="1" style="swimlane;fontStyle=1;align=center;startSize=26;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#333333;fontSize=11;" value="SensorCalibracao" vertex="1">
+          <mxGeometry height="220" width="275" x="1080" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="91" parent="90" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="- tipoParametro : String&#xa;- precisaoAtual : double&#xa;- limiarMinimoPrecisao : double&#xa;- calibrado : boolean&#xa;- leiturasRealizadas : int" vertex="1">
+          <mxGeometry height="80" width="275" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="92" parent="90" style="line;strokeColor=inherit;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="8" width="275" y="106" as="geometry" />
+        </mxCell>
+        <mxCell id="93" parent="90" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="+ aferir(double) : boolean&#xa;+ calibrar() : void&#xa;+ getImpactoRiscoFalha() : double&#xa;+ estaCalibrado() : boolean&#xa;+ precisaManutencao() : boolean&#xa;+ gerarRelatorioDiagnostico() : String" vertex="1">
+          <mxGeometry height="106" width="275" y="114" as="geometry" />
+        </mxCell>
+        <mxCell id="100" parent="1" style="swimlane;fontStyle=1;align=center;startSize=26;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#333333;fontSize=11;" value="AtuadorValvula" vertex="1">
+          <mxGeometry height="265" width="275" x="1080" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="101" parent="100" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="- idAtuador : int&#xa;- funcao : String&#xa;- pressaoTrabalhoBar : double&#xa;- ciclosMaximosSemManutencao : int&#xa;- ciclosOperados : int&#xa;- travado : boolean&#xa;- integridadeVedacao : double" vertex="1">
+          <mxGeometry height="112" width="275" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="102" parent="100" style="line;strokeColor=inherit;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="8" width="275" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="103" parent="100" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=11;" value="+ acionar(int) : boolean&#xa;+ liberarEManter() : void&#xa;+ estaOperacional() : boolean&#xa;+ getImpactoRiscoFalha() : double&#xa;+ precisaManutencao() : boolean&#xa;+ gerarRelatorioDiagnostico() : String" vertex="1">
+          <mxGeometry height="119" width="275" y="146" as="geometry" />
+        </mxCell>
+        <mxCell id="200" edge="1" parent="1" source="30" style="endArrow=block;endFill=0;dashed=1;strokeColor=#9673a6;edgeStyle=orthogonalEdgeStyle;rounded=0;" target="10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="201" edge="1" parent="1" source="40" style="endArrow=block;endFill=0;dashed=1;strokeColor=#9673a6;edgeStyle=orthogonalEdgeStyle;rounded=0;" target="10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="202" edge="1" parent="1" source="80" style="endArrow=block;endFill=0;dashed=1;strokeColor=#9673a6;edgeStyle=orthogonalEdgeStyle;rounded=0;" target="10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="203" edge="1" parent="1" source="90" style="endArrow=block;endFill=0;dashed=1;strokeColor=#9673a6;edgeStyle=orthogonalEdgeStyle;rounded=0;" target="10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1070" y="470" />
+              <mxPoint x="1070" y="60" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="204" edge="1" parent="1" source="100" style="endArrow=block;endFill=0;dashed=1;strokeColor=#9673a6;edgeStyle=orthogonalEdgeStyle;rounded=0;" target="10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1070" y="892" />
+              <mxPoint x="1070" y="60" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="210" edge="1" parent="1" source="30" style="startArrow=diamondThin;startFill=0;startSize=14;endArrow=open;endSize=8;strokeColor=#d6b656;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="40">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="210a" connectable="0" parent="210" style="resizable=0;html=1;align=left;verticalAlign=bottom;fontSize=11;labelBackgroundColor=none;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.85" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="210b" connectable="0" parent="210" style="resizable=0;html=1;align=right;verticalAlign=bottom;fontSize=11;labelBackgroundColor=none;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.85" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="211" edge="1" parent="1" source="40" style="startArrow=diamondThin;startFill=1;startSize=14;endArrow=open;endSize=8;strokeColor=#6c8ebf;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="80">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="211a" connectable="0" parent="211" style="resizable=0;html=1;align=left;verticalAlign=bottom;fontSize=11;labelBackgroundColor=none;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.85" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="211b" connectable="0" parent="211" style="resizable=0;html=1;align=right;verticalAlign=bottom;fontSize=11;labelBackgroundColor=none;" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.85" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="212" edge="1" parent="1" source="40" style="startArrow=diamondThin;startFill=1;startSize=14;endArrow=open;endSize=8;strokeColor=#6c8ebf;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.65;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="90">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="212a" connectable="0" parent="212" style="resizable=0;html=1;align=left;verticalAlign=bottom;fontSize=11;labelBackgroundColor=none;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.85" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="212b" connectable="0" parent="212" style="resizable=0;html=1;align=right;verticalAlign=bottom;fontSize=11;labelBackgroundColor=none;" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.85" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="213" edge="1" parent="1" source="40" style="startArrow=diamondThin;startFill=1;startSize=14;endArrow=open;endSize=8;strokeColor=#6c8ebf;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="100">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="970" y="640" />
+              <mxPoint x="970" y="892" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="213a" connectable="0" parent="213" style="resizable=0;html=1;align=left;verticalAlign=bottom;fontSize=11;labelBackgroundColor=none;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.85" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="213b" connectable="0" parent="213" style="resizable=0;html=1;align=right;verticalAlign=bottom;fontSize=11;labelBackgroundColor=none;" value="1..*" vertex="1">
+          <mxGeometry relative="1" x="0.85" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="220" edge="1" parent="1" source="50" style="endArrow=block;endFill=0;strokeColor=#6c8ebf;edgeStyle=orthogonalEdgeStyle;rounded=0;" target="40">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="221" edge="1" parent="1" source="60" style="endArrow=block;endFill=0;strokeColor=#6c8ebf;edgeStyle=orthogonalEdgeStyle;rounded=0;" target="40">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="222" edge="1" parent="1" source="70" style="endArrow=block;endFill=0;strokeColor=#6c8ebf;edgeStyle=orthogonalEdgeStyle;rounded=0;" target="40">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="230" edge="1" parent="1" source="20" style="endArrow=open;endSize=8;strokeColor=#666666;fontColor=#333333;edgeStyle=orthogonalEdgeStyle;rounded=0;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="30" value="usa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="300" parent="1" style="swimlane;fontStyle=1;align=center;startSize=22;fillColor=#f0f0f0;strokeColor=#999999;fontColor=#333333;fontSize=11;" value="LEGENDA" vertex="1">
+          <mxGeometry height="120" width="285" x="20" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="301" parent="300" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=60;fontSize=10;" value="Composição (Todo *—→ Parte)" vertex="1">
+          <mxGeometry height="20" width="275" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="302" edge="1" parent="300" style="startArrow=diamondThin;startFill=1;startSize=12;endArrow=open;endSize=8;strokeColor=#6c8ebf;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="10" y="38" as="sourcePoint" />
+            <mxPoint x="55" y="38" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="303" parent="300" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=60;fontSize=10;" value="Agregação (Agrupador o—→ Todo)" vertex="1">
+          <mxGeometry height="20" width="275" y="52" as="geometry" />
+        </mxCell>
+        <mxCell id="304" edge="1" parent="300" style="startArrow=diamondThin;startFill=0;startSize=12;endArrow=open;endSize=8;strokeColor=#d6b656;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="10" y="62" as="sourcePoint" />
+            <mxPoint x="55" y="62" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="305" parent="300" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=60;fontSize=10;" value="Herança (extends)" vertex="1">
+          <mxGeometry height="20" width="275" y="76" as="geometry" />
+        </mxCell>
+        <mxCell id="306" edge="1" parent="300" style="endArrow=block;endFill=0;strokeColor=#6c8ebf;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="10" y="86" as="sourcePoint" />
+            <mxPoint x="55" y="86" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="307" parent="300" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=60;fontSize=10;" value="Realização (implements)" vertex="1">
+          <mxGeometry height="18" width="275" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="308" edge="1" parent="300" style="endArrow=block;endFill=0;dashed=1;strokeColor=#9673a6;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="10" y="110" as="sourcePoint" />
+            <mxPoint x="55" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
