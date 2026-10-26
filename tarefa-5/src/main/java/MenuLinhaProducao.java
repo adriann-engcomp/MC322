@@ -71,9 +71,9 @@ public class MenuLinhaProducao {
                     System.out.println("========================================================================================");
                     for (Maquina m : linha.getMaquinas()) {
                         System.out.printf("Máquina: %s\n", m.getNome());
-                        System.out.printf("  - Motor operacional:             %s\n", m.estaMotorOperacional() ? "SIM (Normal)" : "NÃO (Atenção/Sobreaquecido)");
-                        System.out.printf("  - Sensor calibrado (Anvisa):     %s\n", m.estaSensorCalibrado() ? "SIM (Conforme)" : "NÃO (Descalibrado)");
-                        System.out.printf("  - Todos atuadores operacionais:  %s\n", m.estaAtuadoresOperacionais() ? "SIM" : "NÃO (Travamento/Vazamento)");
+                        System.out.printf("  - Motor operacional:             %s\n", m.verificaMotorOperacional() ? "SIM (Normal)" : "NÃO (Atenção/Sobreaquecido)");
+                        System.out.printf("  - Sensor calibrado (Anvisa):     %s\n", m.verificaSensorCalibrado() ? "SIM (Conforme)" : "NÃO (Descalibrado)");
+                        System.out.printf("  - Todos atuadores operacionais:  %s\n", m.verificaAtuadoresOperacionais() ? "SIM" : "NÃO (Travamento/Vazamento)");
                         System.out.printf("  - Máquina precisa manutenção:    %s\n", m.precisaManutencao() ? "SIM" : "NÃO");
                         System.out.println("----------------------------------------------------------------------------------------");
                     }

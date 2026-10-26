@@ -1,9 +1,10 @@
 import java.util.Scanner;
 
 /**
- * Ponto de entrada da fábrica de medicamentos.
+ * Ponto de entrada da fábrica farmacêutica.
  * <p>
- * Solicita o cenário, inicializa a fábrica e coordena o menu principal.
+ * Solicita o cenário, inicializa a fábrica com o Agrupador {@link LinhaDeProducao}
+ * e coordena o menu principal com todas as opções hierárquicas do sistema.
  * </p>
  *
  * @author Adriann e Alexsandro
@@ -34,6 +35,7 @@ public class Main {
             System.out.printf(" ESTRATÉGIA ATUAL: [%s]\n", gerenciador.getEstrategiaAtual().getNomeEstrategia());
             System.out.printf(" CENÁRIO ATIVO:    [%s]\n", cenario.getNome());
             System.out.printf(" BUDGET ATUAL:     R$ %.2f\n", gerenciador.getBudget());
+            System.out.printf(" LINHA FABRIL:     [%s] %s\n", gerenciador.getLinhaDeProducao().getIdLinha(), gerenciador.getLinhaDeProducao().getNome());
             System.out.println("==============================================================");
 
             System.out.println("MENU PRINCIPAL");
@@ -43,6 +45,7 @@ public class Main {
             System.out.println("4. Comprar materia-prima");
             System.out.println("5. Gerenciar estrategia");
             System.out.println("6. Auditoria");
+            System.out.println("7. Linha de producao (Agrupador)");
             System.out.println("0. Sair");
             System.out.print("ESCOLHA: ");
 
@@ -70,12 +73,15 @@ public class Main {
                 case 6:
                     MenuAuditoria.exibir(scanner, gerenciador);
                     break;
+                case 7:
+                    MenuLinhaProducao.exibir(scanner, gerenciador);
+                    break;
                 case 0:
                     System.out.println("\nEncerrando o sistema da fábrica farmacêutica. Até logo!");
                     executando = false;
                     break;
                 default:
-                    System.out.println("Opção inválida! Escolha um número válido do menu principal (0 a 6).");
+                    System.out.println("Opção inválida! Escolha um número válido do menu principal (0 a 7).");
                     break;
             }
         }

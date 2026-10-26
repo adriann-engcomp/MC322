@@ -1,11 +1,13 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Classe controladora central da planta farmacêutica (padrão Controller/Manager).
  * <p>
- * Gerencia todo o fluxo de produção, integrando o cadastro de demandas, o acionamento
- * sequencial das máquinas na linha fabril, o estoque de matérias-primas, o orçamento financeiro
- * e a política ativa de escalonamento baseada no padrão Strategy ({@link EstrategiaProducao}).
+ * Gerencia todo o fluxo de produção, integrando o cadastro de demandas, a esteira fabril
+ * organizada através do Agrupador {@link LinhaDeProducao}, o estoque de matérias-primas,
+ * o orçamento financeiro e a política ativa de escalonamento baseada no padrão Strategy ({@link EstrategiaProducao}).
  * As operações de fabricação, compra e atualização validam todas as pré-condições antes de
  * modificar qualquer estado, assegurando atomicidade e consistência através do lançamento de
  * exceções de domínio especializadas ({@link PlantaException}).
@@ -17,13 +19,31 @@ public class GerenciadorProducao {
 
     private ArrayList<Demanda> demandas;
     private ArrayList<Produto> produtosFabricados;
-    private ArrayList<Maquina> maquinas;
+    private LinhaDeProducao linhaDeProducao;
     private MateriaPrima materiaPrima;
     private double budget;
     private EstrategiaProducao estrategiaAtual;
 
     /**
-     * Construtor do gerenciador da fábrica farmacêutica.
+     * Construtor do gerenciador da fábrica farmacêutica com linha de produção informada.
+     *
+     * @param materiaPrima      Instância que gerencia o insumo farmacêutico disponível.
+     * @param budgetInicial     Valor inicial do orçamento financeiro (em R$).
+     * @param estrategiaInicial Estratégia inicial adotada para seleção de demandas.
+     * @param linhaDeProducao   Agrupador de máquinas da esteira produtiva.
+     */
+    public GerenciadorProducao(MateriaPrima materiaPrima, double budgetInicial,
+        EstrategiaProducao estrategiaInicial, LinhaDeProducao linhaDeProducao) {
+        this.demandas = new ArrayList<>();
+        this.produtosFabricados = new ArrayList<>();
+        this.linhaDeProducao = (linhaDeProducao != null) ? linhaDeProducao : new LinhaDeProducao("LINHA-01", "Linha Farmacêutica Geral");
+        this.materiaPrima = materiaPrima;
+        this.budget = budgetInicial;
+        this.estrategiaAtual = estrategiaInicial;
+    }
+
+    /**
+     * Construtor de compatibilidade, instanciando uma linha de produção padrão.
      *
      * @param materiaPrima      Instância que gerencia o insumo farmacêutico disponível.
      * @param budgetInicial     Valor inicial do orçamento financeiro (em R$).
@@ -31,12 +51,7 @@ public class GerenciadorProducao {
      */
     public GerenciadorProducao(MateriaPrima materiaPrima, double budgetInicial,
         EstrategiaProducao estrategiaInicial) {
-        this.demandas = new ArrayList<>();
-        this.produtosFabricados = new ArrayList<>();
-        this.maquinas = new ArrayList<>();
-        this.materiaPrima = materiaPrima;
-        this.budget = budgetInicial;
-        this.estrategiaAtual = estrategiaInicial;
+        this(materiaPrima, budgetInicial, estrategiaInicial, new LinhaDeProducao("LINHA-01", "Linha Farmacêutica Principal"));
     }
 
     /**
@@ -105,12 +120,12 @@ public class GerenciadorProducao {
     }
 
     /**
-     * Adiciona uma máquina à esteira da linha de fabricação da fábrica.
+     * Adiciona uma máquina à esteira agregada pela Linha de Produção.
      *
      * @param maquina Máquina a ser inserida na sequência de produção.
      */
     public void adicionarMaquina(Maquina maquina) {
-        maquinas.add(maquina);
+        linhaDeProducao.adicionarMaquina(maquina);
     }
 
     /**
@@ -120,7 +135,7 @@ public class GerenciadorProducao {
         System.out.println("\n==========================================");
         System.out.println("          DEMANDAS REGISTRADAS");
         System.out.println("==========================================");
-        
+
         if (demandas.isEmpty()) {
             System.out.println("Nenhuma demanda registrada no momento.");
             return;
@@ -132,14 +147,14 @@ public class GerenciadorProducao {
                     i + 1, demanda.getMedicamento(), demanda.getQuantidade(), demanda.getStatus().getDescricao());
         }
     }
-    
+
     /**
      * Processa a fabricação completa de uma demanda específica garantindo atomicidade e consistência.
      * <p>
      * Todas as condições necessárias (existência da demanda, compatibilidade de status, integridade
-     * das máquinas, estoque físico de matéria-prima e saldo orçamentário) são verificadas antes de
-     * qualquer mutação de estado. Se qualquer requisito não for atendido, uma exceção de domínio
-     * é disparada sem que o estoque ou orçamento sofram qualquer alteração.
+     * das máquinas através da {@link LinhaDeProducao}, estoque físico de matéria-prima e saldo orçamentário)
+     * são verificadas antes de qualquer mutação de estado. Se qualquer requisito não for atendido,
+     * uma exceção de domínio é disparada sem que o estoque ou orçamento sofram qualquer alteração.
      * </p>
      *
      * @param indiceDemanda Posição da demanda na lista de pedidos (0-indexada).
@@ -173,13 +188,12 @@ public class GerenciadorProducao {
             throw new DemandaInvalidaException("A quantidade da demanda é zero ou inválida. Atualize a demanda antes de fabricar.");
         }
 
-        // 2. Validação da integridade das Máquinas
-        for (Maquina maquina : maquinas) {
-            if (maquina.estaQuebrada()) {
-                throw new MaquinaIndisponivelException(String.format(
-                    "Não foi possível iniciar a produção: A máquina '%s' está quebrada e necessita de manutenção antes de operar.",
-                    maquina.getNome()));
-            }
+        // 2. Validação da integridade das Máquinas através do Agrupador LinhaDeProducao
+        if (linhaDeProducao.possuiMaquinasQuebradas()) {
+            Maquina quebrada = linhaDeProducao.obterPrimeiraMaquinaQuebrada();
+            throw new MaquinaIndisponivelException(String.format(
+                "Não foi possível iniciar a produção: A máquina '%s' na linha de produção está quebrada e necessita de manutenção antes de operar.",
+                quebrada != null ? quebrada.getNome() : "desconhecida"));
         }
 
         // 3. Validação de Matéria-Prima
@@ -190,8 +204,8 @@ public class GerenciadorProducao {
                 materiaPrimaNecessaria, materiaPrima.getUnidade(), materiaPrima.getQuantidade(), materiaPrima.getUnidade()));
         }
 
-        // 4. Validação de Orçamento
-        double custoOperacional = calcularCustoProducao(quantidade);
+        // 4. Validação de Orçamento via LinhaDeProducao
+        double custoOperacional = linhaDeProducao.calcularCustoProducao(quantidade);
         if (budget < custoOperacional) {
             throw new RecursoInsuficienteException(String.format(
                 "Orçamento insuficiente para custear a operação das máquinas!\nNecessário: R$ %.2f | Orçamento disponível: R$ %.2f.",
@@ -203,9 +217,8 @@ public class GerenciadorProducao {
         materiaPrima.consumir(materiaPrimaNecessaria);
         budget -= custoOperacional;
 
-        for (Maquina maquina : maquinas) {
-            maquina.ligar();
-        }
+        // Delegação para o Agrupador ligar a esteira
+        linhaDeProducao.ligarTodas();
 
         int aprovados = 0;
         int rejeitados = 0;
@@ -215,9 +228,8 @@ public class GerenciadorProducao {
             Produto produto = demanda.getTipo().criarProduto(demanda.getMedicamento() + " #" + (i + 1), lote);
             produto.iniciarProcessamento();
 
-            for (Maquina maquina : maquinas) {
-                maquina.processar(produto);
-            }
+            // O Agrupador propaga o processamento pelas máquinas
+            linhaDeProducao.processar(produto);
 
             produtosFabricados.add(produto);
 
@@ -228,10 +240,9 @@ public class GerenciadorProducao {
             }
         }
 
-        for (Maquina m : maquinas) {
-            m.registrarCicloDeUso();
-            m.desligar();
-        }
+        // O Agrupador registra o ciclo de desgaste e desliga a linha
+        linhaDeProducao.registrarCicloDeUso();
+        linhaDeProducao.desligarTodas();
 
         demanda.concluir();
 
@@ -278,19 +289,12 @@ public class GerenciadorProducao {
 
     /**
      * Realiza a manutenção e o reparo de todas as máquinas da planta que estejam quebradas
-     * ou com saúde inferior ao limiar mínimo operacional.
+     * ou com saúde/componentes com necessidade de intervenção, delegando para a Linha de Produção.
      *
      * @return Quantidade de máquinas reparadas com sucesso.
      */
     public int repararMaquinas() {
-        int reparadas = 0;
-        for (Maquina m : maquinas) {
-            if (m.estaQuebrada() || m.precisaManutencao()) {
-                m.reparar();
-                reparadas++;
-            }
-        }
-        return reparadas;
+        return linhaDeProducao.repararTodasMaquinas();
     }
 
     /**
@@ -326,18 +330,17 @@ public class GerenciadorProducao {
     }
 
     /**
-     * Emite o relatório de auditoria geral integrando máquinas e produtos armazenados
-     * por meio do contrato {@link Auditavel}.
+     * Emite o relatório de auditoria geral integrando máquinas (via auditoria em cascata
+     * Linha -> Máquinas -> Subcomponentes) e produtos armazenados por meio do contrato {@link Auditavel}.
      */
     public void gerarAuditoriaGeral() {
-        System.out.println("\n==========================================");
-        System.out.println("       RELATÓRIO DE AUDITORIA GERAL");
-        System.out.println("==========================================");
-        System.out.println("[MÁQUINAS]");
-        for (Maquina maquina : maquinas) {
-            System.out.println(maquina.gerarRelatorioDiagnostico());
-        }
-        System.out.println("\n[PRODUTOS]");
+        System.out.println("\n========================================================================================");
+        System.out.println("                   RELATÓRIO DE AUDITORIA GERAL EM CASCATA");
+        System.out.println("========================================================================================");
+        System.out.println("[ESTRUTURA HIERÁRQUICA DA LINHA DE PRODUÇÃO]");
+        System.out.println(linhaDeProducao.gerarRelatorioDiagnostico());
+
+        System.out.println("\n[PRODUTOS NO ARMAZÉM]");
         if (produtosFabricados.isEmpty()) {
             System.out.println("Nenhum produto fabricado no momento.");
         } else {
@@ -345,7 +348,7 @@ public class GerenciadorProducao {
                 System.out.println(produto.gerarRelatorioDiagnostico());
             }
         }
-        System.out.println("==========================================\n");
+        System.out.println("========================================================================================\n");
     }
 
     /**
@@ -362,26 +365,12 @@ public class GerenciadorProducao {
     }
 
     /**
-     * Calcula o custo operacional somado de todas as máquinas para a produção de uma dada quantidade de itens.
-     *
-     * @param quantidadeProdutos Quantidade de itens a processar.
-     * @return Custo total somado em reais (R$).
-     */
-    private double calcularCustoProducao(int quantidadeProdutos) {
-        double custoPorProduto = 0;
-        for (Maquina maquina : maquinas) {
-            custoPorProduto += maquina.getCustoOperacao();
-        }
-        return custoPorProduto * quantidadeProdutos;
-    }
-
-    /**
-     * Obtém a lista de demandas registradas na fábrica.
+     * Obtém a lista de demandas registradas na fábrica. Protegida contra modificação indevida.
      *
      * @return Lista de demandas.
      */
-    public ArrayList<Demanda> getDemandas() {
-        return demandas;
+    public List<Demanda> getDemandas() {
+        return Collections.unmodifiableList(demandas);
     }
 
     /**
@@ -390,16 +379,16 @@ public class GerenciadorProducao {
      * @param demandas Nova lista de demandas.
      */
     public void setDemandas(ArrayList<Demanda> demandas) {
-        this.demandas = demandas;
+        this.demandas = (demandas != null) ? new ArrayList<>(demandas) : new ArrayList<>();
     }
 
     /**
      * Obtém a lista de produtos já fabricados e guardados no armazém.
      *
-     * @return Lista de produtos fabricados.
+     * @return Lista imutável de produtos fabricados.
      */
-    public ArrayList<Produto> getProdutosFabricados() {
-        return produtosFabricados;
+    public List<Produto> getProdutosFabricados() {
+        return Collections.unmodifiableList(produtosFabricados);
     }
 
     /**
@@ -408,25 +397,37 @@ public class GerenciadorProducao {
      * @param produtosFabricados Nova lista de produtos.
      */
     public void setProdutosFabricados(ArrayList<Produto> produtosFabricados) {
-        this.produtosFabricados = produtosFabricados;
+        this.produtosFabricados = (produtosFabricados != null) ? new ArrayList<>(produtosFabricados) : new ArrayList<>();
     }
 
     /**
-     * Obtém a lista de máquinas instaladas na esteira de produção.
+     * Obtém a lista de máquinas instaladas na esteira produtiva.
+     * Cópia defensiva / coleção imutável garantida pelo Agrupador {@link LinhaDeProducao}.
      *
-     * @return Lista de máquinas.
+     * @return Lista imutável de máquinas.
      */
-    public ArrayList<Maquina> getMaquinas() {
-        return maquinas;
+    public List<Maquina> getMaquinas() {
+        return linhaDeProducao.getMaquinas();
     }
 
     /**
-     * Define a lista de máquinas da linha de produção.
+     * Obtém a instância do Agrupador {@link LinhaDeProducao} gerenciada.
      *
-     * @param maquinas Nova lista de máquinas.
+     * @return Agrupador LinhaDeProducao.
      */
-    public void setMaquinas(ArrayList<Maquina> maquinas) {
-        this.maquinas = maquinas;
+    public LinhaDeProducao getLinhaDeProducao() {
+        return linhaDeProducao;
+    }
+
+    /**
+     * Define a Linha de Produção da fábrica.
+     *
+     * @param linhaDeProducao Nova linha de produção.
+     */
+    public void setLinhaDeProducao(LinhaDeProducao linhaDeProducao) {
+        if (linhaDeProducao != null) {
+            this.linhaDeProducao = linhaDeProducao;
+        }
     }
 
     /**
