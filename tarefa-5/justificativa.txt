@@ -126,7 +126,7 @@ Em vez de as máquinas ficarem soltas em uma lista gerenciadora, criamos a class
 
 5. Aplicação da Lei de Deméter (Tell, Don't Ask)
 Para evitar o antipadrão "Train Wreck" (ex: maquina.getMotor().acionar()), Maquina atua como uma Fachada Interna e NÃO expõe getters das suas partes internas:
-- Métodos de alto nível e delegação: isMotorOperacional(), isSensorCalibrado(), areAtuadoresOperacionais(), getQuantidadeAtuadores(), registrarCicloDeUso(), reparar().
+- Métodos de alto nível e delegação: verificaMotorOperacional(), verificaSensorCalibrado(), verificaAtuadoresOperacionais(), getQuantidadeAtuadores(), registrarCicloDeUso(), reparar().
 - O cliente externo (GerenciadorProducao, menus e testes) interage apenas com o Todo e com o Agrupador, desconhecendo a implementação concreta e o acoplamento interno das partes.
 
 6. Auditoria Estrutural em Cascata
