@@ -103,15 +103,80 @@ public class AtuadorValvula implements Auditavel {
         return 0.0;
     }
 
+    /**
+     * Indica se o atuador precisa de manutenção.
+     *
+     * @return {@code true} se estiver travado, com vedação abaixo de 40% ou no limite de ciclos.
+     */
     @Override
     public boolean precisaManutencao() {
         return travado || integridadeVedacao < 40.0 || ciclosOperados >= ciclosMaximosSemManutencao;
     }
 
+    /**
+     * Gera o relatório de diagnóstico do atuador.
+     *
+     * @return Texto com estado, ciclos e integridade da vedação.
+     */
     @Override
     public String gerarRelatorioDiagnostico() {
         String estado = travado ? "TRAVADO" : (precisaManutencao() ? "DESGASTE ELEVADO" : "OPERACIONAL");
         return String.format("Atuador #%d [%s | %.1f bar] -> Estado: %s | Ciclos: %d/%d | Vedação: %.1f%%",
                 idAtuador, funcao, pressaoTrabalhoBar, estado, ciclosOperados, ciclosMaximosSemManutencao, integridadeVedacao);
+    }
+
+    /**
+     * Cópia imutável do estado do atuador, usada para salvar e recuperar seus dados (padrão Memento).
+     *
+     * @param idAtuador                  Identificador do atuador na máquina.
+     * @param funcao                     Função do atuador.
+     * @param pressaoTrabalhoBar         Pressão de trabalho em bar.
+     * @param ciclosMaximosSemManutencao Limite de ciclos antes da revisão.
+     * @param ciclosOperados             Ciclos já operados.
+     * @param travado                    Se o atuador está travado.
+     * @param integridadeVedacao         Integridade da vedação (0 a 100%).
+     */
+    public record Estado(int idAtuador, String funcao, double pressaoTrabalhoBar, int ciclosMaximosSemManutencao,
+                        int ciclosOperados, boolean travado, double integridadeVedacao) {
+    }
+
+    /**
+     * Exporta o estado atual do atuador.
+     *
+     * @return Cópia imutável do estado.
+     */
+    public Estado exportarEstado() {
+        return new Estado(idAtuador, funcao, pressaoTrabalhoBar, ciclosMaximosSemManutencao,
+                ciclosOperados, travado, integridadeVedacao);
+    }
+
+    /**
+     * Verifica se um estado pode ser aplicado a este atuador, sem alterar nada.
+     *
+     * @param e Estado a verificar.
+     * @throws IllegalArgumentException Se o estado for nulo, de outra configuração ou com valores inválidos.
+     */
+    void validarEstado(Estado e) {
+        Validacao.exigir(e != null, "O estado do atuador é obrigatório.");
+        Validacao.exigir(idAtuador == e.idAtuador()
+                && funcao.equals(e.funcao())
+                && pressaoTrabalhoBar == e.pressaoTrabalhoBar()
+                && ciclosMaximosSemManutencao == e.ciclosMaximosSemManutencao(),
+                "Configuração do atuador #" + e.idAtuador() + " incompatível com a máquina.");
+        Validacao.exigir(e.ciclosOperados() >= 0, "Os ciclos do atuador não podem ser negativos.");
+        Validacao.exigirIntervalo(e.integridadeVedacao(), 0.0, 100.0, "Integridade da vedação");
+    }
+
+    /**
+     * Restaura o atuador a partir de um estado salvo. Valida antes de copiar os valores.
+     *
+     * @param e Estado a restaurar.
+     * @throws IllegalArgumentException Se o estado for inválido; nesse caso nada é alterado.
+     */
+    public void restaurarEstado(Estado e) {
+        validarEstado(e);
+        ciclosOperados = e.ciclosOperados();
+        travado = e.travado();
+        integridadeVedacao = e.integridadeVedacao();
     }
 }
