@@ -4,3 +4,6 @@ listas
 livros
 jogo-mc322
 Revisao
+build/
+.gradle/
+dados/
