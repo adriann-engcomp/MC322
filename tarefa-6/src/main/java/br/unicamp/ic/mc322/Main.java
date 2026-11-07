@@ -1,10 +1,10 @@
 package br.unicamp.ic.mc322;
 
-import br.unicamp.ic.mc322.model.Cenario;
 import br.unicamp.ic.mc322.model.LinhaDeProducao;
+import br.unicamp.ic.mc322.persistence.PersistenciaPlanta;
 import br.unicamp.ic.mc322.service.GerenciadorProducao;
-import br.unicamp.ic.mc322.service.InicializoFabrica;
 
+import java.nio.file.Path;
 import java.util.Scanner;
 
 /**
@@ -32,8 +32,9 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        Cenario cenario = MenuCenario.exibir(scanner);
-        GerenciadorProducao gerenciador = InicializoFabrica.inicializar(cenario);
+        PersistenciaPlanta persistencia = new PersistenciaPlanta(Path.of("dados", "planta.xml"));
+        GerenciadorProducao gerenciador = MenuPersistencia.inicializar(scanner, persistencia);
+
         boolean executando = true;
 
         while (executando) {
@@ -53,6 +54,8 @@ public class Main {
             System.out.println("5. Gerenciar estrategia");
             System.out.println("6. Auditoria");
             System.out.println("7. Linha de producao (Agrupador)");
+            System.out.println("8. Salvar estado da planta");
+            System.out.println("9. Carregar estado da planta");
             System.out.println("0. Sair");
             System.out.print("ESCOLHA: ");
 
@@ -83,12 +86,18 @@ public class Main {
                 case 7:
                     MenuLinhaProducao.exibir(scanner, gerenciador);
                     break;
+                case 8:
+                    MenuPersistencia.salvar(gerenciador, persistencia);
+                    break;
+                case 9:
+                    gerenciador = MenuPersistencia.carregar(gerenciador, persistencia);
+                    break;
                 case 0:
                     System.out.println("\nEncerrando o sistema da fábrica farmacêutica. Até logo!");
                     executando = false;
                     break;
                 default:
-                    System.out.println("Opção inválida! Escolha um número válido do menu principal (0 a 7).");
+                    System.out.println("Opção inválida! Escolha um número válido do menu principal (0 a 9).");
                     break;
             }
         }
