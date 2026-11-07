@@ -151,30 +151,25 @@ public class AtuadorValvula implements Auditavel {
     }
 
     /**
-     * Verifica se um estado pode ser aplicado a este atuador, sem alterar nada.
-     *
-     * @param e Estado a verificar.
-     * @throws IllegalArgumentException Se o estado for nulo, de outra configuração ou com valores inválidos.
-     */
-    void validarEstado(Estado e) {
-        Validacao.exigir(e != null, "O estado do atuador é obrigatório.");
-        Validacao.exigir(idAtuador == e.idAtuador()
-                && funcao.equals(e.funcao())
-                && pressaoTrabalhoBar == e.pressaoTrabalhoBar()
-                && ciclosMaximosSemManutencao == e.ciclosMaximosSemManutencao(),
-                "Configuração do atuador #" + e.idAtuador() + " incompatível com a máquina.");
-        Validacao.exigir(e.ciclosOperados() >= 0, "Os ciclos do atuador não podem ser negativos.");
-        Validacao.exigirIntervalo(e.integridadeVedacao(), 0.0, 100.0, "Integridade da vedação");
-    }
-
-    /**
      * Restaura o atuador a partir de um estado salvo. Valida antes de copiar os valores.
      *
      * @param e Estado a restaurar.
-     * @throws IllegalArgumentException Se o estado for inválido; nesse caso nada é alterado.
+     * @throws IllegalArgumentException Se o estado for nulo, de outra configuração ou com valores inválidos.
      */
     public void restaurarEstado(Estado e) {
-        validarEstado(e);
+        Validacao.exigir(e != null, "O estado do atuador é obrigatório.");
+
+        boolean mesmaConfiguracao = idAtuador == e.idAtuador()
+                && funcao.equals(e.funcao())
+                && pressaoTrabalhoBar == e.pressaoTrabalhoBar()
+                && ciclosMaximosSemManutencao == e.ciclosMaximosSemManutencao();
+        if (!mesmaConfiguracao) {
+            throw new IllegalArgumentException("Configuração do atuador #" + e.idAtuador() + " incompatível com a máquina.");
+        }
+
+        Validacao.exigir(e.ciclosOperados() >= 0, "Os ciclos do atuador não podem ser negativos.");
+        Validacao.exigirIntervalo(e.integridadeVedacao(), 0.0, 100.0, "Integridade da vedação");
+
         ciclosOperados = e.ciclosOperados();
         travado = e.travado();
         integridadeVedacao = e.integridadeVedacao();
