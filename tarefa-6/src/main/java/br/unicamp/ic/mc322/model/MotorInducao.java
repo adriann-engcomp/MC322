@@ -100,15 +100,80 @@ public class MotorInducao implements Auditavel {
         return 0.0;
     }
 
+    /**
+     * Indica se o motor precisa de manutenção.
+     *
+     * @return {@code true} se estiver sobreaquecido ou com desgaste de 60% ou mais.
+     */
     @Override
     public boolean precisaManutencao() {
         return sobreaquecido || desgasteMecanico >= 60.0;
     }
 
+    /**
+     * Gera o relatório de diagnóstico do motor.
+     *
+     * @return Texto com estado, temperatura e desgaste.
+     */
     @Override
     public String gerarRelatorioDiagnostico() {
         String estado = sobreaquecido ? "SOBREAQUECIDO" : (desgasteMecanico >= 60.0 ? "ALERTA DESGASTE" : "OPERACIONAL");
         return String.format("Motor de Indução [%s | %.1f HP, %d RPM] -> Estado: %s | Temp: %.1f°C (Máx: %.1f°C) | Desgaste: %.1f%%",
                 identificador, potenciaHP, rpm, estado, temperaturaAtual, temperaturaMaxima, desgasteMecanico);
+    }
+
+    /**
+     * Cópia imutável do estado do motor, usada para salvar e recuperar seus dados (padrão Memento).
+     *
+     * @param identificador     Identificação do motor.
+     * @param potenciaHP        Potência nominal (HP).
+     * @param rpm               Rotações por minuto.
+     * @param temperaturaMaxima Temperatura limite (°C).
+     * @param temperaturaAtual  Temperatura atual (°C).
+     * @param desgasteMecanico  Desgaste mecânico (0 a 100%).
+     * @param sobreaquecido     Se o motor está sobreaquecido.
+     */
+    public record Estado(String identificador, double potenciaHP, int rpm, double temperaturaMaxima,
+                         double temperaturaAtual, double desgasteMecanico, boolean sobreaquecido) {
+    }
+
+    /**
+     * Exporta o estado atual do motor.
+     *
+     * @return Cópia imutável do estado.
+     */
+    public Estado exportarEstado() {
+        return new Estado(identificador, potenciaHP, rpm, temperaturaMaxima,
+                temperaturaAtual, desgasteMecanico, sobreaquecido);
+    }
+
+    /**
+     * Verifica se um estado pode ser aplicado a este motor, sem alterar nada.
+     *
+     * @param e Estado a verificar.
+     * @throws IllegalArgumentException Se o estado for nulo, de outra configuração ou com valores inválidos.
+     */
+    void validarEstado(Estado e) {
+        Validacao.exigir(e != null, "O estado do motor é obrigatório.");
+        Validacao.exigir(identificador.equals(e.identificador())
+                && potenciaHP == e.potenciaHP()
+                && rpm == e.rpm()
+                && temperaturaMaxima == e.temperaturaMaxima(),
+                "Configuração do motor incompatível com a máquina.");
+        Validacao.exigirIntervalo(e.temperaturaAtual(), 25.0, 1000.0, "Temperatura do motor");
+        Validacao.exigirIntervalo(e.desgasteMecanico(), 0.0, 100.0, "Desgaste do motor");
+    }
+
+    /**
+     * Restaura o motor a partir de um estado salvo. Valida antes de copiar os valores.
+     *
+     * @param e Estado a restaurar.
+     * @throws IllegalArgumentException Se o estado for inválido; nesse caso nada é alterado.
+     */
+    public void restaurarEstado(Estado e) {
+        validarEstado(e);
+        temperaturaAtual = e.temperaturaAtual();
+        desgasteMecanico = e.desgasteMecanico();
+        sobreaquecido = e.sobreaquecido();
     }
 }
