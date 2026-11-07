@@ -5,6 +5,7 @@ import br.unicamp.ic.mc322.exception.MaquinaIndisponivelException;
 import br.unicamp.ic.mc322.exception.PlantaException;
 import br.unicamp.ic.mc322.exception.RecursoInsuficienteException;
 import br.unicamp.ic.mc322.model.Auditavel;
+import br.unicamp.ic.mc322.model.Cenario;
 import br.unicamp.ic.mc322.model.Demanda;
 import br.unicamp.ic.mc322.model.LinhaDeProducao;
 import br.unicamp.ic.mc322.model.Maquina;
@@ -38,6 +39,7 @@ public class GerenciadorProducao {
     private MateriaPrima materiaPrima;
     private double budget;
     private EstrategiaProducao estrategiaAtual;
+    private final Cenario cenario;
 
     /**
      * Construtor do gerenciador da fábrica farmacêutica com linha de produção informada.
@@ -46,9 +48,11 @@ public class GerenciadorProducao {
      * @param budgetInicial     Valor inicial do orçamento financeiro (em R$).
      * @param estrategiaInicial Estratégia inicial adotada para seleção de demandas.
      * @param linhaDeProducao   Agrupador de máquinas da esteira produtiva.
+     * @param cenario           Cenário de operação da planta.
      */
     public GerenciadorProducao(MateriaPrima materiaPrima, double budgetInicial,
-        EstrategiaProducao estrategiaInicial, LinhaDeProducao linhaDeProducao) {
+        EstrategiaProducao estrategiaInicial, LinhaDeProducao linhaDeProducao, Cenario cenario) {
+        this.cenario = cenario;
         this.demandas = new ArrayList<>();
         this.produtosFabricados = new ArrayList<>();
         this.linhaDeProducao = (linhaDeProducao != null) ? linhaDeProducao : new LinhaDeProducao("LINHA-01", "Linha Farmacêutica Geral");
@@ -66,7 +70,9 @@ public class GerenciadorProducao {
      */
     public GerenciadorProducao(MateriaPrima materiaPrima, double budgetInicial,
         EstrategiaProducao estrategiaInicial) {
-        this(materiaPrima, budgetInicial, estrategiaInicial, new LinhaDeProducao("LINHA-01", "Linha Farmacêutica Principal"));
+        this(materiaPrima, budgetInicial, estrategiaInicial, 
+            new LinhaDeProducao("LINHA-01", "Linha Farmacêutica Principal"),
+            Cenario.FABRICA_NORMAL);
     }
 
     /**
@@ -479,5 +485,14 @@ public class GerenciadorProducao {
      */
     public void setBudget(double budget) {
         this.budget = budget;
+    }
+
+    /**
+     * Obtém o cenário de operação da planta.
+     *
+     * @return Cenário da planta.
+     */
+    public Cenario getCenario() {
+        return cenario;
     }
 }
