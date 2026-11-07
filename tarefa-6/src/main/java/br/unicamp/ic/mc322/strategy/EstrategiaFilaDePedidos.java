@@ -14,6 +14,13 @@ import java.util.List;
  * @author Adriann e Alexsandro
  */
 public class EstrategiaFilaDePedidos implements EstrategiaProducao {
+
+    /**
+     * Cria a estratégia.
+     */
+    public EstrategiaFilaDePedidos() {
+    }
+
     /**
      * Seleciona a demanda elegível com o menor identificador sequencial (pedido mais antigo).
      *

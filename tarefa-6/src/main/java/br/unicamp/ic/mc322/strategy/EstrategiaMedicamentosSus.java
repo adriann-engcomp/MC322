@@ -15,6 +15,13 @@ import java.util.List;
  * @author Adriann e Alexsandro
  */
 public class EstrategiaMedicamentosSus implements EstrategiaProducao {
+
+    /**
+     * Cria a estratégia.
+     */
+    public EstrategiaMedicamentosSus() {
+    }
+
     /**
      * Seleciona a maior demanda elegível cujo custo de operação não exceda o orçamento disponível.
      *
