@@ -508,14 +508,14 @@ public abstract class Maquina implements Auditavel {
         Validacao.exigir(e.atuadores() != null && e.atuadores().size() == atuadores.size(),
                 "A máquina '" + nome + "' tem " + atuadores.size() + " atuadores, mas o estado não corresponde.");
 
-        // 2. Valida as partes
-        motor.validarEstado(e.motor());
-        sensorCalibracao.validarEstado(e.sensor());
+        // 2. Restaura as partes (cada uma valida os próprios dados)
+        motor.restaurarEstado(e.motor());
+        sensorCalibracao.restaurarEstado(e.sensor());
         for (int i = 0; i < atuadores.size(); i++) {
-            atuadores.get(i).validarEstado(e.atuadores().get(i));
+            atuadores.get(i).restaurarEstado(e.atuadores().get(i));
         }
 
-        // 3. Tudo válido: copia os valores
+        // 3. Copia os valores da máquina
         status = e.status();
         capacidadeMaxima = e.capacidadeMaxima();
         probabilidadeFalha = e.probabilidadeFalha();
@@ -523,10 +523,5 @@ public abstract class Maquina implements Auditavel {
         saude = e.saude();
         saudeMinima = e.saudeMinima();
         historicoDeFalhas = e.historicoDeFalhas();
-        motor.restaurarEstado(e.motor());
-        sensorCalibracao.restaurarEstado(e.sensor());
-        for (int i = 0; i < atuadores.size(); i++) {
-            atuadores.get(i).restaurarEstado(e.atuadores().get(i));
-        }
     }
 }
