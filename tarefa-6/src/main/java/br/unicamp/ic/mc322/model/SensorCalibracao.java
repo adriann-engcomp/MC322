@@ -141,28 +141,23 @@ public class SensorCalibracao implements Auditavel {
     }
 
     /**
-     * Verifica se um estado pode ser aplicado a este sensor, sem alterar nada.
-     *
-     * @param e Estado a verificar.
-     * @throws IllegalArgumentException Se o estado for nulo, de outra configuração ou com valores inválidos.
-     */
-    void validarEstado(Estado e) {
-        Validacao.exigir(e != null, "O estado do sensor é obrigatório.");
-        Validacao.exigir(tipoParametro.equals(e.tipoParametro())
-                && limiarMinimoPrecisao == e.limiarMinimoPrecisao(),
-                "Configuração do sensor incompatível com a máquina.");
-        Validacao.exigirIntervalo(e.precisaoAtual(), 50.0, 100.0, "Precisão do sensor");
-        Validacao.exigir(e.leiturasRealizadas() >= 0, "As leituras do sensor não podem ser negativas.");
-    }
-
-    /**
      * Restaura o sensor a partir de um estado salvo. Valida antes de copiar os valores.
      *
      * @param e Estado a restaurar.
-     * @throws IllegalArgumentException Se o estado for inválido; nesse caso nada é alterado.
+     * @throws IllegalArgumentException Se o estado for nulo, de outra configuração ou com valores inválidos.
      */
     public void restaurarEstado(Estado e) {
-        validarEstado(e);
+        Validacao.exigir(e != null, "O estado do sensor é obrigatório.");
+
+        boolean mesmaConfiguracao = tipoParametro.equals(e.tipoParametro())
+                && limiarMinimoPrecisao == e.limiarMinimoPrecisao();
+        if (!mesmaConfiguracao) {
+            throw new IllegalArgumentException("Configuração do sensor incompatível com a máquina.");
+        }
+
+        Validacao.exigirIntervalo(e.precisaoAtual(), 50.0, 100.0, "Precisão do sensor");
+        Validacao.exigir(e.leiturasRealizadas() >= 0, "As leituras do sensor não podem ser negativas.");
+
         precisaoAtual = e.precisaoAtual();
         calibrado = e.calibrado();
         leiturasRealizadas = e.leiturasRealizadas();
