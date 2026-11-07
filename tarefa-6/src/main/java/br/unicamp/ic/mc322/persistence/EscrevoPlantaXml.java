@@ -18,9 +18,9 @@ import org.w3c.dom.Element;
  *
  * @author Adriann e Alexsandro
  */
-final class EscritorPlantaXml {
+final class EscrevoPlantaXml {
 
-    private EscritorPlantaXml() {
+    private EscrevoPlantaXml() {
     }
 
     /**
