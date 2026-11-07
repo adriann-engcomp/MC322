@@ -87,11 +87,21 @@ public class SensorCalibracao implements Auditavel {
         return 0.0;
     }
 
+    /**
+     * Indica se o sensor precisa de manutenção.
+     *
+     * @return {@code true} se estiver descalibrado ou com precisão abaixo do limiar.
+     */
     @Override
     public boolean precisaManutencao() {
         return !calibrado || precisaoAtual < limiarMinimoPrecisao;
     }
 
+    /**
+     * Gera o relatório de diagnóstico do sensor.
+     *
+     * @return Texto com calibração, precisão e número de leituras.
+     */
     @Override
     public String gerarRelatorioDiagnostico() {
         String statusCalibracao = calibrado ? "CALIBRADO (CONFORME RDC 658)" : "DESCALIBRADO (INCONFORME)";
@@ -106,5 +116,55 @@ public class SensorCalibracao implements Auditavel {
      */
     public boolean estaCalibrado() {
         return calibrado;
+    }
+
+    /**
+     * Cópia imutável do estado do sensor, usada para salvar e recuperar seus dados (padrão Memento).
+     *
+     * @param tipoParametro        Parâmetro monitorado.
+     * @param limiarMinimoPrecisao Precisão mínima aceitável.
+     * @param precisaoAtual        Precisão atual (50 a 100%).
+     * @param calibrado            Se o sensor está calibrado.
+     * @param leiturasRealizadas   Quantidade de leituras feitas.
+     */
+    public record Estado(String tipoParametro, double limiarMinimoPrecisao,
+                         double precisaoAtual, boolean calibrado, int leiturasRealizadas) {
+    }
+
+    /**
+     * Exporta o estado atual do sensor.
+     *
+     * @return Cópia imutável do estado.
+     */
+    public Estado exportarEstado() {
+        return new Estado(tipoParametro, limiarMinimoPrecisao, precisaoAtual, calibrado, leiturasRealizadas);
+    }
+
+    /**
+     * Verifica se um estado pode ser aplicado a este sensor, sem alterar nada.
+     *
+     * @param e Estado a verificar.
+     * @throws IllegalArgumentException Se o estado for nulo, de outra configuração ou com valores inválidos.
+     */
+    void validarEstado(Estado e) {
+        Validacao.exigir(e != null, "O estado do sensor é obrigatório.");
+        Validacao.exigir(tipoParametro.equals(e.tipoParametro())
+                && limiarMinimoPrecisao == e.limiarMinimoPrecisao(),
+                "Configuração do sensor incompatível com a máquina.");
+        Validacao.exigirIntervalo(e.precisaoAtual(), 50.0, 100.0, "Precisão do sensor");
+        Validacao.exigir(e.leiturasRealizadas() >= 0, "As leituras do sensor não podem ser negativas.");
+    }
+
+    /**
+     * Restaura o sensor a partir de um estado salvo. Valida antes de copiar os valores.
+     *
+     * @param e Estado a restaurar.
+     * @throws IllegalArgumentException Se o estado for inválido; nesse caso nada é alterado.
+     */
+    public void restaurarEstado(Estado e) {
+        validarEstado(e);
+        precisaoAtual = e.precisaoAtual();
+        calibrado = e.calibrado();
+        leiturasRealizadas = e.leiturasRealizadas();
     }
 }
