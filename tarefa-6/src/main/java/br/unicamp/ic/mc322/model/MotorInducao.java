@@ -147,31 +147,26 @@ public class MotorInducao implements Auditavel {
                 temperaturaAtual, desgasteMecanico, sobreaquecido);
     }
 
-    /**
-     * Verifica se um estado pode ser aplicado a este motor, sem alterar nada.
-     *
-     * @param e Estado a verificar.
-     * @throws IllegalArgumentException Se o estado for nulo, de outra configuração ou com valores inválidos.
-     */
-    void validarEstado(Estado e) {
-        Validacao.exigir(e != null, "O estado do motor é obrigatório.");
-        Validacao.exigir(identificador.equals(e.identificador())
-                && potenciaHP == e.potenciaHP()
-                && rpm == e.rpm()
-                && temperaturaMaxima == e.temperaturaMaxima(),
-                "Configuração do motor incompatível com a máquina.");
-        Validacao.exigirIntervalo(e.temperaturaAtual(), 25.0, 1000.0, "Temperatura do motor");
-        Validacao.exigirIntervalo(e.desgasteMecanico(), 0.0, 100.0, "Desgaste do motor");
-    }
-
-    /**
+        /**
      * Restaura o motor a partir de um estado salvo. Valida antes de copiar os valores.
      *
      * @param e Estado a restaurar.
-     * @throws IllegalArgumentException Se o estado for inválido; nesse caso nada é alterado.
+     * @throws IllegalArgumentException Se o estado for nulo, de outra configuração ou com valores inválidos.
      */
     public void restaurarEstado(Estado e) {
-        validarEstado(e);
+        Validacao.exigir(e != null, "O estado do motor é obrigatório.");
+
+        boolean mesmaConfiguracao = identificador.equals(e.identificador())
+                && potenciaHP == e.potenciaHP()
+                && rpm == e.rpm()
+                && temperaturaMaxima == e.temperaturaMaxima();
+        if (!mesmaConfiguracao) {
+            throw new IllegalArgumentException("Configuração do motor incompatível com a máquina.");
+        }
+
+        Validacao.exigirIntervalo(e.temperaturaAtual(), 25.0, 1000.0, "Temperatura do motor");
+        Validacao.exigirIntervalo(e.desgasteMecanico(), 0.0, 100.0, "Desgaste do motor");
+
         temperaturaAtual = e.temperaturaAtual();
         desgasteMecanico = e.desgasteMecanico();
         sobreaquecido = e.sobreaquecido();
