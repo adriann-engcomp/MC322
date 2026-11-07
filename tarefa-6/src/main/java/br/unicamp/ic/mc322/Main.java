@@ -1,5 +1,14 @@
 package br.unicamp.ic.mc322;
 
+import br.unicamp.ic.mc322.menu.LeitorDeOpcoes;
+import br.unicamp.ic.mc322.menu.MenuAuditoria;
+import br.unicamp.ic.mc322.menu.MenuConsultar;
+import br.unicamp.ic.mc322.menu.MenuDemandas;
+import br.unicamp.ic.mc322.menu.MenuEstrategias;
+import br.unicamp.ic.mc322.menu.MenuFabricacao;
+import br.unicamp.ic.mc322.menu.MenuLinhaProducao;
+import br.unicamp.ic.mc322.menu.MenuMateriaPrima;
+import br.unicamp.ic.mc322.menu.MenuPersistencia;
 import br.unicamp.ic.mc322.model.LinhaDeProducao;
 import br.unicamp.ic.mc322.persistence.PersistenciaPlanta;
 import br.unicamp.ic.mc322.service.GerenciadorProducao;

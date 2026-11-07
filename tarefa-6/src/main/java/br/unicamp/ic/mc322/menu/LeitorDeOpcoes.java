@@ -1,4 +1,4 @@
-package br.unicamp.ic.mc322;
+package br.unicamp.ic.mc322.menu;
 
 import java.util.Scanner;
 

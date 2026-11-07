@@ -1,4 +1,4 @@
-package br.unicamp.ic.mc322;
+package br.unicamp.ic.mc322.menu;
 
 import br.unicamp.ic.mc322.exception.PersistenciaException;
 import br.unicamp.ic.mc322.model.Cenario;

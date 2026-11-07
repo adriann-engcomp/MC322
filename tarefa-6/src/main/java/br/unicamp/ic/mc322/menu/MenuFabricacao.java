@@ -1,4 +1,4 @@
-package br.unicamp.ic.mc322;
+package br.unicamp.ic.mc322.menu;
 
 import br.unicamp.ic.mc322.exception.DemandaInvalidaException;
 import br.unicamp.ic.mc322.exception.MaquinaIndisponivelException;
