@@ -4,7 +4,6 @@ import br.unicamp.ic.mc322.exception.DemandaInvalidaException;
 import br.unicamp.ic.mc322.exception.MaquinaIndisponivelException;
 import br.unicamp.ic.mc322.exception.PlantaException;
 import br.unicamp.ic.mc322.exception.RecursoInsuficienteException;
-import br.unicamp.ic.mc322.model.Demanda;
 import br.unicamp.ic.mc322.service.GerenciadorProducao;
 
 import  java.util.Scanner;

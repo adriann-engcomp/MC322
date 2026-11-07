@@ -1,6 +1,5 @@
 package br.unicamp.ic.mc322;
 
-import br.unicamp.ic.mc322.model.Demanda;
 import br.unicamp.ic.mc322.service.GerenciadorProducao;
 import br.unicamp.ic.mc322.strategy.EstrategiaFilaDePedidos;
 import br.unicamp.ic.mc322.strategy.EstrategiaMedicamentosSus;
