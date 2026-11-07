@@ -1,7 +1,6 @@
 package br.unicamp.ic.mc322.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -443,6 +442,91 @@ public abstract class Maquina implements Auditavel {
     public void setSaudeMinima(double saudeMinima) {
         if (saudeMinima >= 0 && saudeMinima <= SAUDE_MAX) {
             this.saudeMinima = saudeMinima;
+        }
+    }
+
+    /**
+     * Cópia imutável do estado da máquina e de suas partes (padrão Memento).
+     * A persistência recebe só valores, nunca as partes internas, preservando a Lei de Deméter.
+     *
+     * @param nome               Nome da máquina.
+     * @param status             Status operacional.
+     * @param capacidadeMaxima   Capacidade máxima de processamento.
+     * @param probabilidadeFalha Probabilidade base de falha.
+     * @param custoOperacao      Custo operacional por unidade.
+     * @param saude              Saúde atual (0 a 100).
+     * @param saudeMinima        Saúde mínima antes do alerta de manutenção.
+     * @param historicoDeFalhas  Total de falhas acumuladas.
+     * @param motor              Estado do motor.
+     * @param sensor             Estado do sensor.
+     * @param atuadores          Estados dos atuadores, na ordem de instalação.
+     */
+    public record Estado(String nome, StatusMaquina status, int capacidadeMaxima, double probabilidadeFalha,
+                        double custoOperacao, double saude, double saudeMinima, int historicoDeFalhas,
+                        MotorInducao.Estado motor, SensorCalibracao.Estado sensor,
+                        List<AtuadorValvula.Estado> atuadores) {
+    }
+
+    /**
+     * Exporta o estado da máquina e, em cascata, o de suas partes.
+     *
+     * @return Cópia imutável do estado.
+     */
+    public Estado exportarEstado() {
+        List<AtuadorValvula.Estado> estadosAtuadores = new ArrayList<>();
+        for (AtuadorValvula atuador : atuadores) {
+            estadosAtuadores.add(atuador.exportarEstado());
+        }
+        return new Estado(nome, status, capacidadeMaxima, probabilidadeFalha, custoOperacao,
+                saude, saudeMinima, historicoDeFalhas,
+                motor.exportarEstado(), sensorCalibracao.exportarEstado(), List.copyOf(estadosAtuadores));
+    }
+
+    /**
+     * Restaura a máquina e suas partes a partir de um estado salvo.
+     * Valida tudo antes de copiar: se algo for inválido, nada é alterado.
+     *
+     * @param e Estado a restaurar.
+     * @throws IllegalArgumentException Se o estado violar alguma regra da máquina ou de suas partes.
+     */
+    public void restaurarEstado(Estado e) {
+        // 1. Valida os dados da máquina
+        Validacao.exigir(e != null, "O estado da máquina é obrigatório.");
+        Validacao.exigir(nome.equals(e.nome()), "O estado pertence à máquina '" + e.nome() + "', não a '" + nome + "'.");
+        Validacao.exigir(e.status() != null, "O status da máquina '" + nome + "' é obrigatório.");
+        Validacao.exigir(e.capacidadeMaxima() > 0, "A capacidade da máquina '" + nome + "' deve ser positiva.");
+        Validacao.exigirIntervalo(e.probabilidadeFalha(), 0.0, 1.0, "Probabilidade de falha da máquina '" + nome + "'");
+        Validacao.exigirNaoNegativo(e.custoOperacao(), "Custo de operação da máquina '" + nome + "'");
+        Validacao.exigirIntervalo(e.saude(), 0.0, SAUDE_MAX, "Saúde da máquina '" + nome + "'");
+        Validacao.exigirIntervalo(e.saudeMinima(), 0.0, SAUDE_MAX, "Saúde mínima da máquina '" + nome + "'");
+        Validacao.exigir(e.historicoDeFalhas() >= 0, "O histórico de falhas da máquina '" + nome + "' não pode ser negativo.");
+        if (e.status() == StatusMaquina.QUEBRADA) {
+            Validacao.exigir(e.saude() == 0.0, "Máquina '" + nome + "' está QUEBRADA, mas tem saúde " + e.saude() + ".");
+        } else {
+            Validacao.exigir(e.saude() > 0.0, "Máquina '" + nome + "' tem saúde 0, mas não está QUEBRADA.");
+        }
+        Validacao.exigir(e.atuadores() != null && e.atuadores().size() == atuadores.size(),
+                "A máquina '" + nome + "' tem " + atuadores.size() + " atuadores, mas o estado não corresponde.");
+
+        // 2. Valida as partes
+        motor.validarEstado(e.motor());
+        sensorCalibracao.validarEstado(e.sensor());
+        for (int i = 0; i < atuadores.size(); i++) {
+            atuadores.get(i).validarEstado(e.atuadores().get(i));
+        }
+
+        // 3. Tudo válido: copia os valores
+        status = e.status();
+        capacidadeMaxima = e.capacidadeMaxima();
+        probabilidadeFalha = e.probabilidadeFalha();
+        custoOperacao = e.custoOperacao();
+        saude = e.saude();
+        saudeMinima = e.saudeMinima();
+        historicoDeFalhas = e.historicoDeFalhas();
+        motor.restaurarEstado(e.motor());
+        sensorCalibracao.restaurarEstado(e.sensor());
+        for (int i = 0; i < atuadores.size(); i++) {
+            atuadores.get(i).restaurarEstado(e.atuadores().get(i));
         }
     }
 }
