@@ -25,8 +25,11 @@ public class MateriaPrima {
      * @param quantidade      Quantidade inicial em estoque.
      * @param unidade         Unidade de medida (ex.: "kg", "g", "L").
      * @param custoPorUnidade Custo monetário de compra por unidade de medida (em R$).
+     * @throws IllegalArgumentException Se a quantidade ou o custo forem negativos.
      */
     public MateriaPrima(int id, String nome, double quantidade, String unidade, double custoPorUnidade) {
+        Validacao.exigirNaoNegativo(quantidade, "A quantidade em estoque");
+        Validacao.exigirNaoNegativo(custoPorUnidade, "O custo por unidade");
         this.id = id;
         this.nome = nome;
         this.quantidade = quantidade;
