@@ -1,43 +1,16 @@
 
-# Fábrica de Medicamentos — Tarefa 6 (MC322)
+# Fábrica de Medicamentos — MC322
 
 Dupla: Adriann e Alexsandro
 
-Simulação de uma fábrica de medicamentos: estoque de insumo, linha de produção com três máquinas
-(reator, embaladora e espectrômetro), cada uma composta por motor, sensor e atuadores, demandas com
-status, estratégias de produção e orçamento.
+Simulação, em Java orientado a objetos, de uma fábrica de medicamentos. A matéria-prima chega,
+é conferida, passa por uma linha de produção (reator, embaladora e espectrômetro de inspeção) e vira
+medicamentos aprovados ou rejeitados, sempre dentro de um orçamento. O projeto foi construído ao longo
+de seis tarefas; cada uma acrescentou conceitos sobre a anterior.
 
-Na Tarefa 6 a planta passou a **salvar e carregar seu estado em XML**, ganhou **testes automatizados
-com JUnit 5** e foi organizada em **pacotes**.
-
-## Funcionalidades
-
-| Menu                      | O que faz                                                                                                  |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| 1. Demandas               | cadastra, lista e atualiza pedidos de medicamentos (controlado, contínuo ou genérico)                    |
-| 2. Fabricação           | fabrica a próxima demanda pela estratégia ativa ou uma demanda escolhida, consumindo insumo e orçamento |
-| 3. Consultar              | mostra o armazém e o estoque de matéria-prima                                                            |
-| 4. Comprar matéria-prima | abastece o estoque, debitando o orçamento                                                                 |
-| 5. Gerenciar estratégia  | troca a regra de escolha da próxima demanda: fila de pedidos, pandemia ou SUS                             |
-| 6. Auditoria              | relatório da linha, das máquinas e de suas partes, e reparo das máquinas                                |
-| 7. Linha de produção    | estado da esteira e das partes de cada máquina; liga e desliga a linha                                    |
-| 8. Salvar / 9. Carregar   | salva e carrega o estado da planta em XML                                                                  |
-
-Ao iniciar, o programa pede o cenário (fábrica normal ou pandemia), que define orçamento, estoque e
-desgaste das máquinas. Se houver estado salvo, ele é carregado no lugar disso.
-
-## Evolução do projeto
-
-| Tarefa | O que foi acrescentado                                                                                                                               |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1      | matéria-prima com conferência de estoque e consumo                                                                                                 |
-| 2      | herança em `Produto` (três tipos de medicamento) e em `Maquina` (três máquinas); `GerenciadorProducao` com demandas, armazém e orçamento |
-| 3      | padrão Strategy para escolher a próxima demanda; enums de status, tipo de medicamento e cenário; interface `Auditavel`                          |
-| 4      | Gradle, Javadoc e exceções da planta (`PlantaException` e subclasses)                                                                            |
-| 5      | composição (máquina com motor, sensor e atuadores) e agregação (`LinhaDeProducao`), com Lei de Deméter                                       |
-| 6      | persistência em XML, testes JUnit 5 e organização em pacotes                                                                                      |
-
-A explicação de cada etapa, com as referências, está em `justificativa.txt`.
+Escolhemos o tema porque um dos integrantes faz iniciação científica com computação aplicada à saúde,
+e porque a indústria farmacêutica exige precisão, rastreabilidade e controle de qualidade, seguindo as
+Boas Práticas de Fabricação da Anvisa (RDC 658/2022).
 
 ## Como executar
 
@@ -52,11 +25,100 @@ Requisito: JDK 21 (o Gradle baixa automaticamente, se for preciso).
 O relatório dos testes fica em `build/reports/tests/test/index.html`.
 A pasta `build/` não é versionada: ela é gerada pelo `./gradlew build`.
 
+## Funcionalidades
+
+| Menu                      | O que faz                                                                               |
+| ------------------------- | --------------------------------------------------------------------------------------- |
+| 1. Demandas               | cadastra, lista e atualiza pedidos de medicamentos (controlado, contínuo ou genérico) |
+| 2. Fabricação           | fabrica a próxima demanda pela estratégia ativa ou uma demanda escolhida              |
+| 3. Consultar              | mostra o armazém e o estoque de matéria-prima                                         |
+| 4. Comprar matéria-prima | abastece o estoque, debitando o orçamento                                              |
+| 5. Gerenciar estratégia  | troca a regra de escolha da próxima demanda                                            |
+| 6. Auditoria              | relatório da linha, das máquinas e de suas partes; reparo das máquinas               |
+| 7. Linha de produção    | estado da esteira e das partes de cada máquina; liga e desliga a linha                 |
+| 8. Salvar / 9. Carregar   | salva e carrega o estado da planta em XML                                               |
+
+Ao iniciar, o programa carrega o estado salvo, se houver. Se não houver, pede o cenário
+(fábrica normal ou pandemia), que define orçamento, estoque e desgaste das máquinas.
+
+## Síntese das tarefas
+
+### Tarefa 1 — Matéria-prima
+
+A matéria-prima chega com id, nome, quantidade e unidade, como na tabela que o operador confere antes de
+liberar o caminhão. `MateriaPrima` verifica se há estoque (`verificarDisponibilidade`) e o consome
+(`consumir`): se a demanda for maior que o estoque, a produção não começa.
+
+### Tarefa 2 — Herança, produção e orçamento
+
+- **Produtos:** classe abstrata `Produto` com três tipos de medicamento. Quanto mais exigente o
+  medicamento, maior o consumo de insumo e mais rigorosa a inspeção:
+
+  | Tipo       | Exemplo   | Qualidade exigida | Insumo por unidade | Tempo por unidade |
+  | ---------- | --------- | ----------------- | ------------------ | ----------------- |
+  | Controlado | Ritalina  | 0,9               | 3 kg               | 10 min            |
+  | Contínuo  | Losartana | 0,7               | 2 kg               | 6 min             |
+  | Genérico  | Dipirona  | 0,5               | 1 kg               | 5 min             |
+- **Máquinas:** classe abstrata `Maquina`, percorrida em ordem na esteira:
+
+  - **Processamento** (R$ 1,50 por unidade): a mistura pode sair irregular e aumentar a falha do produto;
+  - **Embalagem** (R$ 1,00): a selagem pode falhar;
+  - **Inspeção** (R$ 2,00): aprova ou rejeita; se ela mesma falhar, inverte a decisão.
+- **Gerente:** `GerenciadorProducao` confere insumo e orçamento antes de produzir, consome, liga as
+  máquinas, fabrica unidade por unidade e guarda tudo no armazém. O orçamento só cai na compra de
+  insumo (R$ 10/kg) e no uso das máquinas (R$ 4,50 por unidade).
+
+### Tarefa 3 — Strategy, enums e auditoria
+
+- **Strategy:** a fábrica escolhe a próxima demanda por uma regra trocável:
+  - **Fila de Pedidos:** quem pediu primeiro;
+  - **Pandemia:** o maior pedido;
+  - **SUS:** o maior pedido que cabe no orçamento.
+- **Enums:**
+  - `StatusDemanda`, que sabe quais transições valem: pendente → em produção → concluída, e cancelada não volta;
+  - `StatusProduto` e `StatusMaquina`;
+  - `TipoMedicamento`, que cria o produto certo (Factory Method);
+  - `Cenario`: normal ou pandemia.
+- **Auditoria:** a interface `Auditavel` (`gerarRelatorioDiagnostico`, `precisaManutencao`) permite
+  auditar máquinas e produtos juntos.
+
+### Tarefa 4 — Gradle, Javadoc e exceções
+
+- **Gradle:** o projeto passou a ser compilado e executado pelo Gradle (Wrapper incluso).
+- **Javadoc:** todas as classes públicas foram documentadas.
+- **Exceções:** foram criadas exceções da planta, com `PlantaException` como base e três especializações:
+
+  - `DemandaInvalidaException`: pedido inexistente, em status incompatível ou com quantidade inválida;
+  - `MaquinaIndisponivelException`: máquina quebrada na linha;
+  - `RecursoInsuficienteException`: insumo ou orçamento insuficiente.
+
+  As operações validam tudo antes de mudar o estado: se faltar algo, nada é alterado.
+
+### Tarefa 5 — Composição, agregação e Lei de Deméter
+
+- **Composição:** cada `Maquina` cria suas partes no próprio construtor e controla o ciclo de vida delas:
+
+  - `MotorInducao` (1:1): aquece e se desgasta;
+  - `SensorCalibracao` (1:1): perde a calibração com o uso;
+  - `AtuadorValvula` (1:N, dois por máquina): pode travar.
+
+  O estado das partes aumenta a chance de falha da máquina, e `reparar()` revisa todas elas.
+- **Agregação:** `LinhaDeProducao` agrupa as máquinas da esteira e devolve uma lista que não pode ser
+  alterada por fora.
+- **Lei de Deméter:** a máquina não expõe suas partes; oferece métodos como `verificaMotorOperacional()`.
+- **Auditoria em cascata:** linha → máquinas → partes.
+
+### Tarefa 6 — Persistência, testes e pacotes
+
+- **Pacotes:** o código saiu do pacote padrão e foi organizado em pacotes (ver Estrutura).
+- **Persistência:** a planta salva e carrega seu estado em XML (ver Persistência).
+- **Testes:** 28 testes JUnit 5, executados pelo Gradle (ver Suíte de testes).
+
 ## Estrutura
 
 ```
 src/main/java/br/unicamp/ic/mc322/
-├── model/        entidades e componentes (máquinas e suas partes, demanda, matéria-prima...)
+├── model/        entidades e componentes (máquinas e suas partes, demanda, produto, matéria-prima, enums)
 ├── service/      GerenciadorProducao e InicializoFabrica
 ├── strategy/     estratégias de produção (padrão Strategy)
 ├── persistence/  leitura e escrita do XML
@@ -68,12 +130,14 @@ src/test/java/br/unicamp/ic/mc322/   testes JUnit 5
 
 ## Persistência
 
-- O estado é salvo em `dados/planta.xml` (menu **8. Salvar estado da planta**). Salvar de novo atualiza o arquivo.
-- **9. Carregar estado da planta** substitui a planta em uso pela do arquivo. Se o carregamento falhar,
-  a planta em uso continua igual.
-- Ao abrir o programa: se existe estado salvo, ele é carregado; se não existe, a planta começa com
-  os dados padrão do cenário escolhido. Se o arquivo estiver com problema, o erro é mostrado,
-  o arquivo não é alterado e a planta começa com os dados padrão.
+- O estado é salvo em `dados/planta.xml` (menu **8**). Salvar de novo atualiza o arquivo.
+- O menu **9** substitui a planta em uso pela do arquivo. Se o carregamento falhar, a planta em uso
+  continua igual.
+- Ao abrir o programa:
+  - se existe estado salvo, ele é carregado;
+  - se não existe, a planta começa com os dados padrão do cenário escolhido;
+  - se o arquivo estiver com problema, o erro é mostrado, o arquivo não é alterado e a planta começa
+    com os dados padrão.
 
 ### Formato do arquivo (resumido)
 
@@ -106,9 +170,9 @@ A hierarquia segue o domínio: a planta tem a linha, a linha tem as máquinas e 
 | `LeitorPlantaXml`    | monta uma planta nova a partir do XML   |
 
 As classes do domínio não sabem nada de arquivos. Para salvar o estado interno da máquina sem expor
-suas partes, a `Maquina`, o `MotorInducao`, o `SensorCalibracao` e o `AtuadorValvula` exportam e
-restauram um `record Estado` (padrão Memento). Ao carregar, cada máquina é criada pelo próprio
-construtor, que cria as partes, e depois recebe os valores salvos.
+suas partes (Tarefa 5), a `Maquina`, o `MotorInducao`, o `SensorCalibracao` e o `AtuadorValvula`
+exportam e restauram um `record Estado` (padrão Memento). Ao carregar, cada máquina é criada pelo
+próprio construtor, que cria as partes, e depois recebe os valores salvos.
 
 ### Falhas tratadas (`PersistenciaException.Motivo`)
 
@@ -164,11 +228,13 @@ temporária apagada ao final, e nunca tocam em `dados/planta.xml`. Nenhum teste 
 
 ## Referências
 
-- GAMMA, E. et al. *Design Patterns*. Addison-Wesley, 1995. (Memento, Strategy, Factory Method)
+A justificativa completa de cada tarefa, com todas as referências, está em `justificativa.txt`.
+
+- AGÊNCIA NACIONAL DE VIGILÂNCIA SANITÁRIA. *RDC nº 658/2022* (Boas Práticas de Fabricação de Medicamentos).
+- GAMMA, E. et al. *Design Patterns*. Addison-Wesley, 1995. (Strategy, Factory Method, Memento)
 - FOWLER, M. *Patterns of Enterprise Application Architecture*. Addison-Wesley, 2002. (Data Mapper)
-- BLOCH, J. *Effective Java*. 3. ed. Addison-Wesley, 2018. (Itens 1, 17, 34, 49, 72 e 73)
+- BLOCH, J. *Effective Java*. 3. ed. Addison-Wesley, 2018.
 - MARTIN, R. C. *Clean Architecture*. Prentice Hall, 2017. (Princípio da Responsabilidade Única)
 - MESZAROS, G. *xUnit Test Patterns*. Addison-Wesley, 2007. (Fresh Fixture)
 - JUNIT TEAM. *JUnit 5 User Guide*. https://junit.org/junit5/docs/current/user-guide/
 - ORACLE. *Java API for XML Processing (JAXP)*. Documentação do Java SE 21.
-- AGÊNCIA NACIONAL DE VIGILÂNCIA SANITÁRIA. *RDC nº 658/2022* (Boas Práticas de Fabricação de Medicamentos).
