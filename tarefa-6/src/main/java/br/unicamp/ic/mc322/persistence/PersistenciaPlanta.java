@@ -67,7 +67,7 @@ public class PersistenciaPlanta {
      */
     public void salvar(GerenciadorProducao planta) {
         try {
-            Document doc = EscritorPlantaXml.escrever(planta);
+            Document doc = EscrevoPlantaXml.escrever(planta);
 
             Files.createDirectories(arquivo.toAbsolutePath().getParent());
 

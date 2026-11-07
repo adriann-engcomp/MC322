@@ -41,7 +41,7 @@ public class Main {
             System.out.println("\n==============================================================");
             System.out.println("       FÁBRICA DE MEDICAMENTOS - Crescendo para te ajudar!!!");
             System.out.printf(" ESTRATÉGIA ATUAL: [%s]\n", gerenciador.getEstrategiaAtual().getNomeEstrategia());
-            System.out.printf(" CENÁRIO ATIVO:    [%s]\n", cenario.getNome());
+            System.out.printf(" CENÁRIO ATIVO:    [%s]\n", gerenciador.getCenario().getNome());
             System.out.printf(" BUDGET ATUAL:     R$ %.2f\n", gerenciador.getBudget());
             System.out.printf(" LINHA FABRIL:     [%s] %s\n", gerenciador.getLinhaDeProducao().getIdLinha(), gerenciador.getLinhaDeProducao().getNome());
             System.out.println("==============================================================");
