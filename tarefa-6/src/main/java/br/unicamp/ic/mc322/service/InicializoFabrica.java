@@ -57,8 +57,11 @@ public class InicializoFabrica {
         linhaDeProducao.adicionarMaquina(maquinaInspecao);
 
         // 5. Instancia o Gerenciador de Produção com a Linha de Produção
+        double orcamentoInicial = cenario.getBudgetInicial();
+        EstrategiaFilaDePedidos estrategiaInicial = new EstrategiaFilaDePedidos();
+
         GerenciadorProducao gerenciador = new GerenciadorProducao(
-                materiaPrima, cenario.getBudgetInicial(), new EstrategiaFilaDePedidos(), linhaDeProducao);
+                materiaPrima, orcamentoInicial, estrategiaInicial, linhaDeProducao, cenario);
 
         // 6. Registra as demandas iniciais de Medicamentos
         gerenciador.registrarDemanda(new Demanda(TipoMedicamento.CONTROLADO, "Ritalina 40mg", 10, 4.50));
