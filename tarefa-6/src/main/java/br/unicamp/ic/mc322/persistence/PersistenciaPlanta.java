@@ -22,7 +22,7 @@ import org.xml.sax.SAXException;
 /**
  * Salva e carrega o estado da planta em um arquivo XML.
  * <p>
- * Cuida do arquivo e dos erros. A conversão fica em {@link EscritorPlantaXml} (planta para XML)
+ * Cuida do arquivo e dos erros. A conversão fica em {@link EscrevoPlantaXml} (planta para XML)
  * e em {@link LeitorPlantaXml} (XML para planta).
  * </p>
  *
