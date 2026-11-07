@@ -34,15 +34,57 @@ public class Demanda {
      * @throws DemandaInvalidaException Se o tipo for nulo ou se a quantidade for menor ou igual a zero.
      */
     public Demanda(TipoMedicamento tipo, String medicamento, int quantidade, double custoOperacionalPorUnidade) {
+        this(proximoNumero, tipo, medicamento, quantidade, custoOperacionalPorUnidade, StatusDemanda.PENDENTE);
+    }
+
+    /**
+     * Construtor usado pela criação normal e pela restauração.
+     *
+     * @param numero                     Número do pedido.
+     * @param tipo                       Tipo do medicamento.
+     * @param medicamento                Nome do medicamento.
+     * @param quantidade                 Quantidade de unidades.
+     * @param custoOperacionalPorUnidade Custo de operação por unidade.
+     * @param status                     Status inicial.
+     * @throws DemandaInvalidaException Se o tipo for nulo ou se a quantidade for menor ou igual a zero.
+     */
+    private Demanda(int numero, TipoMedicamento tipo, String medicamento, int quantidade,
+                    double custoOperacionalPorUnidade, StatusDemanda status) {
         if (tipo == null || quantidade <= 0) {
             throw new DemandaInvalidaException("É obrigatório definir o tipo do medicamento e a quantidade deve ser maior que zero.");
         }
-        this.numero = proximoNumero++;
+        this.numero = numero;
         this.tipo = tipo;
         this.medicamento = medicamento;
         this.quantidade = quantidade;
         this.custoOperacionalPorUnidade = custoOperacionalPorUnidade;
-        this.status = StatusDemanda.PENDENTE;
+        this.status = status;
+        // O próximo pedido nunca repete um número já usado, inclusive os carregados do arquivo.
+        proximoNumero = Math.max(proximoNumero, numero + 1);
+    }
+
+    /**
+     * Recria uma demanda salva, mantendo seu número e seu status.
+     *
+     * @param numero                     Número original do pedido.
+     * @param tipo                       Tipo do medicamento.
+     * @param medicamento                Nome do medicamento.
+     * @param quantidade                 Quantidade de unidades.
+     * @param custoOperacionalPorUnidade Custo de operação por unidade.
+     * @param status                     Status salvo.
+     * @return Demanda recriada.
+     * @throws DemandaInvalidaException Se o número não for positivo, se o status for EM_PRODUCAO
+     *                                  (só existe durante a fabricação) ou se os dados forem inválidos.
+     */
+    public static Demanda restaurar(int numero, TipoMedicamento tipo, String medicamento, int quantidade,
+                                    double custoOperacionalPorUnidade, StatusDemanda status) {
+        if (numero <= 0) {
+            throw new DemandaInvalidaException("O número do pedido deve ser positivo (recebido: " + numero + ").");
+        }
+        if (status == StatusDemanda.EM_PRODUCAO) {
+            throw new DemandaInvalidaException("O pedido #" + numero + " não pode ser restaurado em produção.");
+        }
+        return new Demanda(numero, tipo, medicamento, quantidade, custoOperacionalPorUnidade, status);
     }
 
     /**
