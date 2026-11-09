@@ -1,7 +1,7 @@
 ------------------Justificativa-----------------------------------
 
 Dupla: Adriann e Alex 
-Data de entrega: 26/10/2026 
+Data de entrega: 09/11/2026 
 
 # Tarefa 1 ########################################################################################################################
 
@@ -63,7 +63,7 @@ O GerenciadorProducao faz no código o papel que João faz no dia a dia. A fábr
 
 Ao final desse exemplo, restam 450 kg de princípio ativo e R$ 775,00 de orçamento. Se depois comprarmos 10 kg de matéria-prima, pagamos 10 x R$ 10,00 = R$ 100,00, e o orçamento cai para R$ 675,00. O orçamento só diminui nesses dois momentos: na compra de matéria-prima e no uso das máquinas. Se a quantidade de uma demanda mudar, ela pode ser fabricada de novo. 
 
-Com a Tarefa 2, nossa fábrica ficou mais parecida com uma fábrica de verdade: cada medicamento tem suas exigências, as máquinas podem errar, o orçamento limita o que conseguimos produzir e tudo o que foi fabricado fica registrado no armazém. Herança, polimorfismo, ArrayList e Random deixaram de ser só conceitos e passaram a representar partes da rotina de João e Francisco. 
+Com a Tarefa 2, nossa fábrica ficou mais parecida com uma fábrica de verdade: cada medicamento tem suas exigências, as máquinas podem errar, o orçamento limita o que conseguimos produzir e tudo o que foi fabricado fica registrado no armazém. Herança, polimorfismo, ArrayList e Random [5] deixaram de ser só conceitos e passaram a representar partes da rotina de João e Francisco. 
 
  
 
@@ -71,21 +71,21 @@ Com a Tarefa 2, nossa fábrica ficou mais parecida com uma fábrica de verdade: 
 
 Com a tarefa 2, a fábrica já produzia, mas quem decidia o que fabricar ou não era o numero digitado no menu. No caso, o GerenciadorProducao escolhia a demanda pelo índice dela e disso decidia o que produzia ou não. Agora, na tarefa3, a fábrica fica mais real e recebe pedidos de distribuidoras, hospitais, orgãos do governo ou mesmo farmácias e tem que saber lidar com isso. 
 
-Nesse contexto, aplicamos o padrão Strategy para que a nossa fábrica saiba lidar com diferentes situações de demandas. Nesse caso, cada regra virou uma classe que deriva da EstrategiaProdução para diferentes situações, veja: 
+Nesse contexto, aplicamos o padrão Strategy [6] para que a nossa fábrica saiba lidar com diferentes situações de demandas. Nesse caso, cada regra virou uma classe que deriva da EstrategiaProdução para diferentes situações, veja: 
 
-    A. EstrategiaFilaDePedidos: Atendo primeiro quem pediu primeiro; 
+    A. EstrategiaFilaDePedidos: Atendo primeiro quem pediu primeiro, como na regra FIFO de sequenciamento da produção [7, 8]; 
 
-    B. EstrategiaPandemia: Atendo primeiro que pediu mais, mas devido a alta demanda assumo riscos no orçamento;
+    B. EstrategiaPandemia: Atendo primeiro que pediu mais, mas devido a alta demanda assumo riscos no orçamento, como na COVID-19, quando a lei dispensou a licitação para acelerar as compras [9];
 
-    C. EstrategiaMedicamentosSus: Atendo primeiro que pediu mais, mas vejo o que consigo produzir, senão perco a licitação. 
+    C. EstrategiaMedicamentosSus: Atendo primeiro que pediu mais, mas vejo o que consigo produzir, senão perco a licitação e posso ser multado ou impedido de licitar [10]. 
 
-Além disso, na tarefa 2 o status de um produto era um texto ("Aprovado", "Processado") e a demanda tinha um boolean atendida. Agora, na tarefa 3 usamos os enums: 
+Além disso, na tarefa 2 o status de um produto era um texto ("Aprovado", "Processado") e a demanda tinha um boolean atendida. Agora, na tarefa 3 usamos os enums [11]: 
 
 1. StatusDemanda = PENDENTE, EM_PRODUCAO, CONCLUIDA, CANCELADA, que já sabe quais mudanças são válidas: um pedido pendente pode entrar em produção ou ser cancelado; um pedido em produção só pode ser concluído; um pedido concluído pode voltar a pendente, quando o cliente pede de novo; e um pedido cancelado não volta mais; 
 
 2. StatusProduto e StatusMaquina, comparados com == e não com equals(); 
 
-    A. TipoMedicamento, em que cada tipo cria o seu próprio medicamento (criarProduto); 
+    A. TipoMedicamento, em que cada tipo cria o seu próprio medicamento (criarProduto), como no padrão Factory Method [6]; 
 
     B. Cenario, que guarda os parâmetros de cada cenário de operação. 
 
@@ -95,16 +95,16 @@ Conclusão: Na Tarefa3, a fabrica deixou de depender do número digitado no menu
 # Tarefa 4 ########################################################################################################################
 1. O que deveriámos aprender/aplicar na tarefa4?
 Deveríamos aprender/aplicar isso:
-    A. Gradle: Que é estruturar, configurar build.gradle e settings.gradle, fazer funcionar o build e Gradle Wrapper e disso automatizar a execução do programa;
-    B. Documentação Javadoc;
-    C. Tratar erros;
+    A. Gradle: Que é estruturar, configurar build.gradle e settings.gradle, fazer funcionar o build e Gradle Wrapper e disso automatizar a execução do programa [12];
+    B. Documentação Javadoc [13];
+    C. Tratar erros, com exceções da própria planta e usando as exceções padrão do Java quando cabem [11];
     D. Organizar o código melhor;
 
 # Tarefa 5 ########################################################################################################################
 1. Contextualização e Motivação da Refatoração Estrutural
 Nas etapas anteriores, a unidade produtiva central da fábrica de medicamentos era representada pela classe abstrata Maquina de maneira monolítica. Entretanto, na indústria farmacêutica regulamentada pelas Boas Práticas de Fabricação (Anvisa RDC 658/2022 [3]), um equipamento fabril nunca é um bloco isolado: ele é composto por subcomponentes eletromecânicos, analíticos e pneumáticos que operam sob responsabilidades específicas e cujo ciclo de vida está estritamente atrelado à máquina.
 
-Na Tarefa 5, decompusemos a unidade produtiva ("O Todo") e introduzimos um Agrupador fabril, estruturando o sistema em relações de Composição Estrita e Agregação, com encapsulamento rigoroso baseado na Lei de Deméter e auditoria estrutural em cascata.
+Na Tarefa 5, decompusemos a unidade produtiva ("O Todo") e introduzimos um Agrupador fabril, estruturando o sistema em relações de Composição Estrita e Agregação [14], com encapsulamento rigoroso baseado na Lei de Deméter [16] e auditoria estrutural em cascata.
 
 2. Modelagem da Composição Temática (O Todo e as Partes)
 - O Todo: A classe abstrata Maquina (especializada em MaquinaProcessamento / Reator, MaquinaEmbalagem / Blister e MaquinaInspecao / Espectrômetro Anvisa).
@@ -122,10 +122,10 @@ A relação Maquina, MotorInducao, SensorCalibracao e AtuadorValvula é uma Comp
 4. Agrupador Fabril: LinhaDeProducao (Agregação 1:N)
 Em vez de as máquinas ficarem soltas em uma lista gerenciadora, criamos a classe intermediária LinhaDeProducao:
 - Relação de Agregação: LinhaDeProducao e Maquina. A linha agrupa máquinas em uma esteira sequencial ordenada. O ciclo de vida da máquina não depende da linha: máquinas podem ser adicionadas ou removidas da esteira independentemente.
-- Proteção de Coleções (Cópia Defensiva): O método getMaquinas() retorna estritamente Collections.unmodifiableList(maquinas). Qualquer tentativa de código externo de invocar .add() ou .remove() diretamente na lista lança UnsupportedOperationException, blindando o estado interno da linha.
+- Proteção de Coleções (Cópia Defensiva [11]): O método getMaquinas() retorna estritamente Collections.unmodifiableList(maquinas). Qualquer tentativa de código externo de invocar .add() ou .remove() diretamente na lista lança UnsupportedOperationException, blindando o estado interno da linha.
 
 5. Aplicação da Lei de Deméter (Tell, Don't Ask)
-Para evitar o antipadrão "Train Wreck" (ex: maquina.getMotor().acionar()), Maquina atua como uma Fachada Interna e NÃO expõe getters das suas partes internas:
+Para evitar o antipadrão "Train Wreck" [15] (ex: maquina.getMotor().acionar()), Maquina atua como uma Fachada Interna e NÃO expõe getters das suas partes internas:
 - Métodos de alto nível e delegação: verificaMotorOperacional(), verificaSensorCalibrado(), verificaAtuadoresOperacionais(), getQuantidadeAtuadores(), registrarCicloDeUso(), reparar().
 - O cliente externo (GerenciadorProducao, menus e testes) interage apenas com o Todo e com o Agrupador, desconhecendo a implementação concreta e o acoplamento interno das partes.
 
@@ -136,10 +136,44 @@ A interface Auditavel foi implementada em todos os níveis da hierarquia:
 - Nível 3 (As Partes): MotorInducao, SensorCalibracao e AtuadorValvula
 Ao solicitar a auditoria da fábrica, o relatório é emitido em uma estrutura arbórea indentada e legível no terminal, detalhando a integridade de cada elo produtivo da esteira.
 
+# Tarefa 6 ########################################################################################################################
+1. O que fizemos
+Até a Tarefa 5, ao fechar o programa perdíamos o estoque, o desgaste das máquinas e o andamento dos pedidos, o que não faz sentido numa fábrica que precisa manter registros do que produz [3]. Na Tarefa 6 a planta passou a salvar e carregar seu estado em XML, ganhou testes JUnit 5 [19] e foi organizada em pacotes.
+
+2. Pacotes
+O código saiu do pacote padrão para br.unicamp.ic.mc322 [21], dividido em model, service, strategy, persistence, exception e menu. O Main fica sozinho na raiz, e o model não sabe nada de arquivos nem de menus.
+
+3. Persistência
+    A. PersistenciaPlanta cuida do arquivo dados/planta.xml e dos erros; EscrevoPlantaXml converte a planta em XML; LeitorPlantaXml monta uma planta nova a partir do XML [17, 18].
+    B. Para salvar as partes da máquina sem quebrar a Lei de Deméter da Tarefa 5, a Maquina e suas partes exportam e restauram um record Estado (padrão Memento [6]).
+    C. Salvamos estoque, máquinas com suas partes, demandas com status, orçamento e cenário. Não salvamos o armazém (opcional e só histórico), a estratégia ativa (escolha do operador) nem o gerador aleatório (recriado pela semente do cenário).
+    D. Ao abrir, carregamos o estado salvo, se houver; se não, a planta começa com os dados padrão. Se o carregamento falhar, a planta em uso continua igual.
+
+4. Erros
+As falhas viram PersistenciaException, que estende a PlantaException da Tarefa 4 e diz o motivo: arquivo inexistente, vazio, formato inválido, falha de leitura ou escrita, ou dados incompatíveis. Os erros do Java são traduzidos para essa exceção [11], e os valores lidos passam pelas mesmas validações de um objeto criado pelo menu.
+
+5. Testes
+São 28 testes em TestesDemanda, TestesMaquina, TestesGerenciadorProducao e TestesPersistencia. Cada teste cria seus próprios dados [20], as máquinas de teste nunca falham e os testes de persistência usam uma pasta temporária (@TempDir) [19]. O ./gradlew build roda todos eles [12].
+
 # Referências bibliográficas ######################################################################################################
 [1] WAZLAWICK, Raul Sidnei. Metodologia de pesquisa para ciência da computação. 2. ed. Rio de Janeiro: Elsevier, 2014. 
 [2] AUTOM8. Inside Pharma's High Tech Factory. YouTube, 22 jun. 2025. 1 vídeo (11 min). Disponível em: <https://www.youtube.com/watch?v=hEI2VqbOsr0&t=211s>. Acesso em: 2 set. 2026. 
 [3] AGÊNCIA NACIONAL DE VIGILÂNCIA SANITÁRIA (Brasil). Resolução da Diretoria Colegiada - RDC nº 658, de 30 de março de 2022. Dispõe sobre as Diretrizes Gerais de Boas Práticas de Fabricação de Medicamentos. Brasília: Anvisa, 2022. Disponível em: <https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000658&seqAto=000&valorAno=2022&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=1696&cod_modulo=134&pesquisa=true>. Acesso em: 14 set. 2026. 
 [4] VARELLA, Drauzio. Como é feito um medicamento? YouTube, 12 mar. 2017. 1 vídeo (6 min). Disponível em: <https://www.youtube.com/watch?v=DRYvpKRFx2A>. Acesso em: 28 set. 2026. 
-
- 
+[5] DEITEL, Paul; DEITEL, Harvey. Java: como programar. 10. ed. São Paulo: Pearson, 2017. (herança, polimorfismo, ArrayList e Random)
+[6] GAMMA, Erich; HELM, Richard; JOHNSON, Ralph; VLISSIDES, John. Design Patterns: Elements of Reusable Object-Oriented Software. Reading: Addison-Wesley, 1995. (Strategy, Factory Method e Memento)
+[7] SLACK, Nigel; BRANDON-JONES, Alistair; JOHNSTON, Robert. Administração da Produção. 8. ed. São Paulo: Atlas, 2018. (regras de sequenciamento)
+[8] LEAN ENTERPRISE INSTITUTE. First In, First Out (FIFO). Lean Lexicon. Disponível em: <https://www.lean.org/lexicon-terms/first-in-first-out-fifo/>. Acesso em: 9 nov. 2026.
+[9] BRASIL. Lei nº 13.979, de 6 de fevereiro de 2020. Medidas para enfrentamento da emergência de saúde pública decorrente do coronavírus. Art. 4º. Disponível em: <https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/lei/l13979.htm>. Acesso em: 9 nov. 2026.
+[10] BRASIL. Lei nº 14.133, de 1º de abril de 2021. Lei de Licitações e Contratos Administrativos. Arts. 155 e 156. Disponível em: <https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm>. Acesso em: 9 nov. 2026.
+[11] BLOCH, Joshua. Effective Java. 3. ed. Boston: Addison-Wesley, 2018. (Item 34: enums; Item 50: cópia defensiva; Itens 72 e 73: exceções)
+[12] GRADLE INC. Gradle User Manual: Building Java & JVM projects. Disponível em: <https://docs.gradle.org/current/userguide/building_java_projects.html>. Acesso em: 9 nov. 2026.
+[13] ORACLE. How to Write Doc Comments for the Javadoc Tool. Disponível em: <https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html>. Acesso em: 9 nov. 2026.
+[14] BOOCH, Grady; RUMBAUGH, James; JACOBSON, Ivar. UML: guia do usuário. 2. ed. Rio de Janeiro: Elsevier, 2012. (composição e agregação)
+[15] MARTIN, Robert C. Clean Code: A Handbook of Agile Software Craftsmanship. Upper Saddle River: Prentice Hall, 2008. (cap. 6: Train Wrecks)
+[16] LIEBERHERR, Karl; HOLLAND, Ian. Assuring Good Style for Object-Oriented Programs. IEEE Software, v. 6, n. 5, p. 38-48, 1989. (Lei de Deméter)
+[17] FOWLER, Martin. Patterns of Enterprise Application Architecture. Boston: Addison-Wesley, 2002. (Data Mapper)
+[18] MARTIN, Robert C. Clean Architecture: A Craftsman's Guide to Software Structure and Design. Boston: Prentice Hall, 2017. (Princípio da Responsabilidade Única)
+[19] JUNIT TEAM. JUnit 5 User Guide. Disponível em: <https://junit.org/junit5/docs/current/user-guide/>. Acesso em: 9 nov. 2026.
+[20] MESZAROS, Gerard. xUnit Test Patterns: Refactoring Test Code. Boston: Addison-Wesley, 2007. (Fresh Fixture)
+[21] ORACLE. Naming a Package. The Java Tutorials. Disponível em: <https://docs.oracle.com/javase/tutorial/java/package/namingpkgs.html>. Acesso em: 9 nov. 2026.
